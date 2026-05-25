@@ -1,0 +1,33 @@
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.ValueProps;
+using STS2RitsuLib.Interop.AutoRegistration;
+
+namespace sanguosha.Cards;
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class ShanCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new BlockVar(6, ValueProp.Move)
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [];
+
+    public ShanCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await CreatureCmd.GainBlock(cardPlay.Card.Owner.Creature, DynamicVars.Block, cardPlay, false);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Block.UpgradeValueBy(2);
+    }
+}

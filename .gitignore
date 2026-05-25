@@ -1,0 +1,28 @@
+# Godot and .NET generated files
+.godot/
+GodotSharp/
+bin/
+obj/
+*.user
+*.suo
+*.tmp
+
+# Local machine configuration
+local.props
+
+# IDE folders
+.idea/
+.vs/
+.vscode/
+
+# Local Godot editor binaries copied into the project root
+Godot_*.exe
+
+# Build outputs and symbols
+*.dll
+*.pdb
+*.mdb
+
+# OS noise
+Thumbs.db
+Desktop.ini

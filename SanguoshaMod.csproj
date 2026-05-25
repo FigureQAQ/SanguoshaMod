@@ -1,0 +1,49 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1">
+  <Import Project="local.props" Condition="Exists('local.props')" />
+
+  <PropertyGroup>
+    <RootNamespace>sanguosha</RootNamespace>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>true</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>sanguosha</AssemblyName>
+    <RitsuLibDeployDir>$(Sts2Dir)\mods\STS2-RitsuLib</RitsuLibDeployDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="STS2.RitsuLib" Version="0.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="sts2" HintPath="$(Sts2DataDir)\sts2.dll" Private="False" />
+    <Reference Include="0Harmony" HintPath="$(Sts2DataDir)\0Harmony.dll" Private="False" />
+    <Reference Include="SmartFormat" HintPath="$(Sts2DataDir)\SmartFormat.dll" Private="False" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Scripts\**\*.cs" />
+  </ItemGroup>
+
+  <Target Name="CopySanguoshaMod" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true' and '$(Sts2Dir)' != ''">
+    <PropertyGroup>
+      <SanguoshaDeployDir>$(Sts2Dir)\mods\sanguosha</SanguoshaDeployDir>
+    </PropertyGroup>
+    <MakeDir Directories="$(SanguoshaDeployDir)" />
+    <MakeDir Directories="$(SanguoshaDeployDir)\power_icons" />
+    <MakeDir Directories="$(SanguoshaDeployDir)\power_icons_big" />
+    <MakeDir Directories="$(SanguoshaDeployDir)\localization" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(SanguoshaDeployDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(SanguoshaDeployDir)" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\mod_manifest.json" DestinationFolder="$(SanguoshaDeployDir)" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <SanguoshaPowerIcons Include="$(MSBuildProjectDirectory)\power_icons\**\*" />
+      <SanguoshaPowerBigIcons Include="$(MSBuildProjectDirectory)\power_icons_big\**\*" />
+      <SanguoshaLocalization Include="$(MSBuildProjectDirectory)\sanguosha\localization\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SanguoshaPowerIcons)" DestinationFolder="$(SanguoshaDeployDir)\power_icons\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SanguoshaPowerBigIcons)" DestinationFolder="$(SanguoshaDeployDir)\power_icons_big\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SanguoshaLocalization)" DestinationFolder="$(SanguoshaDeployDir)\localization\%(RecursiveDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>
