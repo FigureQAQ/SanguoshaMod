@@ -28,7 +28,11 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_TAI_PING_DISPLAY_POWER"] = "SANGUOSHA_POWER_TAI_PING_DISPLAY_POWER",
         ["SANGUOSHA_KONG_CHENG_DISPLAY_POWER"] = "SANGUOSHA_POWER_KONG_CHENG_DISPLAY_POWER",
         ["SANGUOSHA_ZHI_HENG_DISPLAY_POWER"] = "SANGUOSHA_POWER_ZHI_HENG_DISPLAY_POWER",
-        ["SANGUOSHA_WU_SHUANG_DISPLAY_POWER"] = "SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER"
+        ["SANGUOSHA_WU_SHUANG_DISPLAY_POWER"] = "SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER",
+        ["SANGUOSHA_LIAN_YING_DISPLAY_POWER"] = "SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER",
+        ["SANGUOSHA_YI_JI_DISPLAY_POWER"] = "SANGUOSHA_POWER_YI_JI_DISPLAY_POWER",
+        ["SANGUOSHA_JIAN_XIONG_DISPLAY_POWER"] = "SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER",
+        ["SANGUOSHA_GUI_CAI_DISPLAY_POWER"] = "SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER"
     };
 
     private static readonly IReadOnlyDictionary<string, Entry> Text = new Dictionary<string, Entry>
@@ -115,6 +119,14 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_CARD_ZHI_HENG_CARD.description"] = new("cards", "能力。可消耗至多 {MaxCards:diff()} 张手牌，抽等量牌并额外抽 {DrawBonus:diff()} 张。此后每回合首次打出锦囊牌后抽牌；升级后变为 0 费并提高制衡上限。"),
         ["SANGUOSHA_CARD_WU_SHUANG_CARD.title"] = new("cards", "无双"),
         ["SANGUOSHA_CARD_WU_SHUANG_CARD.description"] = new("cards", "能力。获得 {Strength:diff()} 点力量。每回合前 {Repeats:diff()} 次杀命中后追加一次无双伤害；升级后次数和力量提高。"),
+        ["SANGUOSHA_CARD_LIAN_YING_CARD.title"] = new("cards", "连营"),
+        ["SANGUOSHA_CARD_LIAN_YING_CARD.description"] = new("cards", "能力。抽 1 张牌。每回合前 {Triggers:diff()} 次你打出牌后没有手牌时，抽 {Draw:diff()} 张牌，并使其中 1 张杀或锦囊本回合变为 0 费。"),
+        ["SANGUOSHA_CARD_YI_JI_CARD.title"] = new("cards", "遗计"),
+        ["SANGUOSHA_CARD_YI_JI_CARD.description"] = new("cards", "能力。抽 1 张牌。每回合首次敌人即将对你造成伤害时，抽 {Draw:diff()} 张牌；若手牌不多，额外抽 {LowHandDraw:diff()} 张牌，并使至多 {FreeCards:diff()} 张杀或锦囊本回合变为 0 费。"),
+        ["SANGUOSHA_CARD_JIAN_XIONG_CARD.title"] = new("cards", "奸雄"),
+        ["SANGUOSHA_CARD_JIAN_XIONG_CARD.description"] = new("cards", "能力。获得 1 点力量。每回合首次敌人即将对你造成伤害时，抽 {Draw:diff()} 张牌，你的下一张杀额外造成 {NextShaDamage:diff()} 点伤害；升级后还获得 {Energy:diff()} 点能量。"),
+        ["SANGUOSHA_CARD_GUI_CAI_CARD.title"] = new("cards", "鬼才"),
+        ["SANGUOSHA_CARD_GUI_CAI_CARD.description"] = new("cards", "能力。获得 {Block:diff()} 点格挡。敌人即将对你造成伤害时，判定抽牌堆顶 1 张牌并置入弃牌堆：若为锦囊或能力，获得 {Block:diff()} 点格挡并抽 {Draw:diff()} 张牌；若为杀，施加 {Weak:diff()} 层虚弱；否则使 1 张杀或锦囊本回合变为 0 费。"),
 
         ["SANGUOSHA_POWER_ZHU_GE_DISPLAY_POWER.title"] = new("powers", "诸葛连弩"),
         ["SANGUOSHA_POWER_ZHU_GE_DISPLAY_POWER.description"] = new("powers", "装备：武器。每回合开始时，手牌中前 2 张杀本回合变为 0 费；升级后为 3 张。被替换时按本回合已打出的杀抽牌。"),
@@ -154,6 +166,14 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_POWER_ZHI_HENG_DISPLAY_POWER.description"] = new("powers", "能力。每回合首次打出锦囊牌后抽牌；升级后抽牌更多。"),
         ["SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER.title"] = new("powers", "无双"),
         ["SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER.description"] = new("powers", "能力。每回合前若干次杀命中后追加无双伤害；升级后次数提高。"),
+        ["SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER.title"] = new("powers", "连营"),
+        ["SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER.description"] = new("powers", "能力。打出牌后若没有手牌，抽牌并让 1 张杀或锦囊本回合变为 0 费。"),
+        ["SANGUOSHA_POWER_YI_JI_DISPLAY_POWER.title"] = new("powers", "遗计"),
+        ["SANGUOSHA_POWER_YI_JI_DISPLAY_POWER.description"] = new("powers", "能力。每回合首次敌人即将造成伤害时抽牌，手牌少时额外抽牌并临时减费。"),
+        ["SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER.title"] = new("powers", "奸雄"),
+        ["SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER.description"] = new("powers", "能力。每回合首次敌人即将造成伤害时抽牌，并强化下一张杀。"),
+        ["SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER.title"] = new("powers", "鬼才"),
+        ["SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER.description"] = new("powers", "能力。敌人即将造成伤害时判定抽牌堆顶，根据判定牌获得格挡抽牌、施加虚弱或临时减费。"),
 
         ["IRONCLAD.title"] = new("characters", "赤壁猛将"),
         ["IRONCLAD.titleObject"] = new("characters", "赤壁猛将"),

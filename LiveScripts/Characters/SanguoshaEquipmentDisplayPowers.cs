@@ -281,3 +281,39 @@ internal sealed class WuShuangDisplayPower : SanguoshaEquipmentDisplayPower
     protected override string LocKey => "SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER";
 
 }
+
+[RegisterPower]
+internal sealed class LianYingDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "muniu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class YiJiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "taiping";
+
+    protected override string LocKey => "SANGUOSHA_POWER_YI_JI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class JianXiongDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "guding";
+
+    protected override string LocKey => "SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class GuiCaiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "bagua";
+
+    protected override string LocKey => "SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER";
+
+}

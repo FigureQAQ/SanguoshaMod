@@ -38,18 +38,26 @@ internal static class BaGuaBeforeDamageReceivedPatch
             return;
         }
 
-        __result = ApplyAfterOriginal(__result, choiceContext, player, amount, props, cardSource);
+        __result = ApplyAfterOriginal(__result, choiceContext, player, dealer, amount, props, cardSource);
     }
 
     private static async Task ApplyAfterOriginal(
         Task original,
         PlayerChoiceContext choiceContext,
         Player player,
+        Creature dealer,
         decimal amount,
         ValueProp props,
         CardModel? cardSource)
     {
         await original;
+        await SanguoshaCharacterSkills.TryApplyIncomingDamageAbilities(
+            choiceContext,
+            player,
+            dealer,
+            amount,
+            props,
+            cardSource);
         await SanguoshaCharacterSkills.TryApplyBaGuaDefense(choiceContext, player, amount, props, cardSource);
     }
 }

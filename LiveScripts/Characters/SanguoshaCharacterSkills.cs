@@ -177,6 +177,48 @@ internal static class SanguoshaCharacterSkills
         RefreshDisplayPower<WuShuangDisplayPower>(player);
     }
 
+    public static void ActivateLianYing(Player player, int draw, int triggersPerTurn)
+    {
+        var state = GetState(player);
+        state.LianYingActive = true;
+        state.LianYingDraw = Math.Max(state.LianYingDraw, draw);
+        state.LianYingTriggersPerTurn = Math.Max(state.LianYingTriggersPerTurn, triggersPerTurn);
+        state.LianYingTriggersUsedThisTurn = 0;
+        RefreshDisplayPower<LianYingDisplayPower>(player);
+    }
+
+    public static void ActivateYiJi(Player player, int draw, int lowHandDraw, int freeCards)
+    {
+        var state = GetState(player);
+        state.YiJiActive = true;
+        state.YiJiDraw = Math.Max(state.YiJiDraw, draw);
+        state.YiJiLowHandDraw = Math.Max(state.YiJiLowHandDraw, lowHandDraw);
+        state.YiJiFreeCards = Math.Max(state.YiJiFreeCards, freeCards);
+        state.YiJiTriggeredThisTurn = false;
+        RefreshDisplayPower<YiJiDisplayPower>(player);
+    }
+
+    public static void ActivateJianXiong(Player player, int draw, int nextShaDamage, int energy)
+    {
+        var state = GetState(player);
+        state.JianXiongActive = true;
+        state.JianXiongDraw = Math.Max(state.JianXiongDraw, draw);
+        state.JianXiongNextShaDamage = Math.Max(state.JianXiongNextShaDamage, nextShaDamage);
+        state.JianXiongEnergy = Math.Max(state.JianXiongEnergy, energy);
+        state.JianXiongTriggeredThisTurn = false;
+        RefreshDisplayPower<JianXiongDisplayPower>(player);
+    }
+
+    public static void ActivateGuiCai(Player player, int block, int draw, int weak)
+    {
+        var state = GetState(player);
+        state.GuiCaiActive = true;
+        state.GuiCaiBlock = Math.Max(state.GuiCaiBlock, block);
+        state.GuiCaiDraw = Math.Max(state.GuiCaiDraw, draw);
+        state.GuiCaiWeak = Math.Max(state.GuiCaiWeak, weak);
+        RefreshDisplayPower<GuiCaiDisplayPower>(player);
+    }
+
     public static bool IsZhangBaUpgraded(Player player)
     {
         var state = GetState(player);
@@ -588,6 +630,9 @@ internal static class SanguoshaCharacterSkills
                 state.RenWangSkillEnergyGrantedThisTurn = false;
                 state.MuNiuSkillDrawsUsed = 0;
                 state.KongChengTriggeredThisTurn = false;
+                state.LianYingTriggersUsedThisTurn = 0;
+                state.YiJiTriggeredThisTurn = false;
+                state.JianXiongTriggeredThisTurn = false;
                 state.LastCardType = null;
                 BaiYinDamageCapPatch.ResetDamageThisTurn(player);
 
@@ -621,6 +666,7 @@ internal static class SanguoshaCharacterSkills
 
             await ApplyLowHpEmergency(player, state, evt.CombatState, card);
             await RunCardPlayedSkill(player, state, evt.CombatState, cardPlay);
+            await ApplyLianYingIfEmpty(player, state, card);
             await ApplyKongChengIfEmpty(player, state, card);
 
             state.LastCardType = card.Type;
@@ -797,6 +843,20 @@ internal static class SanguoshaCharacterSkills
         }
 
         await EnsureZhangBaSha(player);
+    }
+
+    private static async Task ApplyLianYingIfEmpty(Player player, CharacterSkillState state, CardModel source)
+    {
+        if (!state.LianYingActive
+            || state.LianYingTriggersUsedThisTurn >= state.LianYingTriggersPerTurn
+            || player.PlayerCombatState!.Hand.Cards.Count > 0)
+        {
+            return;
+        }
+
+        state.LianYingTriggersUsedThisTurn++;
+        await Draw(player, Math.Max(1, state.LianYingDraw));
+        MakeHandCardsFree(player, 1, card => card.Type is CardType.Attack or CardType.Skill);
     }
 
     private static void ApplyZhuGeTurnStart(Player player, CharacterSkillState state)
@@ -1095,6 +1155,24 @@ internal static class SanguoshaCharacterSkills
         await CardPileCmd.Draw(NewContext(), amount, player, false);
     }
 
+    private static int MakeHandCardsFree(Player player, int count, Func<CardModel, bool>? filter = null)
+    {
+        var changed = 0;
+        foreach (var card in player.PlayerCombatState!.Hand.Cards
+                     .Where(card => filter?.Invoke(card) ?? true)
+                     .OrderByDescending(card => card.EnergyCost.GetResolved()))
+        {
+            card.EnergyCost.SetThisTurn(0, true);
+            changed++;
+            if (changed >= count)
+            {
+                break;
+            }
+        }
+
+        return changed;
+    }
+
     private static Task ApplyPower<TPower>(Player player, Creature target, decimal amount, CardModel? source)
         where TPower : PowerModel, new()
     {
@@ -1140,6 +1218,79 @@ internal static class SanguoshaCharacterSkills
         }
     }
 
+    internal static async Task TryApplyIncomingDamageAbilities(
+        PlayerChoiceContext choiceContext,
+        Player player,
+        Creature dealer,
+        decimal incomingDamage,
+        ValueProp props,
+        CardModel? source)
+    {
+        if (!States.TryGetValue(player.NetId, out var state)
+            || incomingDamage <= 0
+            || props.HasFlag(ValueProp.Unblockable)
+            || player.PlayerCombatState is null)
+        {
+            return;
+        }
+
+        if (state.GuiCaiActive)
+        {
+            await ApplyGuiCaiJudgement(choiceContext, player, dealer, state, source);
+        }
+
+        if (state.YiJiActive && !state.YiJiTriggeredThisTurn)
+        {
+            state.YiJiTriggeredThisTurn = true;
+            var draw = state.YiJiDraw
+                + (player.PlayerCombatState.Hand.Cards.Count <= 3 ? state.YiJiLowHandDraw : 0);
+            await Draw(player, Math.Max(1, draw));
+            MakeHandCardsFree(player, state.YiJiFreeCards, card => card.Type is CardType.Attack or CardType.Skill);
+        }
+
+        if (state.JianXiongActive && !state.JianXiongTriggeredThisTurn)
+        {
+            state.JianXiongTriggeredThisTurn = true;
+            await Draw(player, Math.Max(1, state.JianXiongDraw));
+            EmpowerNextSha(player, state.JianXiongNextShaDamage);
+            if (state.JianXiongEnergy > 0)
+            {
+                player.PlayerCombatState.GainEnergy(state.JianXiongEnergy);
+            }
+        }
+    }
+
+    private static async Task ApplyGuiCaiJudgement(
+        PlayerChoiceContext choiceContext,
+        Player player,
+        Creature dealer,
+        CharacterSkillState state,
+        CardModel? source)
+    {
+        await CardPileCmd.ShuffleIfNecessary(choiceContext, player);
+        var revealed = player.PlayerCombatState!.DrawPile.Cards.FirstOrDefault();
+        if (revealed is null)
+        {
+            return;
+        }
+
+        await CardPileCmd.Add([revealed], PileType.Discard, CardPilePosition.Top, source, false);
+        if (revealed.Type is CardType.Skill or CardType.Power)
+        {
+            await CreatureCmd.GainBlock(player.Creature, state.GuiCaiBlock, ValueProp.Move, null, false);
+            await Draw(player, Math.Max(1, state.GuiCaiDraw));
+            return;
+        }
+
+        if (revealed.Type == CardType.Attack)
+        {
+            await ApplyPower<WeakPower>(player, dealer, Math.Max(1, state.GuiCaiWeak), source);
+            return;
+        }
+
+        MakeHandCardsFree(player, 1, card => card.Type is CardType.Attack or CardType.Skill);
+    }
+
     private static Task DamageTarget(Player player, Creature target, decimal amount, CardModel? source)
     {
         return amount <= 0 || !target.IsAlive
@@ -1181,6 +1332,24 @@ internal static class SanguoshaCharacterSkills
         public bool WuShuangActive { get; set; }
         public int WuShuangRepeatsPerTurn { get; set; } = 1;
         public int WuShuangRepeatsUsedThisTurn { get; set; }
+        public bool LianYingActive { get; set; }
+        public int LianYingDraw { get; set; }
+        public int LianYingTriggersPerTurn { get; set; }
+        public int LianYingTriggersUsedThisTurn { get; set; }
+        public bool YiJiActive { get; set; }
+        public int YiJiDraw { get; set; }
+        public int YiJiLowHandDraw { get; set; }
+        public int YiJiFreeCards { get; set; }
+        public bool YiJiTriggeredThisTurn { get; set; }
+        public bool JianXiongActive { get; set; }
+        public int JianXiongDraw { get; set; }
+        public int JianXiongNextShaDamage { get; set; }
+        public int JianXiongEnergy { get; set; }
+        public bool JianXiongTriggeredThisTurn { get; set; }
+        public bool GuiCaiActive { get; set; }
+        public int GuiCaiBlock { get; set; }
+        public int GuiCaiDraw { get; set; }
+        public int GuiCaiWeak { get; set; }
         public bool BaGuaActive { get; set; }
         public bool BaGuaUpgraded { get; set; }
         public bool BaGuaEnergyGrantedThisTurn { get; set; }
