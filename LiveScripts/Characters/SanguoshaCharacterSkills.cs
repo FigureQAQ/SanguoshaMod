@@ -240,8 +240,7 @@ internal static class SanguoshaCharacterSkills
 
         var hand = player.PlayerCombatState!.Hand.Cards;
         if (hand.Any(card => card is ZhangBaShaCard)
-            || hand.Count(card => card is not ZhangBaShaCard) < 2
-            || hand.Count >= CardPile.MaxCardsInHand)
+            || hand.Count(card => card is not ZhangBaShaCard) < 2)
         {
             return;
         }

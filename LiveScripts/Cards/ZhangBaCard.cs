@@ -22,6 +22,7 @@ public sealed class ZhangBaCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         SanguoshaCharacterSkills.ActivateZhangBa(cardPlay.Card.Owner, IsUpgraded);
+        await SanguoshaCharacterSkills.EnsureZhangBaSha(cardPlay.Card.Owner);
         await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         await SanguoshaCharacterSkills.EnsureZhangBaSha(cardPlay.Card.Owner);
     }

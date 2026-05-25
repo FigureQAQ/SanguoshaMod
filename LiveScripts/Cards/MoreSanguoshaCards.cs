@@ -144,7 +144,7 @@ internal static class SanguoshaCardFx
 
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, minCards, maxCards)
         {
-            Cancelable = true,
+            Cancelable = minCards <= 0,
             RequireManualConfirmation = true,
             Comparison = HandCardOrder
         };
@@ -179,7 +179,7 @@ internal static class SanguoshaCardFx
 
         var prefs = new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, minCards, maxCards)
         {
-            Cancelable = true,
+            Cancelable = minCards <= 0,
             RequireManualConfirmation = true,
             Comparison = HandCardOrder
         };
