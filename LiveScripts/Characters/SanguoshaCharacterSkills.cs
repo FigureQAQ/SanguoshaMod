@@ -1181,7 +1181,7 @@ internal static class SanguoshaCharacterSkills
             : PowerCmd.Apply<TPower>(NewContext(), target, amount, player.Creature, source!, false);
     }
 
-    internal static async Task TryApplyBaGuaDefense(
+    internal static async Task TryApplyBaGuaShan(
         PlayerChoiceContext choiceContext,
         Player player,
         decimal incomingDamage,

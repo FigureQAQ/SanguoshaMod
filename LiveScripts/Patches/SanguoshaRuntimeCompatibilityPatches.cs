@@ -58,7 +58,7 @@ internal static class BaGuaBeforeDamageReceivedPatch
             amount,
             props,
             cardSource);
-        await SanguoshaCharacterSkills.TryApplyBaGuaDefense(choiceContext, player, amount, props, cardSource);
+        await SanguoshaCharacterSkills.TryApplyBaGuaShan(choiceContext, player, amount, props, cardSource);
     }
 }
 

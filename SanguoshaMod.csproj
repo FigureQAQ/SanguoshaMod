@@ -22,10 +22,6 @@
     <Reference Include="SmartFormat" HintPath="$(Sts2DataDir)\SmartFormat.dll" Private="False" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Scripts\**\*.cs" />
-  </ItemGroup>
-
   <Target Name="CopySanguoshaMod" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true' and '$(Sts2Dir)' != ''">
     <PropertyGroup>
       <SanguoshaDeployDir>$(Sts2Dir)\mods\sanguosha</SanguoshaDeployDir>
