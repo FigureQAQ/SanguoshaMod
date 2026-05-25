@@ -12,8 +12,10 @@ namespace sanguosha.Cards;
 public sealed class DuelCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(6, ValueProp.Move),
-        new DynamicVar("Hits", 3m)
+        new DamageVar(7, ValueProp.Move),
+        new DynamicVar("BaseHits", 2m),
+        new DynamicVar("MaxSha", 2m),
+        new DynamicVar("Vulnerable", 1m)
     ];
     public DuelCard() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
@@ -21,19 +23,27 @@ public sealed class DuelCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        for (var i = 0; i < DynamicVars["Hits"].IntValue; i++)
+        var extraSha = await SanguoshaCardFx.ExhaustFromHand(
+            choiceContext,
+            cardPlay,
+            DynamicVars["MaxSha"].IntValue,
+            card => card is ShaCard);
+        var hits = DynamicVars["BaseHits"].IntValue + extraSha.Count;
+        for (var i = 0; i < hits; i++)
         {
             await SanguoshaCardFx.Attack(choiceContext, cardPlay, DynamicVars.Damage.BaseValue);
         }
 
-        var nextSha = cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards.OfType<ShaCard>().FirstOrDefault();
-        nextSha?.EnergyCost.SetThisTurn(0, true);
+        if (extraSha.Count > 0 && cardPlay.Target is { IsAlive: true } target)
+        {
+            await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
+        }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2);
-        DynamicVars["Hits"].UpgradeValueBy(1);
+        DynamicVars["MaxSha"].UpgradeValueBy(1);
     }
 }
 

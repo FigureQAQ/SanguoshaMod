@@ -449,6 +449,11 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         var bonus = 0m;
 
+        if (state.JiuNextShaBonus > 0)
+        {
+            bonus += state.JiuNextShaBonus;
+        }
+
         if (state.GuanShiActive && target.Block > 0)
         {
             bonus += state.GuanShiBonusDamage;
@@ -475,6 +480,11 @@ internal static class SanguoshaCharacterSkills
         }
 
         var state = GetState(play.Card.Owner);
+        if (IsShaLike(play.Card) && state.JiuNextShaBonus > 0)
+        {
+            state.JiuNextShaBonus = 0;
+        }
+
         if (state.HanBingActive)
         {
             await ApplyPower<WeakPower>(play.Card.Owner, target, state.HanBingWeak, play.Card);
@@ -498,6 +508,12 @@ internal static class SanguoshaCharacterSkills
     {
         var state = GetState(player);
         return state.TieSuoThisTurn ? state.TieSuoSplashMultiplier : 0m;
+    }
+
+    public static void EmpowerNextSha(Player player, int bonusDamage)
+    {
+        var state = GetState(player);
+        state.JiuNextShaBonus += Math.Max(0, bonusDamage);
     }
 
     public static void Register()
@@ -1153,6 +1169,7 @@ internal static class SanguoshaCharacterSkills
         public int IngenuityCap { get; set; } = 5;
         public bool LowHpEmergencyUsed { get; set; }
         public bool EnergyGrantedThisTurn { get; set; }
+        public int JiuNextShaBonus { get; set; }
         public bool IngenuityEnergyGrantedThisTurn { get; set; }
         public bool ZhuGeActive { get; set; }
         public int ZhuGeFreeShaPerTurn { get; set; } = 1;

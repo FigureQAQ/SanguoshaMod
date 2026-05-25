@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
+using sanguosha.Characters;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace sanguosha.Cards;
@@ -13,7 +14,8 @@ public sealed class JiuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Strength", 2m),
-        new DamageVar(4, ValueProp.Move)
+        new DynamicVar("NextShaDamage", 9m),
+        new DynamicVar("Draw", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -26,16 +28,18 @@ public sealed class JiuCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await SanguoshaCardFx.Strength(choiceContext, cardPlay, DynamicVars["Strength"].BaseValue);
-        foreach (var enemy in SanguoshaCardFx.AliveEnemies(cardPlay))
+        SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
+        var freeSha = SanguoshaCardFx.MakeHandCardsFree(cardPlay, 1, card => card is ShaCard);
+        if (freeSha == 0)
         {
-            await SanguoshaCardFx.Damage(choiceContext, cardPlay, enemy, DynamicVars.Damage.BaseValue);
+            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Strength"].UpgradeValueBy(1);
-        DynamicVars.Damage.UpgradeValueBy(2);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(4);
     }
 }
 
