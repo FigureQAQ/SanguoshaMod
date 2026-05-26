@@ -177,19 +177,19 @@ internal static class SanguoshaLocalization
 
         ["IRONCLAD.title"] = new("characters", "赤壁猛将"),
         ["IRONCLAD.titleObject"] = new("characters", "赤壁猛将"),
-        ["IRONCLAD.description"] = new("characters", "赤壁猛将承袭铁甲战士的浴血强攻：以杀的节奏、力量成长和残血爆发压制敌人。"),
+        ["IRONCLAD.description"] = new("characters", "赤壁猛将以血火开锋：用杀的节奏、力量成长和残血爆发压制敌人。"),
         ["SILENT.title"] = new("characters", "锦囊夜行"),
         ["SILENT.titleObject"] = new("characters", "锦囊夜行"),
-        ["SILENT.description"] = new("characters", "锦囊夜行承袭猎人的潜伏谋略：以技能连段、机巧资源、抽牌和负面效果掌控战局。"),
+        ["SILENT.description"] = new("characters", "锦囊夜行以暗谋入局：用锦囊连段、机巧资源、抽牌和负面效果掌控战局。"),
         ["DEFECT.title"] = new("characters", "机关卧龙"),
         ["DEFECT.titleObject"] = new("characters", "机关卧龙"),
-        ["DEFECT.description"] = new("characters", "机关卧龙承袭故障的机关雷格：积累雷势和星辉，周期性打出全体爆发。"),
+        ["DEFECT.description"] = new("characters", "机关卧龙以奇门驭雷：积累雷势和星辉，周期性打出全体爆发。"),
         ["NECROBINDER.title"] = new("characters", "青囊魂医"),
         ["NECROBINDER.titleObject"] = new("characters", "青囊魂医"),
-        ["NECROBINDER.description"] = new("characters", "青囊魂医承袭亡缚者的魂术急救：以治疗、魂值和闪避续航拖出优势。"),
-        ["REGENT.title"] = new("characters", "汉宫仁主"),
-        ["REGENT.titleObject"] = new("characters", "汉宫仁主"),
-        ["REGENT.description"] = new("characters", "汉宫仁主承袭储君的王道统御：以号令、星辉和交替出牌扩大团队攻防。"),
+        ["NECROBINDER.description"] = new("characters", "青囊魂医以魂术济危：用治疗、魂值和闪避续航拖出优势。"),
+        ["REGENT.title"] = new("characters", "汉室仁主"),
+        ["REGENT.titleObject"] = new("characters", "汉室仁主"),
+        ["REGENT.description"] = new("characters", "汉室仁主以王道统御：用号令、星辉和交替出牌扩大团队攻防。"),
 
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title"] = new("relics", "武魂：无双"),
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description"] = new("relics", "赤壁猛将的武魂。战斗开始获得力量；酒、决斗、南蛮入侵、万箭齐发会推动力量与抽牌节奏。"),
@@ -204,7 +204,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description"] = new("relics", "青囊魂医的武魂。治疗与部分锦囊积累魂值，魂值满时回复生命并补充手牌。"),
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor"] = new("relics", "刀兵之后，总有人要把命从鬼门关边上拉回来。"),
         ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title"] = new("relics", "武魂：仁德激将"),
-        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "汉宫仁主的武魂。战斗开始获得号令和星辉；交替出牌获得能量，部分锦囊会补充星辉或手牌。"),
+        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "汉室仁主的武魂。战斗开始获得号令和星辉；交替出牌获得能量，部分锦囊会补充星辉或手牌。"),
         ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor"] = new("relics", "仁德不是软弱，是让每一次出牌都有人响应。")
     };
 
