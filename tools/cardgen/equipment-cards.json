@@ -1,0 +1,139 @@
+{
+  "object": "sanguosha-card-batch",
+  "version": 1,
+  "defaults": {
+    "cost": 1,
+    "rarity": "Rare",
+    "palette": "equipment"
+  },
+  "cards": [
+    {
+      "id": "ZhuGeCard",
+      "slug": "zhuge",
+      "title": "诸葛连弩",
+      "type": "装备 - 武器",
+      "description": "获得力量并生成 1 张免费杀。每回合开始时，手牌中前若干张杀本回合变为 0 费。",
+      "art": "zhuge.png"
+    },
+    {
+      "id": "ZhangBaCard",
+      "slug": "zhangba",
+      "title": "丈八蛇矛",
+      "type": "装备 - 武器",
+      "description": "抽牌。只要你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。",
+      "art": "zhangba.png"
+    },
+    {
+      "id": "QingGangCard",
+      "slug": "qinggang",
+      "title": "青釭剑",
+      "type": "装备 - 武器",
+      "description": "获得能量。你的杀无视敌人格挡。",
+      "art": "qinggang.png"
+    },
+    {
+      "id": "GuanShiCard",
+      "slug": "guanshi",
+      "title": "贯石斧",
+      "type": "装备 - 武器",
+      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。",
+      "art": "guanshi.png"
+    },
+    {
+      "id": "HanBingCard",
+      "slug": "hanbing",
+      "title": "寒冰剑",
+      "type": "装备 - 武器",
+      "description": "抽牌。你的杀命中后施加虚弱。",
+      "art": "hanbing.png"
+    },
+    {
+      "id": "QiLinCard",
+      "slug": "qilin",
+      "title": "麒麟弓",
+      "type": "装备 - 武器",
+      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害，并施加易伤。",
+      "art": "qilin.png"
+    },
+    {
+      "id": "GuDingCard",
+      "slug": "guding",
+      "title": "古锭刀",
+      "type": "装备 - 武器",
+      "description": "获得力量。杀命中没有格挡的敌人时，伤害翻倍。",
+      "art": "guding.png"
+    },
+    {
+      "id": "BaGuaCard",
+      "slug": "bagua",
+      "title": "八卦阵",
+      "type": "装备 - 防具",
+      "description": "敌人攻击你时，从抽牌堆顶依次打出牌：若为闪，获得格挡并继续；直到不是闪或攻击被完全格挡。",
+      "art": "bagua.png"
+    },
+    {
+      "id": "RenWangCard",
+      "slug": "renwang",
+      "title": "仁王盾",
+      "type": "装备 - 防具",
+      "description": "获得敏捷。",
+      "art": "renwang.png"
+    },
+    {
+      "id": "BaiYinCard",
+      "slug": "baiyin",
+      "title": "白银狮子",
+      "type": "装备 - 防具",
+      "description": "获得敏捷并回复生命。每回合开始时回复生命。每回合最多受到 15 点单次伤害。",
+      "art": "baiyin.png"
+    },
+    {
+      "id": "ChiTuCard",
+      "slug": "chitu",
+      "title": "赤兔",
+      "type": "装备 - 坐骑",
+      "description": "获得力量和能量。",
+      "art": "chitu.png"
+    },
+    {
+      "id": "DaWanCard",
+      "slug": "dawan",
+      "title": "大宛",
+      "type": "装备 - 坐骑",
+      "description": "获得力量。",
+      "art": "dawan.png"
+    },
+    {
+      "id": "DiLuCard",
+      "slug": "dilu",
+      "title": "的卢",
+      "type": "装备 - 坐骑",
+      "description": "获得敏捷。",
+      "art": "dilu.png"
+    },
+    {
+      "id": "YuXiCard",
+      "slug": "yuxi",
+      "title": "玉玺",
+      "type": "装备 - 宝物",
+      "description": "获得能量、力量并抽牌。每回合开始时额外获得 1 点能量。",
+      "art": "yuxi.png"
+    },
+    {
+      "id": "MuNiuCard",
+      "slug": "muniu",
+      "title": "木牛流马",
+      "type": "装备 - 宝物",
+      "description": "获得能量并抽牌。每回合前若干次打出锦囊牌后，抽 1 张牌。",
+      "art": "muniu.png"
+    },
+    {
+      "id": "TaiPingCard",
+      "slug": "taiping",
+      "title": "太平要术",
+      "type": "装备 - 宝物",
+      "description": "获得敏捷并回复生命。每回合开始时净化 1 个负面效果；若成功净化，获得能量并额外回复生命。",
+      "art": "taiping.png"
+    }
+  ]
+}

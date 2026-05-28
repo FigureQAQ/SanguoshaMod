@@ -1,0 +1,12 @@
+{
+  "name": "sanguosha-mod-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "cardgen": "node tools/cardgen/render-cards.mjs --input tools/cardgen/equipment-cards.json --out tools/cardgen/output",
+    "cardgen:serve": "node tools/cardgen/serve.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}

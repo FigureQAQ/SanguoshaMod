@@ -22,6 +22,11 @@ Godot_*.exe
 *.dll
 *.pdb
 *.mdb
+node_modules/
+
+# Local card generation inputs/outputs
+tools/cardgen/input/
+tools/cardgen/output/
 
 # OS noise
 Thumbs.db
