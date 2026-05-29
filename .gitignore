@@ -27,6 +27,9 @@ node_modules/
 # Local card generation inputs/outputs
 tools/cardgen/input/
 tools/cardgen/output/
+tools/cardgen/output-tricks/
+tools/cardgen/output-core/
+release/
 
 # OS noise
 Thumbs.db

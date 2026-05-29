@@ -4,6 +4,13 @@
   "type": "module",
   "scripts": {
     "cardgen": "node tools/cardgen/render-cards.mjs --input tools/cardgen/equipment-cards.json --out tools/cardgen/output",
+    "cardgen:art": "powershell -ExecutionPolicy Bypass -File tools/cardgen/generate-art-from-batch-pinai.ps1 -BatchFile tools/cardgen/equipment-cards.json -ExternalOutDir \"C:\\Users\\Administrator\\Pictures\\三国杀mod\\image2\" -ProjectArtDir tools/cardgen/input/equipment-art",
+    "cardgen:all": "npm run cardgen && npm run cardgen:tricks && npm run cardgen:core && npm run cardgen:export",
+    "cardgen:export": "node tools/cardgen/export-game-assets.mjs",
+    "cardgen:tricks": "node tools/cardgen/render-cards.mjs --input tools/cardgen/trick-cards.json --art-dir tools/cardgen/input/tricks-art --out tools/cardgen/output-tricks",
+    "cardgen:tricks:art": "powershell -ExecutionPolicy Bypass -File tools/cardgen/generate-art-from-batch-pinai.ps1 -BatchFile tools/cardgen/trick-cards.json",
+    "cardgen:core": "node tools/cardgen/render-cards.mjs --input tools/cardgen/core-cards.json --art-dir tools/cardgen/input/core-art --out tools/cardgen/output-core",
+    "cardgen:core:art": "powershell -ExecutionPolicy Bypass -File tools/cardgen/generate-art-from-batch-pinai.ps1 -BatchFile tools/cardgen/core-cards.json",
     "cardgen:serve": "node tools/cardgen/serve.mjs"
   },
   "dependencies": {

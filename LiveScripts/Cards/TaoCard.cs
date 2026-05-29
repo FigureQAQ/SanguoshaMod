@@ -13,9 +13,8 @@ public sealed class TaoCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new HealVar(6),
-        new DynamicVar("LowHpHeal", 4m),
-        new BlockVar(6, ValueProp.Move),
-        new EnergyVar(1)
+        new DynamicVar("LowHpHeal", 3m),
+        new BlockVar(4, ValueProp.Move)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -37,14 +36,13 @@ public sealed class TaoCard : SanguoshaCard
 
         await CreatureCmd.Heal(player.Creature, heal, true);
         await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        player.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Heal.UpgradeValueBy(2);
-        DynamicVars["LowHpHeal"].UpgradeValueBy(2);
-        DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars["LowHpHeal"].UpgradeValueBy(1);
+        DynamicVars.Block.UpgradeValueBy(2);
     }
 }
 

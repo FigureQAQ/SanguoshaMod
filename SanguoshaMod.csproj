@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="STS2.RitsuLib" Version="0.3.0" />
+    <PackageReference Include="STS2.RitsuLib" Version="0.3.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +29,7 @@
     <MakeDir Directories="$(SanguoshaDeployDir)" />
     <MakeDir Directories="$(SanguoshaDeployDir)\power_icons" />
     <MakeDir Directories="$(SanguoshaDeployDir)\power_icons_big" />
+    <MakeDir Directories="$(SanguoshaDeployDir)\card_art" />
     <MakeDir Directories="$(SanguoshaDeployDir)\localization" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(SanguoshaDeployDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(SanguoshaDeployDir)" SkipUnchangedFiles="true" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
@@ -36,10 +37,12 @@
     <ItemGroup>
       <SanguoshaPowerIcons Include="$(MSBuildProjectDirectory)\power_icons\**\*" />
       <SanguoshaPowerBigIcons Include="$(MSBuildProjectDirectory)\power_icons_big\**\*" />
+      <SanguoshaCardArt Include="$(MSBuildProjectDirectory)\card_art\**\*" />
       <SanguoshaLocalization Include="$(MSBuildProjectDirectory)\sanguosha\localization\**\*" />
     </ItemGroup>
     <Copy SourceFiles="@(SanguoshaPowerIcons)" DestinationFolder="$(SanguoshaDeployDir)\power_icons\%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(SanguoshaPowerBigIcons)" DestinationFolder="$(SanguoshaDeployDir)\power_icons_big\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(SanguoshaCardArt)" DestinationFolder="$(SanguoshaDeployDir)\card_art\%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(SanguoshaLocalization)" DestinationFolder="$(SanguoshaDeployDir)\localization\%(RecursiveDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>

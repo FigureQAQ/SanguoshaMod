@@ -37,8 +37,8 @@ public sealed class ZhangBaCard : SanguoshaCard
 public sealed class ZhangBaShaCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(9, ValueProp.Move),
-        new DynamicVar("UpgradeDamage", 3m),
+        new DamageVar(7, ValueProp.Move),
+        new DynamicVar("UpgradeDamage", 2m),
         new DynamicVar("Draw", 1m)
     ];
 

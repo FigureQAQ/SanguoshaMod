@@ -12,7 +12,7 @@ namespace sanguosha.Cards;
 public sealed class ShaCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(9, ValueProp.Move)
+        new DamageVar(8, ValueProp.Move)
     ];
 
     public ShaCard() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)

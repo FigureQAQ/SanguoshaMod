@@ -11,129 +11,177 @@
       "id": "ZhuGeCard",
       "slug": "zhuge",
       "title": "诸葛连弩",
-      "type": "装备 - 武器",
-      "description": "获得力量并生成 1 张免费杀。每回合开始时，手牌中前若干张杀本回合变为 0 费。",
+      "type": "装备牌 - 武器",
+      "description": "获得力量并生成 1 张免费杀。每回合开始时，手牌中前若干张杀本回合变为 0 费。失去时按本回合已打出的杀抽牌。",
       "art": "zhuge.png"
     },
     {
       "id": "ZhangBaCard",
       "slug": "zhangba",
       "title": "丈八蛇矛",
-      "type": "装备 - 武器",
-      "description": "抽牌。只要你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。",
+      "type": "装备牌 - 武器",
+      "description": "抽牌。只要你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。失去时获得能量并补蛇矛杀。",
       "art": "zhangba.png"
     },
     {
       "id": "QingGangCard",
       "slug": "qinggang",
       "title": "青釭剑",
-      "type": "装备 - 武器",
-      "description": "获得能量。你的杀无视敌人格挡。",
+      "type": "装备牌 - 武器",
+      "description": "获得能量。你的杀无视敌人格挡。失去时获得能量。",
       "art": "qinggang.png"
     },
     {
       "id": "GuanShiCard",
       "slug": "guanshi",
       "title": "贯石斧",
-      "type": "装备 - 武器",
-      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。",
+      "type": "装备牌 - 武器",
+      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时获得力量并强化下一张杀。",
       "art": "guanshi.png"
     },
     {
       "id": "HanBingCard",
       "slug": "hanbing",
       "title": "寒冰剑",
-      "type": "装备 - 武器",
-      "description": "抽牌。你的杀命中后施加虚弱。",
+      "type": "装备牌 - 武器",
+      "description": "抽牌。你的杀命中后施加虚弱。失去时抽牌。",
       "art": "hanbing.png"
     },
     {
       "id": "QiLinCard",
       "slug": "qilin",
       "title": "麒麟弓",
-      "type": "装备 - 武器",
-      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害，并施加易伤。",
+      "type": "装备牌 - 武器",
+      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害，并施加易伤。失去时获得力量并抽牌。",
       "art": "qilin.png"
     },
     {
       "id": "GuDingCard",
       "slug": "guding",
       "title": "古锭刀",
-      "type": "装备 - 武器",
-      "description": "获得力量。杀命中没有格挡的敌人时，伤害翻倍。",
+      "type": "装备牌 - 武器",
+      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。失去时获得力量。",
       "art": "guding.png"
     },
     {
       "id": "BaGuaCard",
       "slug": "bagua",
       "title": "八卦阵",
-      "type": "装备 - 防具",
-      "description": "敌人攻击你时，从抽牌堆顶依次打出牌：若为闪，获得格挡并继续；直到不是闪或攻击被完全格挡。",
+      "type": "装备牌 - 防具",
+      "description": "敌人攻击你时，从抽牌堆顶依次打出牌：若为闪，获得格挡并继续；直到不是闪或攻击被完全格挡。失去时抽牌并获得格挡。",
       "art": "bagua.png"
     },
     {
       "id": "RenWangCard",
       "slug": "renwang",
       "title": "仁王盾",
-      "type": "装备 - 防具",
-      "description": "获得敏捷。",
+      "type": "装备牌 - 防具",
+      "description": "获得敏捷。失去时获得敏捷。",
       "art": "renwang.png"
     },
     {
       "id": "BaiYinCard",
       "slug": "baiyin",
       "title": "白银狮子",
-      "type": "装备 - 防具",
-      "description": "获得敏捷并回复生命。每回合开始时回复生命。每回合最多受到 15 点单次伤害。",
+      "type": "装备牌 - 防具",
+      "description": "获得敏捷并回复生命。每回合开始时回复生命。每回合最大受到 15 点单次伤害。失去时回复生命。",
       "art": "baiyin.png"
     },
     {
       "id": "ChiTuCard",
       "slug": "chitu",
       "title": "赤兔",
-      "type": "装备 - 坐骑",
-      "description": "获得力量和能量。",
+      "type": "装备牌 - 坐骑",
+      "description": "获得力量和能量。失去时获得能量，并使手牌中的杀临时变为 0 费。",
       "art": "chitu.png"
     },
     {
       "id": "DaWanCard",
       "slug": "dawan",
       "title": "大宛",
-      "type": "装备 - 坐骑",
-      "description": "获得力量。",
+      "type": "装备牌 - 坐骑",
+      "description": "获得力量。失去时获得力量，并强化下一张杀。",
       "art": "dawan.png"
     },
     {
       "id": "DiLuCard",
       "slug": "dilu",
       "title": "的卢",
-      "type": "装备 - 坐骑",
-      "description": "获得敏捷。",
+      "type": "装备牌 - 坐骑",
+      "description": "获得敏捷。失去时获得敏捷和格挡。",
       "art": "dilu.png"
     },
     {
       "id": "YuXiCard",
       "slug": "yuxi",
       "title": "玉玺",
-      "type": "装备 - 宝物",
-      "description": "获得能量、力量并抽牌。每回合开始时额外获得 1 点能量。",
+      "type": "装备牌 - 宝物",
+      "description": "获得能量、力量并抽牌。每回合开始时额外获得 1 点能量。失去时获得能量并抽牌。",
       "art": "yuxi.png"
     },
     {
       "id": "MuNiuCard",
       "slug": "muniu",
       "title": "木牛流马",
-      "type": "装备 - 宝物",
-      "description": "获得能量并抽牌。每回合前若干次打出锦囊牌后，抽 1 张牌。",
+      "type": "装备牌 - 宝物",
+      "description": "获得能量并抽牌。每回合前若干次打出锦囊牌后，抽 1 张牌。失去时抽牌。",
       "art": "muniu.png"
     },
     {
       "id": "TaiPingCard",
       "slug": "taiping",
       "title": "太平要术",
-      "type": "装备 - 宝物",
-      "description": "获得敏捷并回复生命。每回合开始时净化 1 个负面效果；若成功净化，获得能量并额外回复生命。",
+      "type": "装备牌 - 宝物",
+      "description": "获得敏捷并回复生命。每回合开始时净化 1 个负面效果；若成功净化，获得能量并额外回复生命。失去时回复生命。",
       "art": "taiping.png"
+    },
+    {
+      "id": "GanJiangMoYeCard",
+      "slug": "ganjiangmoye",
+      "title": "干将莫邪",
+      "type": "装备牌 - 武器",
+      "rarity": "Rare",
+      "cost": 2,
+      "description": "获得力量并抽牌。每回合前若干次杀命中后，追加剑气伤害。失去时强化下一张杀并抽牌。",
+      "art": "ganjiangmoye.png",
+      "externalFileB64": "5bmy5bCG6I6r6YKqLnBuZw==",
+      "prompt": "干将莫邪，三国幻想武器卡牌插画，一对雌雄双剑交叉悬浮，冷白与赤金剑气缠绕，剑身有古篆纹，背景为夜色铸剑炉与战场烟尘，氛围锋利、对偶、爆发，厚涂，强轮廓，竖版卡牌，无文字无边框。"
+    },
+    {
+      "id": "TengJiaCard",
+      "slug": "tengjia",
+      "title": "藤甲",
+      "type": "装备牌 - 防具",
+      "rarity": "Uncommon",
+      "cost": 1,
+      "description": "获得敏捷。敌人非杀伤害来临前，获得格挡。失去时获得格挡。",
+      "art": "tengjia.png",
+      "externalFileB64": "6Jek55SyLnBuZw==",
+      "prompt": "藤甲，三国幻想防具卡牌插画，坚韧藤蔓编织的轻甲披在木架上，青绿藤纹与皮革护片交错，周围箭矢被藤蔓缠住，背景为南中密林和雾气，氛围灵巧、防护、自然，厚涂，强轮廓，竖版卡牌，无文字无边框。"
+    },
+    {
+      "id": "JueYingCard",
+      "slug": "jueying",
+      "title": "绝影",
+      "type": "装备牌 - 坐骑",
+      "rarity": "Uncommon",
+      "cost": 1,
+      "description": "获得敏捷。每回合首次敌人即将造成伤害时，获得格挡。失去时获得格挡。",
+      "art": "jueying.png",
+      "externalFileB64": "57ud5b2xLnBuZw==",
+      "prompt": "绝影，三国幻想坐骑卡牌插画，乌黑骏马在月夜中疾驰，身影几乎融入暗影，银色马铠反光，箭雨从身后落空，背景为山道追兵与冷月，氛围迅捷、闪避、幽影，厚涂，强轮廓，竖版卡牌，无文字无边框。"
+    },
+    {
+      "id": "MengDeXinShuCard",
+      "slug": "mengdexinshu",
+      "title": "孟德新书",
+      "type": "装备牌 - 宝物",
+      "rarity": "Rare",
+      "cost": 1,
+      "description": "获得能量并抽牌。每回合首次打出锦囊牌后，获得能量，并使杀或锦囊牌临时变为 0 费。失去时获得能量并临时减费。",
+      "art": "mengdexinshu.png",
+      "externalFileB64": "5a2f5b635paw5LmmLnBuZw==",
+      "prompt": "孟德新书，三国幻想宝物卡牌插画，黑金兵书摊开在曹魏军帐的沙盘上，竹简、令牌、烛火与乌鸦羽毛环绕，书页浮现兵法光纹，背景为谋士剪影和战旗，氛围权谋、调度、智略，厚涂，强轮廓，竖版卡牌，无文字无边框。"
     }
   ]
 }

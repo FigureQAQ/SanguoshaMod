@@ -25,14 +25,24 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<WuZhongCard>(),
                 ModelDb.Card<TaoCard>(),
                 ModelDb.Card<JiuCard>(),
+                ModelDb.Card<CiShaCard>(),
+                ModelDb.Card<ShouShiCard>(),
+                ModelDb.Card<DiaoDuCard>(),
+                ModelDb.Card<RenDeCard>(),
+                ModelDb.Card<TuXiCard>(),
+                ModelDb.Card<QiXiCard>(),
+                ModelDb.Card<GuaGuCard>(),
                 ModelDb.Card<DuelCard>(),
                 ModelDb.Card<GuDingCard>(),
+                ModelDb.Card<GanJiangMoYeCard>(),
                 ModelDb.Card<GuanShiCard>(),
                 ModelDb.Card<GuoHeCard>(),
                 ModelDb.Card<HanBingCard>(),
                 ModelDb.Card<HuoGongCard>(),
                 ModelDb.Card<JieDaoCard>(),
+                ModelDb.Card<JueYingCard>(),
                 ModelDb.Card<LeBuCard>(),
+                ModelDb.Card<MengDeXinShuCard>(),
                 ModelDb.Card<NanManCard>(),
                 ModelDb.Card<QiLinCard>(),
                 ModelDb.Card<QingGangCard>(),
@@ -40,6 +50,7 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<ShanDianCard>(),
                 ModelDb.Card<ShunShouCard>(),
                 ModelDb.Card<TaoYuanCard>(),
+                ModelDb.Card<TengJiaCard>(),
                 ModelDb.Card<TieSuoCard>(),
                 ModelDb.Card<WanJianCard>(),
                 ModelDb.Card<WuGuCard>(),
@@ -114,10 +125,21 @@ internal static class SanguoshaCardCatalog
             return originalList;
         }
 
-        return originalList.Select(card => ReplaceStartingCard(card, cards)).ToList();
+        var replacedAttackWithTao = false;
+        var replacedSkillWithJiu = false;
+        return originalList.Select(card =>
+            ReplaceStartingCard(
+                card,
+                cards,
+                ref replacedAttackWithTao,
+                ref replacedSkillWithJiu)).ToList();
     }
 
-    private static CardModel ReplaceStartingCard(CardModel card, IReadOnlyList<CardModel> cards)
+    private static CardModel ReplaceStartingCard(
+        CardModel card,
+        IReadOnlyList<CardModel> cards,
+        ref bool replacedAttackWithTao,
+        ref bool replacedSkillWithJiu)
     {
         if (IsSanguoshaCard(card) || IsNonCollectible(card))
         {
@@ -126,11 +148,23 @@ internal static class SanguoshaCardCatalog
 
         if (card.Type == CardType.Attack)
         {
+            if (!replacedAttackWithTao)
+            {
+                replacedAttackWithTao = true;
+                return cards.OfType<TaoCard>().First();
+            }
+
             return cards.OfType<ShaCard>().First();
         }
 
         if (card.Type == CardType.Skill || card.GainsBlock)
         {
+            if (!replacedSkillWithJiu)
+            {
+                replacedSkillWithJiu = true;
+                return cards.OfType<JiuCard>().First();
+            }
+
             return cards.OfType<ShanCard>().First();
         }
 

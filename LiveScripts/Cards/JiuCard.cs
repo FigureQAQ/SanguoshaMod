@@ -13,15 +13,15 @@ namespace sanguosha.Cards;
 public sealed class JiuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Strength", 2m),
-        new DynamicVar("NextShaDamage", 9m),
+        new DynamicVar("Strength", 1m),
+        new DynamicVar("NextShaDamage", 6m),
         new DynamicVar("Draw", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
         CardKeyword.Exhaust
     ];
-    public JiuCard() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public JiuCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -38,8 +38,8 @@ public sealed class JiuCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Strength"].UpgradeValueBy(1);
-        DynamicVars["NextShaDamage"].UpgradeValueBy(4);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(3);
+        EnergyCost.SetCustomBaseCost(0);
     }
 }
 

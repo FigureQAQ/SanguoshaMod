@@ -12,11 +12,10 @@ namespace sanguosha.Cards;
 public sealed class RenWangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Dexterity", 2m),
-        new EnergyVar(1)
+        new DynamicVar("Dexterity", 1m)
     ];
 
-    public RenWangCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public RenWangCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 

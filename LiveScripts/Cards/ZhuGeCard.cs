@@ -12,7 +12,7 @@ namespace sanguosha.Cards;
 public sealed class ZhuGeCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("FreeSha", 2m),
+        new DynamicVar("FreeSha", 1m),
         new DynamicVar("Strength", 1m)
     ];
     public ZhuGeCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -30,7 +30,7 @@ public sealed class ZhuGeCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         DynamicVars["FreeSha"].UpgradeValueBy(1);
-        DynamicVars["Strength"].UpgradeValueBy(1);
+        EnergyCost.SetCustomBaseCost(1);
     }
 }
 

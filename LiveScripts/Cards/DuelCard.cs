@@ -12,9 +12,9 @@ namespace sanguosha.Cards;
 public sealed class DuelCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(7, ValueProp.Move),
+        new DamageVar(6, ValueProp.Move),
         new DynamicVar("BaseHits", 2m),
-        new DynamicVar("MaxSha", 2m),
+        new DynamicVar("MaxSha", 1m),
         new DynamicVar("Vulnerable", 1m)
     ];
     public DuelCard() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)

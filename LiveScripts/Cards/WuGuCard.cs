@@ -12,10 +12,10 @@ namespace sanguosha.Cards;
 public sealed class WuGuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(10, ValueProp.Move),
+        new BlockVar(8, ValueProp.Move),
         new EnergyVar(1),
         new DynamicVar("Draw", 2m),
-        new DynamicVar("BonusDraw", 2m)
+        new DynamicVar("BonusDraw", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -41,7 +41,7 @@ public sealed class WuGuCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars.Block.UpgradeValueBy(2);
         DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }

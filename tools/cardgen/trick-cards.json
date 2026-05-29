@@ -1,0 +1,219 @@
+{
+  "object": "sanguosha-card-batch",
+  "version": 1,
+  "defaults": {
+    "cost": 1,
+    "rarity": "Uncommon",
+    "palette": "skill"
+  },
+  "artDefaults": {
+    "externalSubdir": "tricks",
+    "promptSuffix": "Three Kingdoms fantasy strategy card illustration, dramatic painterly 2D digital art, strong silhouette, ancient Chinese battlefield atmosphere, no text, no watermark, no card frame."
+  },
+  "cards": [
+    {
+      "id": "DuelCard",
+      "slug": "duel",
+      "title": "决斗",
+      "cost": 1,
+      "type": "锦囊牌 - 对决",
+      "rarity": "Uncommon",
+      "description": "造成多段伤害。可消耗手牌中的杀追加攻击并施加易伤。",
+      "art": "duel.png",
+      "externalFileB64": "5Yaz5paXLnBuZw==",
+      "prompt": "Duel stratagem from Three Kingdoms. Two rival generals clash in single combat under torn banners, spear and sword sparks, soldiers forming a tense circle around them."
+    },
+    {
+      "id": "WuZhongCard",
+      "slug": "wuzhong",
+      "title": "无中生有",
+      "cost": 1,
+      "type": "锦囊牌 - 过牌",
+      "rarity": "Rare",
+      "description": "可消耗 1 张手牌。抽牌；若成功消耗，获得能量并额外抽牌。",
+      "art": "wuzhong.png",
+      "externalFileB64": "5peg5Lit55Sf5pyJLnBuZw==",
+      "prompt": "A brilliant strategist conjures supplies from empty hands, glowing scrolls and cards materializing from mist above an ancient war table."
+    },
+    {
+      "id": "WuGuCard",
+      "slug": "wugu",
+      "title": "五谷丰登",
+      "cost": 1,
+      "type": "锦囊牌 - 补给",
+      "rarity": "Rare",
+      "description": "获得格挡。可消耗 1 张手牌；抽牌，成功消耗时获得能量并额外抽牌。",
+      "art": "wugu.png",
+      "externalFileB64": "5LqU6LC35Liw55m7LnBuZw==",
+      "prompt": "Abundant harvest supplies arrive for an army, golden grain carts, open granaries, soldiers cheering under warm sunlight after a siege."
+    },
+    {
+      "id": "BingLiangCard",
+      "slug": "bingliang",
+      "title": "兵粮寸断",
+      "cost": 1,
+      "type": "锦囊牌 - 控制",
+      "rarity": "Uncommon",
+      "description": "判定牌堆顶。施加虚弱和减速；判定有利时额外削弱并抽牌，否则造成伤害。",
+      "art": "bingliang.png",
+      "externalFileB64": "5YW157Ku5a+45patLnBuZw==",
+      "prompt": "Supply lines cut in a Three Kingdoms campaign, burning grain carts on a muddy road, scouts severing ropes, enemy camp starving in the distance."
+    },
+    {
+      "id": "GuoHeCard",
+      "slug": "guohe",
+      "title": "过河拆桥",
+      "cost": 1,
+      "type": "锦囊牌 - 破阵",
+      "rarity": "Uncommon",
+      "description": "移除目标格挡，造成伤害并施加虚弱和易伤。移除足量格挡时获得能量并抽牌。",
+      "art": "guohe.png",
+      "externalFileB64": "6L+H5rKz5ouG5qGlLnBuZw==",
+      "prompt": "Destroy the bridge after crossing, an ancient wooden bridge collapsing into a river, enemy cavalry stranded, tactical betrayal under storm clouds."
+    },
+    {
+      "id": "HuoGongCard",
+      "slug": "huogong",
+      "title": "火攻",
+      "cost": 1,
+      "type": "锦囊牌 - 火攻",
+      "rarity": "Uncommon",
+      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。",
+      "art": "huogong.png",
+      "externalFileB64": "54Gr5pS7LnBuZw==",
+      "prompt": "Fire attack stratagem, flaming arrows rain into an enemy camp at night, oil jars exploding, red smoke, tactical chaos and poison-green sparks."
+    },
+    {
+      "id": "JieDaoCard",
+      "slug": "jiedao",
+      "title": "借刀杀人",
+      "cost": 1,
+      "type": "锦囊牌 - 借势",
+      "rarity": "Rare",
+      "description": "可消耗手牌中的杀提高伤害，并对所有敌人施加减速；没有消耗杀则抽牌。",
+      "art": "jiedao.png",
+      "externalFileB64": "5YCf5YiA5p2A5Lq6LnBuZw==",
+      "prompt": "Borrowed blade assassination scheme, one general hands a gleaming saber through shadowed curtains while another enemy is framed in the distance."
+    },
+    {
+      "id": "LeBuCard",
+      "slug": "lebu",
+      "title": "乐不思蜀",
+      "cost": 2,
+      "type": "锦囊牌 - 控制",
+      "rarity": "Uncommon",
+      "description": "判定牌堆顶并施加减速；若判定不是杀，额外减速、易伤、伤害并获得能量。",
+      "art": "lebu.png",
+      "externalFileB64": "5LmQ5LiN5oCd6JyALnBuZw==",
+      "prompt": "Indulgent palace trap, a warlord distracted by music, dancers and wine while urgent military scrolls burn unnoticed in the background."
+    },
+    {
+      "id": "NanManCard",
+      "slug": "nanman",
+      "title": "南蛮入侵",
+      "cost": 2,
+      "type": "锦囊牌 - 群攻",
+      "rarity": "Rare",
+      "description": "对所有敌人施加虚弱并造成伤害；若击杀敌人则回复生命。",
+      "art": "nanman.png",
+      "externalFileB64": "5Y2X6Juu5YWl5L61LnBuZw==",
+      "prompt": "Southern barbarian invasion, wild armored warriors and beasts surge from jungle mist toward a fortified pass, drums and spears everywhere."
+    },
+    {
+      "id": "ShanDianCard",
+      "slug": "shandian",
+      "title": "闪电",
+      "cost": 2,
+      "type": "锦囊牌 - 判定",
+      "rarity": "Uncommon",
+      "description": "判定牌堆顶。造成随判定牌费用和稀有度提高的伤害；稀有或能力牌额外易伤。",
+      "art": "shandian.png",
+      "externalFileB64": "6Zeq55S1LnBuZw==",
+      "prompt": "Judgment lightning spell over a battlefield, a thunderbolt strikes a marked enemy general, divination cards and storm clouds swirling overhead."
+    },
+    {
+      "id": "TieSuoCard",
+      "slug": "tiesuo",
+      "title": "铁索连环",
+      "cost": 1,
+      "type": "锦囊牌 - 连环",
+      "rarity": "Uncommon",
+      "description": "施加减速。本回合杀会溅射其他敌人；判定有利时其他敌人受伤并获得能量。",
+      "art": "tiesuo.png",
+      "externalFileB64": "6ZOB57Si6L+e546vLnBuZw==",
+      "prompt": "Iron chain formation, several enemy generals bound by glowing heavy chains across a battlefield, one strike sending shockwaves through all links."
+    },
+    {
+      "id": "ShunShouCard",
+      "slug": "shunshou",
+      "title": "顺手牵羊",
+      "cost": 1,
+      "type": "锦囊牌 - 偷袭",
+      "rarity": "Uncommon",
+      "description": "偷取目标格挡并造成伤害、抽牌。偷取成功获得能量，否则让手牌临时变为 0 费。",
+      "art": "shunshou.png",
+      "externalFileB64": "6aG65omL54m1576KLnBuZw==",
+      "prompt": "Clever theft in a war camp, a nimble strategist steals a guarded banner and supply token while soldiers look the wrong way."
+    },
+    {
+      "id": "TaoYuanCard",
+      "slug": "taoyuan",
+      "title": "桃园结义",
+      "cost": 2,
+      "type": "锦囊牌 - 回复",
+      "rarity": "Rare",
+      "description": "回复生命，获得格挡和能量，并抽牌。",
+      "art": "taoyuan.png",
+      "externalFileB64": "5qGD5Zut57uT5LmJLnBuZw==",
+      "prompt": "Peach Garden oath, three heroic warriors swear brotherhood beneath blooming peach trees, warm sunrise, sacred banners and falling petals."
+    },
+    {
+      "id": "WanJianCard",
+      "slug": "wanjian",
+      "title": "万箭齐发",
+      "cost": 2,
+      "type": "锦囊牌 - 群攻",
+      "rarity": "Rare",
+      "description": "对所有敌人造成伤害。每命中一个仍存活的敌人，获得力量。获得格挡。",
+      "art": "wanjian.png",
+      "externalFileB64": "5LiH566t6b2Q5Y+RLnBuZw==",
+      "prompt": "Ten thousand arrows fired at once, the sky darkens with volleys of arrows over an ancient battlefield, shields raised, cinematic scale."
+    },
+    {
+      "id": "WuXieCard",
+      "slug": "wuxie",
+      "title": "无懈可击",
+      "cost": 1,
+      "type": "锦囊牌 - 反制",
+      "rarity": "Uncommon",
+      "description": "移除自身负面效果。每移除一种获得格挡；移除成功获得能量，否则获得基础格挡。",
+      "art": "wuxie.png",
+      "externalFileB64": "5peg5oeI5Y+v5Ye7LnBuZw==",
+      "prompt": "Perfect countermeasure stratagem, a calm strategist raises a jade talisman shield that shatters curses, arrows, flames and chains at once."
+    },
+    {
+      "id": "GuanXingCard",
+      "slug": "guanxing",
+      "title": "观星",
+      "cost": 1,
+      "type": "锦囊牌 - 观星",
+      "rarity": "Rare",
+      "description": "获得格挡。观看牌堆顶若干牌，可将部分置入弃牌堆，其余保持在牌堆顶。",
+      "art": "guanxing.png",
+      "externalFileB64": "6KeC5pifLnBuZw==",
+      "prompt": "Zhuge Liang star-gazing strategy, a robed strategist observes a star map and celestial cards above a quiet mountain altar at night."
+    },
+    {
+      "id": "LongDanCard",
+      "slug": "longdan",
+      "title": "龙胆",
+      "cost": 1,
+      "type": "锦囊牌 - 武技",
+      "rarity": "Rare",
+      "description": "杀可当闪，闪可当杀。",
+      "art": "longdan.png",
+      "externalFileB64": "6b6Z6IOGLnBuZw==",
+      "prompt": "Zhao Yun Dragon Courage technique, a white-armored spear hero swaps offense and defense in a blue dragon aura, cutting through arrows and blades."
+    }
+  ]
+}

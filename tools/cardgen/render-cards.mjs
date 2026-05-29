@@ -101,9 +101,14 @@ function wrapText(text, maxUnits) {
 
   const lines = [];
   let line = '';
+  const closingPunctuation = new Set(['。', '，', '；', '：', '！', '？', '、', '）', '》', '」', '』']);
   for (const token of tokens) {
     const candidate = token === ' ' && !line ? line : line + token;
     if (textWidthUnits(candidate) > maxUnits && line) {
+      if (closingPunctuation.has(token)) {
+        line = candidate;
+        continue;
+      }
       lines.push(line.trimEnd());
       line = token.trimStart();
     } else {

@@ -13,12 +13,12 @@ public sealed class WuZhongCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),
         new DynamicVar("Draw", 2m),
-        new DynamicVar("BonusDraw", 2m)
+        new DynamicVar("BonusDraw", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         IsUpgraded ? [] : [CardKeyword.Exhaust];
-    public WuZhongCard() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public WuZhongCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
 
@@ -37,6 +37,7 @@ public sealed class WuZhongCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         DynamicVars["Draw"].UpgradeValueBy(1);
+        EnergyCost.SetCustomBaseCost(0);
     }
 }
 

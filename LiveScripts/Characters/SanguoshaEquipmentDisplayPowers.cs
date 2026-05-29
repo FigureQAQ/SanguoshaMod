@@ -175,6 +175,15 @@ internal sealed class GuDingDisplayPower : SanguoshaEquipmentDisplayPower
 }
 
 [RegisterPower]
+internal sealed class GanJiangMoYeDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "ganjiangmoye";
+
+    protected override string LocKey => "SANGUOSHA_POWER_GAN_JIANG_MO_YE_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
 internal sealed class BaiYinDisplayPower : SanguoshaEquipmentDisplayPower
 {
     protected override string IconBaseName => "baiyin";
@@ -198,6 +207,15 @@ internal sealed class BaGuaDisplayPower : SanguoshaEquipmentDisplayPower
     protected override string IconBaseName => "bagua";
 
     protected override string LocKey => "SANGUOSHA_POWER_BA_GUA_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class TengJiaDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "tengjia";
+
+    protected override string LocKey => "SANGUOSHA_POWER_TENG_JIA_DISPLAY_POWER";
 
 }
 
@@ -229,6 +247,15 @@ internal sealed class DiLuDisplayPower : SanguoshaEquipmentDisplayPower
 }
 
 [RegisterPower]
+internal sealed class JueYingDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "jueying";
+
+    protected override string LocKey => "SANGUOSHA_POWER_JUE_YING_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
 internal sealed class YuXiDisplayPower : SanguoshaEquipmentDisplayPower
 {
     protected override string IconBaseName => "yuxi";
@@ -252,6 +279,15 @@ internal sealed class TaiPingDisplayPower : SanguoshaEquipmentDisplayPower
     protected override string IconBaseName => "taiping";
 
     protected override string LocKey => "SANGUOSHA_POWER_TAI_PING_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class MengDeXinShuDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "mengdexinshu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_MENG_DE_XIN_SHU_DISPLAY_POWER";
 
 }
 
