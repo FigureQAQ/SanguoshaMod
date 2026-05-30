@@ -68,7 +68,7 @@
       "slug": "cisha",
       "title": "刺杀",
       "cost": 1,
-      "type": "杀牌 - 突袭",
+      "type": "攻击牌 - 突袭",
       "rarity": "Common",
       "palette": "attack",
       "description": "造成伤害。若目标没有格挡，额外造成伤害。",
@@ -110,7 +110,7 @@
       "type": "技能牌 - 回复",
       "rarity": "Uncommon",
       "palette": "skill",
-      "description": "弃 1 张手牌，回复生命并获得格挡。若弃掉技能牌，抽牌。",
+      "description": "弃 1 张手牌，回复生命并抽牌。弃杀强化下一张杀，弃闪获得格挡，弃技能牌获得能量。",
       "art": "rende.png",
       "externalFileB64": "5LuB5b63LnBuZw==",
       "prompt": "Ren De benevolence card, Liu Bei-like noble leader gives supplies to wounded soldiers, warm golden light, banners of loyalty and compassion."
@@ -123,7 +123,7 @@
       "type": "技能牌 - 削弱",
       "rarity": "Uncommon",
       "palette": "skill",
-      "description": "抽牌。目标失去力量；若目标没有力量，改为施加易伤。",
+      "description": "抽牌。若目标有格挡，移除其所有格挡；否则获得能量，并削减目标力量或施加易伤。",
       "art": "tuxi.png",
       "externalFileB64": "56qB6KKtLnBuZw==",
       "prompt": "Tu Xi surprise raid card, Zhang Liao-style cavalry bursts from fog into enemy camp, stolen banners and startled soldiers, cold blue morning."
@@ -136,7 +136,7 @@
       "type": "技能牌 - 破阵",
       "rarity": "Uncommon",
       "palette": "skill",
-      "description": "消耗 1 张技能牌，移除目标所有格挡并施加易伤。",
+      "description": "消耗 1 张技能牌；若目标有格挡，移除其所有格挡并施加易伤；否则抽牌并获得能量。",
       "art": "qixi.png",
       "externalFileB64": "5aWH6KKtLnBuZw==",
       "prompt": "Qi Xi cunning raid card, Gan Ning night assault with bells and black sails, a swift strike breaks enemy defenses, moonlit river ambush."

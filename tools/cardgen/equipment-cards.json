@@ -31,7 +31,7 @@
       "slug": "qinggang",
       "title": "青釭剑",
       "type": "装备牌 - 武器",
-      "description": "获得能量。你的杀无视敌人格挡。失去时获得能量。",
+      "description": "获得能量。你的杀无视目标一半格挡，并在目标有格挡时额外造成伤害。失去时获得能量。",
       "art": "qinggang.png",
       "rarity": "Uncommon"
     },
@@ -112,7 +112,7 @@
       "slug": "dawan",
       "title": "大宛",
       "type": "装备牌 - 坐骑",
-      "description": "获得力量。失去时获得力量，并强化下一张杀。",
+      "description": "获得力量。你的杀额外造成伤害。失去时获得力量，并强化下一张杀。",
       "art": "dawan.png",
       "rarity": "Uncommon"
     },

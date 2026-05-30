@@ -16,7 +16,7 @@
       "slug": "duel",
       "title": "决斗",
       "cost": 1,
-      "type": "技能牌 - 对决",
+      "type": "攻击牌 - 对决",
       "rarity": "Uncommon",
       "description": "造成多段伤害。可消耗手牌中的杀追加攻击并施加易伤。",
       "art": "duel.png",
@@ -42,7 +42,7 @@
       "cost": 1,
       "type": "技能牌 - 补给",
       "rarity": "Rare",
-      "description": "获得格挡。可消耗 1 张手牌；抽牌，成功消耗时获得能量并额外抽牌。",
+      "description": "获得格挡。可消耗 1 张手牌；所有玩家抽牌，成功消耗时你获得能量，所有玩家额外抽牌。",
       "art": "wugu.png",
       "externalFileB64": "5LqU6LC35Liw55m7LnBuZw==",
       "prompt": "Abundant harvest supplies arrive for an army, golden grain carts, open granaries, soldiers cheering under warm sunlight after a siege."
@@ -54,7 +54,7 @@
       "cost": 1,
       "type": "技能牌 - 控制",
       "rarity": "Uncommon",
-      "description": "判定牌堆顶。施加虚弱和减速；判定有利时额外削弱并抽牌，否则造成伤害。",
+      "description": "判定牌堆顶。若判定牌费用为 0，抽牌；否则施加虚弱和减速。若判定牌是技能牌、能力牌或费用不低于 2，额外施加虚弱和减速。",
       "art": "bingliang.png",
       "externalFileB64": "5YW157Ku5a+45patLnBuZw==",
       "prompt": "Supply lines cut in a Three Kingdoms campaign, burning grain carts on a muddy road, scouts severing ropes, enemy camp starving in the distance."
@@ -78,7 +78,7 @@
       "cost": 1,
       "type": "技能牌 - 火攻",
       "rarity": "Uncommon",
-      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。",
+      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。弃杀额外伤害，弃闪获得格挡，弃能力牌施加易伤。",
       "art": "huogong.png",
       "externalFileB64": "54Gr5pS7LnBuZw==",
       "prompt": "Fire attack stratagem, flaming arrows rain into an enemy camp at night, oil jars exploding, red smoke, tactical chaos and poison-green sparks."
@@ -112,9 +112,9 @@
       "slug": "nanman",
       "title": "南蛮入侵",
       "cost": 2,
-      "type": "技能牌 - 群攻",
+      "type": "攻击牌 - 群攻",
       "rarity": "Rare",
-      "description": "对所有敌人施加虚弱并造成伤害；若击杀敌人则回复生命。",
+      "description": "对所有敌人施加虚弱并造成伤害；若击杀敌人则回复生命。所有玩家获得敏捷。",
       "art": "nanman.png",
       "externalFileB64": "5Y2X6Juu5YWl5L61LnBuZw==",
       "prompt": "Southern barbarian invasion, wild armored warriors and beasts surge from jungle mist toward a fortified pass, drums and spears everywhere."
@@ -162,7 +162,7 @@
       "cost": 2,
       "type": "技能牌 - 回复",
       "rarity": "Rare",
-      "description": "回复生命，获得格挡和能量，并抽牌。",
+      "description": "所有玩家回复生命。你获得格挡、能量并抽牌。",
       "art": "taoyuan.png",
       "externalFileB64": "5qGD5Zut57uT5LmJLnBuZw==",
       "prompt": "Peach Garden oath, three heroic warriors swear brotherhood beneath blooming peach trees, warm sunrise, sacred banners and falling petals."
@@ -172,9 +172,9 @@
       "slug": "wanjian",
       "title": "万箭齐发",
       "cost": 2,
-      "type": "技能牌 - 群攻",
+      "type": "攻击牌 - 群攻",
       "rarity": "Rare",
-      "description": "对所有敌人造成伤害。每命中一个仍存活的敌人，获得力量。获得格挡。",
+      "description": "对所有敌人造成伤害。所有玩家获得力量。你获得格挡。",
       "art": "wanjian.png",
       "externalFileB64": "5LiH566t6b2Q5Y+RLnBuZw==",
       "prompt": "Ten thousand arrows fired at once, the sky darkens with volleys of arrows over an ancient battlefield, shields raised, cinematic scale."

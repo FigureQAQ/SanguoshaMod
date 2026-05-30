@@ -1,7 +1,7 @@
 {
   "object": "sanguosha-game-card-assets",
   "version": 1,
-  "generatedAt": "2026-05-30T11:24:33.318Z",
+  "generatedAt": "2026-05-30T12:28:33.881Z",
   "portraitSize": {
     "width": 1024,
     "height": 752
@@ -41,7 +41,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得能量。你的杀无视敌人格挡。失去时获得能量。",
+      "description": "获得能量。你的杀无视目标一半格挡，并在目标有格挡时额外造成伤害。失去时获得能量。",
       "portrait": "qinggang.png",
       "portraitPath": "res://mods/sanguosha/card_art/qinggang.png",
       "sourceArt": "tools/cardgen/input/equipment-art/qinggang.png"
@@ -158,7 +158,7 @@
       "type": "装备牌 - 坐骑",
       "category": "mount",
       "rarity": "Uncommon",
-      "description": "获得力量。失去时获得力量，并强化下一张杀。",
+      "description": "获得力量。你的杀额外造成伤害。失去时获得力量，并强化下一张杀。",
       "portrait": "dawan.png",
       "portraitPath": "res://mods/sanguosha/card_art/dawan.png",
       "sourceArt": "tools/cardgen/input/equipment-art/dawan.png"
@@ -272,8 +272,8 @@
       "slug": "duel",
       "title": "决斗",
       "cost": 1,
-      "type": "技能牌 - 对决",
-      "category": "trick",
+      "type": "攻击牌 - 对决",
+      "category": "attack",
       "rarity": "Uncommon",
       "description": "造成多段伤害。可消耗手牌中的杀追加攻击并施加易伤。",
       "portrait": "duel.png",
@@ -301,7 +301,7 @@
       "type": "技能牌 - 补给",
       "category": "trick",
       "rarity": "Rare",
-      "description": "获得格挡。可消耗 1 张手牌；抽牌，成功消耗时获得能量并额外抽牌。",
+      "description": "获得格挡。可消耗 1 张手牌；所有玩家抽牌，成功消耗时你获得能量，所有玩家额外抽牌。",
       "portrait": "wugu.png",
       "portraitPath": "res://mods/sanguosha/card_art/wugu.png",
       "sourceArt": "tools/cardgen/input/tricks-art/wugu.png"
@@ -314,7 +314,7 @@
       "type": "技能牌 - 控制",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "判定牌堆顶。施加虚弱和减速；判定有利时额外削弱并抽牌，否则造成伤害。",
+      "description": "判定牌堆顶。若判定牌费用为 0，抽牌；否则施加虚弱和减速。若判定牌是技能牌、能力牌或费用不低于 2，额外施加虚弱和减速。",
       "portrait": "bingliang.png",
       "portraitPath": "res://mods/sanguosha/card_art/bingliang.png",
       "sourceArt": "tools/cardgen/input/tricks-art/bingliang.png"
@@ -340,7 +340,7 @@
       "type": "技能牌 - 火攻",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。",
+      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。弃杀额外伤害，弃闪获得格挡，弃能力牌施加易伤。",
       "portrait": "huogong.png",
       "portraitPath": "res://mods/sanguosha/card_art/huogong.png",
       "sourceArt": "tools/cardgen/input/tricks-art/huogong.png"
@@ -376,10 +376,10 @@
       "slug": "nanman",
       "title": "南蛮入侵",
       "cost": 2,
-      "type": "技能牌 - 群攻",
-      "category": "trick",
+      "type": "攻击牌 - 群攻",
+      "category": "attack",
       "rarity": "Rare",
-      "description": "对所有敌人施加虚弱并造成伤害；若击杀敌人则回复生命。",
+      "description": "对所有敌人施加虚弱并造成伤害；若击杀敌人则回复生命。所有玩家获得敏捷。",
       "portrait": "nanman.png",
       "portraitPath": "res://mods/sanguosha/card_art/nanman.png",
       "sourceArt": "tools/cardgen/input/tricks-art/nanman.png"
@@ -431,7 +431,7 @@
       "type": "技能牌 - 回复",
       "category": "trick",
       "rarity": "Rare",
-      "description": "回复生命，获得格挡和能量，并抽牌。",
+      "description": "所有玩家回复生命。你获得格挡、能量并抽牌。",
       "portrait": "taoyuan.png",
       "portraitPath": "res://mods/sanguosha/card_art/taoyuan.png",
       "sourceArt": "tools/cardgen/input/tricks-art/taoyuan.png"
@@ -441,10 +441,10 @@
       "slug": "wanjian",
       "title": "万箭齐发",
       "cost": 2,
-      "type": "技能牌 - 群攻",
-      "category": "trick",
+      "type": "攻击牌 - 群攻",
+      "category": "attack",
       "rarity": "Rare",
-      "description": "对所有敌人造成伤害。每命中一个仍存活的敌人，获得力量。获得格挡。",
+      "description": "对所有敌人造成伤害。所有玩家获得力量。你获得格挡。",
       "portrait": "wanjian.png",
       "portraitPath": "res://mods/sanguosha/card_art/wanjian.png",
       "sourceArt": "tools/cardgen/input/tricks-art/wanjian.png"
@@ -545,8 +545,8 @@
       "slug": "cisha",
       "title": "刺杀",
       "cost": 1,
-      "type": "杀牌 - 突袭",
-      "category": "power",
+      "type": "攻击牌 - 突袭",
+      "category": "attack",
       "rarity": "Common",
       "description": "造成伤害。若目标没有格挡，额外造成伤害。",
       "portrait": "cisha.png",
@@ -587,7 +587,7 @@
       "type": "技能牌 - 回复",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "弃 1 张手牌，回复生命并获得格挡。若弃掉技能牌，抽牌。",
+      "description": "弃 1 张手牌，回复生命并抽牌。弃杀强化下一张杀，弃闪获得格挡，弃技能牌获得能量。",
       "portrait": "rende.png",
       "portraitPath": "res://mods/sanguosha/card_art/rende.png",
       "sourceArt": "tools/cardgen/input/core-art/rende.png"
@@ -600,7 +600,7 @@
       "type": "技能牌 - 削弱",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "抽牌。目标失去力量；若目标没有力量，改为施加易伤。",
+      "description": "抽牌。若目标有格挡，移除其所有格挡；否则获得能量，并削减目标力量或施加易伤。",
       "portrait": "tuxi.png",
       "portraitPath": "res://mods/sanguosha/card_art/tuxi.png",
       "sourceArt": "tools/cardgen/input/core-art/tuxi.png"
@@ -613,7 +613,7 @@
       "type": "技能牌 - 破阵",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "消耗 1 张技能牌，移除目标所有格挡并施加易伤。",
+      "description": "消耗 1 张技能牌；若目标有格挡，移除其所有格挡并施加易伤；否则抽牌并获得能量。",
       "portrait": "qixi.png",
       "portraitPath": "res://mods/sanguosha/card_art/qixi.png",
       "sourceArt": "tools/cardgen/input/core-art/qixi.png"

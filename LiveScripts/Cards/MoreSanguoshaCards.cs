@@ -506,7 +506,8 @@ public sealed class ChiTuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Strength", 1m),
-        new EnergyVar(1)
+        new EnergyVar(1),
+        new DynamicVar("FreeSha", 1m)
     ];
 
     public ChiTuCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -515,14 +516,14 @@ public sealed class ChiTuCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        SanguoshaCharacterSkills.ActivateChiTu(cardPlay.Card.Owner);
+        SanguoshaCharacterSkills.ActivateChiTu(cardPlay.Card.Owner, IsUpgraded);
         await SanguoshaCardFx.Strength(choiceContext, cardPlay, DynamicVars["Strength"].BaseValue);
         SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Strength"].UpgradeValueBy(1);
+        DynamicVars["FreeSha"].UpgradeValueBy(1);
     }
 }
 
@@ -531,7 +532,7 @@ public sealed class DaWanCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Strength", 1m),
-        new DynamicVar("BonusDamage", 3m)
+        new DynamicVar("BonusDamage", 2m)
     ];
 
     public DaWanCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
@@ -546,7 +547,7 @@ public sealed class DaWanCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars["BonusDamage"].UpgradeValueBy(2);
+        DynamicVars["BonusDamage"].UpgradeValueBy(1);
     }
 }
 
@@ -554,8 +555,7 @@ public sealed class DaWanCard : SanguoshaCard
 public sealed class DiLuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Dexterity", 1m),
-        new DynamicVar("SkillDraw", 1m)
+        new DynamicVar("Dexterity", 1m)
     ];
 
     public DiLuCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
@@ -571,7 +571,6 @@ public sealed class DiLuCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         DynamicVars["Dexterity"].UpgradeValueBy(1);
-        DynamicVars["TurnHeal"].UpgradeValueBy(1);
     }
 }
 

@@ -138,7 +138,7 @@ internal static class SanguoshaCharacterSkills
                 break;
             case "DaWanCard":
                 await ApplyPower<StrengthPower>(player, player.Creature, 1, null);
-                EmpowerNextSha(player, wasUpgraded ? 6 : 4);
+                EmpowerNextSha(player, wasUpgraded ? 4 : 3);
                 break;
             case "DiLuCard":
                 await ApplyPower<DexterityPower>(player, player.Creature, 1, null);
@@ -318,10 +318,10 @@ internal static class SanguoshaCharacterSkills
         RefreshDisplayPower<BaiYinDisplayPower>(player);
     }
 
-    public static void ActivateChiTu(Player player)
+    public static void ActivateChiTu(Player player, bool upgraded)
     {
         var state = GetState(player);
-        ReplaceEquipment(player, state, EquipSlot.Mount, "ChiTuCard", false);
+        ReplaceEquipment(player, state, EquipSlot.Mount, "ChiTuCard", upgraded);
         state.ChiTuActive = true;
         RefreshDisplayPower<ChiTuDisplayPower>(player);
     }
@@ -331,7 +331,7 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         ReplaceEquipment(player, state, EquipSlot.Mount, "DaWanCard", upgraded);
         state.DaWanActive = true;
-        state.DaWanBonusDamage = upgraded ? 5 : 3;
+        state.DaWanBonusDamage = upgraded ? 3 : 2;
         RefreshDisplayPower<DaWanDisplayPower>(player);
     }
 
@@ -779,7 +779,7 @@ internal static class SanguoshaCharacterSkills
                 break;
             case ShaInfusion.Calamity:
                 state.Soul = Math.Min(10, state.Soul + 1);
-                await ApplyPower<CalamityPower>(player, target, 1, play.Card);
+                await ApplyPower<MegaCrit.Sts2.Core.Models.Powers.CalamityPower>(player, target, 1, play.Card);
                 if (state.HealedThisTurn)
                 {
                     await DamageTarget(player, target, 2, play.Card);
