@@ -40,7 +40,7 @@
   "SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER.title": "连营",
   "SANGUOSHA_POWER_LIAN_YING_DISPLAY_POWER.description": "能力牌。主动打出牌后若没有手牌，抽牌并让 1 张杀或技能牌本回合费用降低 1。",
   "SANGUOSHA_POWER_YI_JI_DISPLAY_POWER.title": "遗计",
-  "SANGUOSHA_POWER_YI_JI_DISPLAY_POWER.description": "能力牌。每回合首次敌人即将造成伤害时抽牌，手牌少时额外抽牌并临时减费。",
+  "SANGUOSHA_POWER_YI_JI_DISPLAY_POWER.description": "能力牌。每回合首次敌人即将对你造成可被格挡的伤害时抽牌；若触发前手牌不超过 3 张，额外抽牌并临时减费。",
   "SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER.title": "奸雄",
   "SANGUOSHA_POWER_JIAN_XIONG_DISPLAY_POWER.description": "能力牌。每回合首次敌人即将造成伤害时抽牌，并强化下一张杀。",
   "SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER.title": "鬼才",
