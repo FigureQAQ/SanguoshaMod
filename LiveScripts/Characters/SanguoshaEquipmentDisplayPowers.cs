@@ -301,6 +301,15 @@ internal sealed class KongChengDisplayPower : SanguoshaEquipmentDisplayPower
 }
 
 [RegisterPower]
+internal sealed class LongDanDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "longdan";
+
+    protected override string LocKey => "SANGUOSHA_POWER_LONG_DAN_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
 internal sealed class ZhiHengDisplayPower : SanguoshaEquipmentDisplayPower
 {
     protected override string IconBaseName => "yuxi";
@@ -352,4 +361,24 @@ internal sealed class GuiCaiDisplayPower : SanguoshaEquipmentDisplayPower
 
     protected override string LocKey => "SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER";
 
+}
+
+[RegisterPower]
+internal sealed class CalamityPower : ModPowerTemplate
+{
+    public override LocString Title => new("powers", "SANGUOSHA_POWER_CALAMITY.title");
+
+    public override LocString Description => new("powers", "SANGUOSHA_POWER_CALAMITY.description");
+
+    public override PowerType Type => PowerType.Debuff;
+
+    public override PowerStackType StackType => PowerStackType.None;
+
+    public override PowerAssetProfile AssetProfile => new(
+        IconPath: "res://mods/sanguosha/card_art/sha_calamity.png",
+        BigIconPath: "res://mods/sanguosha/card_art/sha_calamity.png");
+
+    public override string CustomIconPath => "res://mods/sanguosha/card_art/sha_calamity.png";
+
+    public override string CustomBigIconPath => "res://mods/sanguosha/card_art/sha_calamity.png";
 }

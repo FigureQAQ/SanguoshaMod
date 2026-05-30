@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Characters;
@@ -92,9 +91,8 @@ public sealed class KongChengCard : SanguoshaCard
 public sealed class LongDanCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(3, ValueProp.Move),
-        new DynamicVar("Draw", 1m),
-        new DynamicVar("MaxCards", 99m)
+        new BlockVar(4, ValueProp.Move),
+        new DynamicVar("Draw", 1m)
     ];
     public LongDanCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
@@ -103,30 +101,7 @@ public sealed class LongDanCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        var maxCards = Math.Min(
-            DynamicVars["MaxCards"].IntValue,
-            cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards.Count(card => card != cardPlay.Card && IsLongDanConvertible(card)));
-        var converted = await SanguoshaCardFx.ExhaustFromHand(choiceContext, cardPlay, maxCards, IsLongDanConvertible);
-        if (converted.Count == 0)
-        {
-            if (IsUpgraded)
-            {
-                await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-            }
-
-            return;
-        }
-
-        foreach (var card in converted)
-        {
-            var generated = card is ShaCard
-                ? await AddFreeShanToHand(cardPlay)
-                : await SanguoshaCardFx.AddFreeShaToHand(cardPlay, true);
-            if (generated is not null && card.IsUpgraded)
-            {
-                CardCmd.Upgrade(generated);
-            }
-        }
+        SanguoshaCharacterSkills.ActivateLongDan(cardPlay.Card.Owner);
 
         if (IsUpgraded)
         {
@@ -138,29 +113,6 @@ public sealed class LongDanCard : SanguoshaCard
     {
         DynamicVars.Block.UpgradeValueBy(1);
         EnergyCost.SetCustomBaseCost(0);
-    }
-
-    private static bool IsLongDanConvertible(CardModel card)
-    {
-        return card is ShaCard or ShanCard;
-    }
-
-    private static async Task<CardModel?> AddFreeShanToHand(CardPlay cardPlay)
-    {
-        var result = await CardPileCmd.AddGeneratedCardToCombat(
-            ModelDb.Card<ShanCard>(),
-            PileType.Hand,
-            cardPlay.Card.Owner,
-            CardPilePosition.Top);
-
-        if (!result.success || result.cardAdded is null)
-        {
-            return null;
-        }
-
-        result.cardAdded.EnergyCost.SetThisTurn(0, true);
-        result.cardAdded.ExhaustOnNextPlay = true;
-        return result.cardAdded;
     }
 }
 

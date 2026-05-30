@@ -37,13 +37,13 @@ npm run cardgen:art -- -Card zhuge,zhangba
 npm run cardgen:art -- -Card chitu -Force
 ```
 
-生成锦囊牌插画：
+生成技能牌插画：
 
 ```powershell
 npm run cardgen:tricks:art
 ```
 
-锦囊牌会读取 `trick-cards.json` 里的 `prompt` 和 `externalFileB64`，默认保存到 `C:\Users\Administrator\Pictures\三国杀mod\image2\tricks`，并同步到 `tools/cardgen/input/tricks-art/`。同样支持只生成单张和强制重生成：
+技能牌会读取 `trick-cards.json` 里的 `prompt` 和 `externalFileB64`，默认保存到 `C:\Users\Administrator\Pictures\三国杀mod\image2\tricks`，并同步到 `tools/cardgen/input/tricks-art/`。同样支持只生成单张和强制重生成：
 
 ```powershell
 npm run cardgen:tricks:art -- -Card guanxing
@@ -68,7 +68,7 @@ npm run cardgen:core:art
 npm run cardgen
 ```
 
-只生成锦囊牌牌面：
+只生成技能牌牌面：
 
 ```powershell
 npm run cardgen:tricks
@@ -119,7 +119,7 @@ npm run cardgen:serve
 - `slug`：输出文件名。
 - `title`：牌名。
 - `cost`：费用，可写数字或 `X`。
-- `type`：牌面展示分类，统一使用“大类 - 功能”的格式，例如 `基础牌 - 杀`、`锦囊牌 - 过牌`、`能力牌 - 连段`、`装备牌 - 武器`。
+- `type`：牌面展示分类，统一使用“大类 - 功能”的格式，例如 `基础牌 - 杀`、`技能牌 - 过牌`、`能力牌 - 连段`、`装备牌 - 武器`。
 - `rarity`：`Common`、`Uncommon`、`Rare`。
 - `description`：牌面描述。
 - `art`：插画文件名或相对路径。
