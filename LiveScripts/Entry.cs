@@ -2,6 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Modding;
+using sanguosha.Cards;
 using sanguosha.Characters;
 using STS2RitsuLib;
 using STS2RitsuLib.Interop;
@@ -21,7 +22,19 @@ public static class Entry
         RitsuLibFramework.EnsureGodotScriptsRegistered(assembly, Logger);
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         SanguoshaPowerIconAssets.Register();
+        SanguoshaCardPortraitLoader.RegisterAll();
         SanguoshaCharacterSkills.Register();
+        RegisterSanguoshaStarterCompatibility();
         Logger.Info("Sanguosha mod initialized.");
+    }
+
+    private static void RegisterSanguoshaStarterCompatibility()
+    {
+        RitsuLibFramework.RegisterArchaicToothTranscendenceMapping<
+            ShaCard,
+            MegaCrit.Sts2.Core.Models.Cards.UltimateStrike>(ModId);
+        RitsuLibFramework.RegisterArchaicToothTranscendenceMapping<
+            ShanCard,
+            MegaCrit.Sts2.Core.Models.Cards.UltimateDefend>(ModId);
     }
 }

@@ -63,6 +63,7 @@ public abstract class SanguoshaCard(
         ["TieSuoCard"] = "tiesuo",
         ["TuXiCard"] = "tuxi",
         ["WanJianCard"] = "wanjian",
+        ["WangJianShaCard"] = "wangjiansha",
         ["WuGuCard"] = "wugu",
         ["WuShuangCard"] = "wushuang",
         ["WuXieCard"] = "wuxie",
@@ -70,19 +71,135 @@ public abstract class SanguoshaCard(
         ["YiJiCard"] = "yiji",
         ["YuXiCard"] = "yuxi",
         ["ZhangBaCard"] = "zhangba",
-        ["ZhangBaShaCard"] = "sha",
+        ["ZhangBaShaCard"] = "zhangbasha",
         ["ZhiHengCard"] = "zhiheng",
         ["ZhuGeCard"] = "zhuge"
     };
 
+    internal static readonly string[] ShaInfusionPortraitSlugs =
+    [
+        "sha_fire",
+        "sha_poison",
+        "sha_thunder",
+        "sha_stored",
+        "sha_calamity"
+    ];
+
+    internal static readonly string[] CharacterBasicPortraitSlugs =
+    [
+        "shan_ironclad",
+        "tao_ironclad",
+        "jiu_ironclad",
+        "shan_silent",
+        "tao_silent",
+        "jiu_silent",
+        "shan_defect",
+        "tao_defect",
+        "jiu_defect",
+        "shan_necrobinder",
+        "tao_necrobinder",
+        "jiu_necrobinder",
+        "shan_regent",
+        "tao_regent",
+        "jiu_regent"
+    ];
+
     public override string CustomPortraitPath => GetModPortraitPath();
     public override string CustomBetaPortraitPath => GetModPortraitPath();
+    public override string CustomFramePath => GetCharacterUiPath("frame") ?? base.CustomFramePath ?? string.Empty;
+    public override string CustomPortraitBorderPath => GetCharacterUiPath("portrait_border") ?? base.CustomPortraitBorderPath ?? string.Empty;
+    public override string CustomEnergyIconPath => GetCharacterEnergyIconPath() ?? base.CustomEnergyIconPath ?? string.Empty;
 
-    internal string SanguoshaPortraitSlug => GetPortraitSlug(GetType());
+    internal string SanguoshaPortraitSlug => GetPortraitSlug();
 
     private string GetModPortraitPath()
     {
-        return $"res://mods/{Entry.ModId}/card_art/{SanguoshaPortraitSlug}.png";
+        return SanguoshaCardPortraitLoader.GetResourcePath(SanguoshaPortraitSlug);
+    }
+
+    private string? GetCharacterUiPath(string assetPrefix)
+    {
+        var characterKey = GetCharacterSkinKey();
+        if (characterKey is null)
+        {
+            return null;
+        }
+
+        return GetModUiPath($"{assetPrefix}_{characterKey}_{GetCardTypeUiKey()}");
+    }
+
+    private string? GetCharacterEnergyIconPath()
+    {
+        var characterKey = GetCharacterSkinKey();
+        return characterKey is null ? null : GetModUiPath($"energy_{characterKey}");
+    }
+
+    private static string GetModUiPath(string assetName)
+    {
+        return $"res://mods/{Entry.ModId}/card_art/ui/{assetName}.png";
+    }
+
+    private string? GetCharacterSkinKey()
+    {
+        return Owner?.Character.GetType().Name switch
+        {
+            "Ironclad" => "ironclad",
+            "Silent" => "silent",
+            "Defect" => "defect",
+            "Necrobinder" => "necrobinder",
+            "Regent" => "regent",
+            _ => null
+        };
+    }
+
+    private string GetCardTypeUiKey()
+    {
+        return Type switch
+        {
+            CardType.Attack => "attack",
+            CardType.Power => "power",
+            _ => "skill"
+        };
+    }
+
+    private string GetPortraitSlug()
+    {
+        var characterName = Owner?.Character.GetType().Name;
+        if (characterName is not null
+            && GetCharacterBasicPortraitSlug(characterName, GetType().Name) is { } characterSlug)
+        {
+            return characterSlug;
+        }
+
+        return GetPortraitSlug(GetType());
+    }
+
+    private static string? GetCharacterBasicPortraitSlug(string characterName, string cardTypeName)
+    {
+        return (characterName, cardTypeName) switch
+        {
+            ("Ironclad", "ShaCard") => "sha_fire",
+            ("Ironclad", "ShanCard") => "shan_ironclad",
+            ("Ironclad", "TaoCard") => "tao_ironclad",
+            ("Ironclad", "JiuCard") => "jiu_ironclad",
+            ("Silent", "ShaCard") => "sha_poison",
+            ("Silent", "ShanCard") => "shan_silent",
+            ("Silent", "TaoCard") => "tao_silent",
+            ("Silent", "JiuCard") => "jiu_silent",
+            ("Defect", "ShaCard") => "sha_thunder",
+            ("Defect", "ShanCard") => "shan_defect",
+            ("Defect", "TaoCard") => "tao_defect",
+            ("Defect", "JiuCard") => "jiu_defect",
+            ("Necrobinder", "ShaCard") => "sha_calamity",
+            ("Necrobinder", "ShanCard") => "shan_necrobinder",
+            ("Necrobinder", "TaoCard") => "tao_necrobinder",
+            ("Necrobinder", "JiuCard") => "jiu_necrobinder",
+            ("Regent", "ShaCard") => "sha_stored",
+            ("Regent", "ShanCard") => "shan_regent",
+            ("Regent", "TaoCard") => "tao_regent",
+            ("Regent", "JiuCard") => "jiu_regent",
+            _ => null
+        };
     }
 
     internal static string GetPortraitSlug(Type type)
@@ -135,42 +252,104 @@ internal static class SanguoshaCardPortraitPatch
 internal static class SanguoshaCardPortraitLoader
 {
     private static readonly Dictionary<string, Texture2D> Cache = [];
+    private static bool _registered;
+
+    public static void RegisterAll()
+    {
+        if (_registered)
+        {
+            return;
+        }
+
+        _registered = true;
+        foreach (var slug in SanguoshaCard.PortraitSlugs.Values
+                     .Concat(SanguoshaCard.ShaInfusionPortraitSlugs)
+                     .Concat(SanguoshaCard.CharacterBasicPortraitSlugs)
+                     .Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            Load(slug, warnIfMissing: false);
+        }
+
+        Entry.Logger.Info($"Registered {Cache.Count} Sanguosha card portrait resources.");
+    }
+
+    public static string GetResourcePath(string slug)
+    {
+        return $"res://mods/{Entry.ModId}/card_art/{slug}.png";
+    }
 
     public static bool HasPortrait(SanguoshaCard card)
     {
-        return File.Exists(GetPortraitFilePath(card));
+        return Cache.ContainsKey(card.SanguoshaPortraitSlug)
+            || GetPortraitFilePaths(card.SanguoshaPortraitSlug).Any(File.Exists);
     }
 
     public static Texture2D? Load(SanguoshaCard card)
     {
-        var slug = card.SanguoshaPortraitSlug;
+        return Load(card.SanguoshaPortraitSlug, warnIfMissing: true, card.GetType().Name);
+    }
+
+    private static Texture2D? Load(string slug, bool warnIfMissing, string? ownerName = null)
+    {
         if (Cache.TryGetValue(slug, out var cached))
         {
             return cached;
         }
 
-        var path = GetPortraitFilePath(card);
-        if (!File.Exists(path))
+        foreach (var path in GetPortraitFilePaths(slug))
         {
-            return null;
+            if (!File.Exists(path))
+            {
+                continue;
+            }
+
+            var image = Image.LoadFromFile(path);
+            if (image is null || image.IsEmpty())
+            {
+                continue;
+            }
+
+            var texture = ImageTexture.CreateFromImage(image);
+            texture.TakeOverPath(GetResourcePath(slug));
+            Cache[slug] = texture;
+            return texture;
         }
 
-        var image = Image.LoadFromFile(path);
-        if (image is null || image.IsEmpty())
+        if (warnIfMissing)
         {
-            return null;
+            Entry.Logger.Warn($"Card portrait not found for {ownerName ?? slug} ({slug}).");
         }
 
-        var texture = ImageTexture.CreateFromImage(image);
-        Cache[slug] = texture;
-        return texture;
+        return null;
     }
 
-    private static string GetPortraitFilePath(SanguoshaCard card)
+    private static IEnumerable<string> GetPortraitFilePaths(string slug)
     {
+        var fileName = $"{slug}.png";
+
         var modDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        return string.IsNullOrWhiteSpace(modDir)
-            ? string.Empty
-            : Path.Combine(modDir, "card_art", $"{card.SanguoshaPortraitSlug}.png");
+        if (!string.IsNullOrWhiteSpace(modDir))
+        {
+            yield return Path.Combine(modDir, "card_art", fileName);
+        }
+
+        var globalizedResPath = ProjectSettings.GlobalizePath($"res://mods/{Entry.ModId}/card_art/{fileName}");
+        if (!string.IsNullOrWhiteSpace(globalizedResPath))
+        {
+            yield return globalizedResPath;
+        }
+
+        if (!string.IsNullOrWhiteSpace(AppContext.BaseDirectory))
+        {
+            yield return Path.Combine(AppContext.BaseDirectory, "card_art", fileName);
+            yield return Path.Combine(AppContext.BaseDirectory, "mods", Entry.ModId, "card_art", fileName);
+        }
+
+        var currentDir = System.Environment.CurrentDirectory;
+        if (!string.IsNullOrWhiteSpace(currentDir))
+        {
+            yield return Path.Combine(currentDir, "card_art", fileName);
+            yield return Path.Combine(currentDir, "mods", Entry.ModId, "card_art", fileName);
+        }
     }
 }

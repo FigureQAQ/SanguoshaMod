@@ -1,0 +1,213 @@
+{
+  "object": "sanguosha-role-basic-card-batch",
+  "version": 1,
+  "defaults": {
+    "cost": 1,
+    "rarity": "Common"
+  },
+  "artDefaults": {
+    "externalSubdir": "core"
+  },
+  "cards": [
+    {
+      "id": "IroncladShaPreview",
+      "slug": "sha_fire",
+      "title": "火杀",
+      "type": "基础牌 - 火杀",
+      "palette": "attack",
+      "character": "ironclad",
+      "description": "造成伤害；命中后触发赤壁猛将的火焰追击。",
+      "art": "sha_fire.png"
+    },
+    {
+      "id": "IroncladShanPreview",
+      "slug": "shan_ironclad",
+      "title": "闪",
+      "type": "基础牌 - 闪",
+      "palette": "skill",
+      "character": "ironclad",
+      "description": "获得格挡，以赤焰战意化解攻势。",
+      "art": "shan_ironclad.png"
+    },
+    {
+      "id": "IroncladTaoPreview",
+      "slug": "tao_ironclad",
+      "title": "桃",
+      "type": "基础牌 - 回复",
+      "palette": "skill",
+      "character": "ironclad",
+      "description": "回复生命并获得格挡；生命较低时额外回复。",
+      "art": "tao_ironclad.png"
+    },
+    {
+      "id": "IroncladJiuPreview",
+      "slug": "jiu_ironclad",
+      "title": "酒",
+      "type": "基础牌 - 爆发",
+      "palette": "skill",
+      "character": "ironclad",
+      "description": "下一张攻击牌造成的伤害翻倍。",
+      "art": "jiu_ironclad.png"
+    },
+    {
+      "id": "SilentShaPreview",
+      "slug": "sha_poison",
+      "title": "毒杀",
+      "type": "基础牌 - 毒杀",
+      "palette": "attack",
+      "character": "silent",
+      "description": "造成伤害并施加中毒；暗谋入局，利刃见血。",
+      "art": "sha_poison.png"
+    },
+    {
+      "id": "SilentShanPreview",
+      "slug": "shan_silent",
+      "title": "闪",
+      "type": "基础牌 - 闪",
+      "palette": "skill",
+      "character": "silent",
+      "description": "获得格挡，以夜行身法避开攻势。",
+      "art": "shan_silent.png"
+    },
+    {
+      "id": "SilentTaoPreview",
+      "slug": "tao_silent",
+      "title": "桃",
+      "type": "基础牌 - 回复",
+      "palette": "skill",
+      "character": "silent",
+      "description": "回复生命并获得格挡；生命较低时额外回复。",
+      "art": "tao_silent.png"
+    },
+    {
+      "id": "SilentJiuPreview",
+      "slug": "jiu_silent",
+      "title": "酒",
+      "type": "基础牌 - 爆发",
+      "palette": "skill",
+      "character": "silent",
+      "description": "下一张攻击牌造成的伤害翻倍。",
+      "art": "jiu_silent.png"
+    },
+    {
+      "id": "DefectShaPreview",
+      "slug": "sha_thunder",
+      "title": "雷杀",
+      "type": "基础牌 - 雷杀",
+      "palette": "attack",
+      "character": "defect",
+      "description": "造成伤害并追加雷击；雷势满时爆发全场。",
+      "art": "sha_thunder.png"
+    },
+    {
+      "id": "DefectShanPreview",
+      "slug": "shan_defect",
+      "title": "闪",
+      "type": "基础牌 - 闪",
+      "palette": "skill",
+      "character": "defect",
+      "description": "获得格挡，以机关阵式偏折攻势。",
+      "art": "shan_defect.png"
+    },
+    {
+      "id": "DefectTaoPreview",
+      "slug": "tao_defect",
+      "title": "桃",
+      "type": "基础牌 - 回复",
+      "palette": "skill",
+      "character": "defect",
+      "description": "回复生命并获得格挡；生命较低时额外回复。",
+      "art": "tao_defect.png"
+    },
+    {
+      "id": "DefectJiuPreview",
+      "slug": "jiu_defect",
+      "title": "酒",
+      "type": "基础牌 - 爆发",
+      "palette": "skill",
+      "character": "defect",
+      "description": "下一张攻击牌造成的伤害翻倍。",
+      "art": "jiu_defect.png"
+    },
+    {
+      "id": "NecrobinderShaPreview",
+      "slug": "sha_calamity",
+      "title": "灾厄杀",
+      "type": "基础牌 - 灾厄杀",
+      "palette": "attack",
+      "character": "necrobinder",
+      "description": "造成伤害并施加虚弱和减速；魂值满时追加伤害。",
+      "art": "sha_calamity.png"
+    },
+    {
+      "id": "NecrobinderShanPreview",
+      "slug": "shan_necrobinder",
+      "title": "闪",
+      "type": "基础牌 - 闪",
+      "palette": "skill",
+      "character": "necrobinder",
+      "description": "获得格挡，以魂术护身避开攻势。",
+      "art": "shan_necrobinder.png"
+    },
+    {
+      "id": "NecrobinderTaoPreview",
+      "slug": "tao_necrobinder",
+      "title": "桃",
+      "type": "基础牌 - 回复",
+      "palette": "skill",
+      "character": "necrobinder",
+      "description": "回复生命并获得格挡；生命较低时额外回复。",
+      "art": "tao_necrobinder.png"
+    },
+    {
+      "id": "NecrobinderJiuPreview",
+      "slug": "jiu_necrobinder",
+      "title": "酒",
+      "type": "基础牌 - 爆发",
+      "palette": "skill",
+      "character": "necrobinder",
+      "description": "下一张攻击牌造成的伤害翻倍。",
+      "art": "jiu_necrobinder.png"
+    },
+    {
+      "id": "RegentShaPreview",
+      "slug": "sha_stored",
+      "title": "储能杀",
+      "type": "基础牌 - 储能杀",
+      "palette": "attack",
+      "character": "regent",
+      "description": "造成伤害并获得储能；星辉满时发动诏令。",
+      "art": "sha_stored.png"
+    },
+    {
+      "id": "RegentShanPreview",
+      "slug": "shan_regent",
+      "title": "闪",
+      "type": "基础牌 - 闪",
+      "palette": "skill",
+      "character": "regent",
+      "description": "获得格挡，以王道星辉护住阵线。",
+      "art": "shan_regent.png"
+    },
+    {
+      "id": "RegentTaoPreview",
+      "slug": "tao_regent",
+      "title": "桃",
+      "type": "基础牌 - 回复",
+      "palette": "skill",
+      "character": "regent",
+      "description": "回复生命并获得格挡；生命较低时额外回复。",
+      "art": "tao_regent.png"
+    },
+    {
+      "id": "RegentJiuPreview",
+      "slug": "jiu_regent",
+      "title": "酒",
+      "type": "基础牌 - 爆发",
+      "palette": "skill",
+      "character": "regent",
+      "description": "下一张攻击牌造成的伤害翻倍。",
+      "art": "jiu_regent.png"
+    }
+  ]
+}

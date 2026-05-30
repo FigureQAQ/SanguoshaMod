@@ -23,13 +23,20 @@ Godot_*.exe
 *.pdb
 *.mdb
 node_modules/
+.tools/
 
 # Local card generation inputs/outputs
 tools/cardgen/input/
 tools/cardgen/output/
 tools/cardgen/output-tricks/
 tools/cardgen/output-core/
+tools/cardgen/output-role-basic/
 release/
+
+# Local scratch/debug output
+tmp/
+tmp_reflect_stars/
+power_icons_preview.png
 
 # OS noise
 Thumbs.db

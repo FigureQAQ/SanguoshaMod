@@ -46,7 +46,7 @@ public sealed class CiShaCard : SanguoshaCard
 public sealed class ShouShiCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(7, ValueProp.Move),
+        new BlockVar(5, ValueProp.Move),
         new DynamicVar("Draw", 1m)
     ];
 
@@ -65,7 +65,7 @@ public sealed class ShouShiCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars.Block.UpgradeValueBy(2);
     }
 }
 
@@ -73,9 +73,8 @@ public sealed class ShouShiCard : SanguoshaCard
 public sealed class DiaoDuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("MaxCards", 1m),
-        new BlockVar(3, ValueProp.Move),
-        new EnergyVar(1)
+        new DynamicVar("Draw", 1m),
+        new DynamicVar("Discard", 1m)
     ];
 
     public DiaoDuCard() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
@@ -84,31 +83,19 @@ public sealed class DiaoDuCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var discarded = await SanguoshaCardFx.DiscardFromHand(
+        var amount = DynamicVars["Draw"].IntValue;
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, amount);
+        await SanguoshaCardFx.DiscardFromHand(
             choiceContext,
             cardPlay,
-            DynamicVars["MaxCards"].IntValue,
-            minCards: 1);
-        if (discarded.Count == 0)
-        {
-            return;
-        }
-
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, discarded.Count);
-        if (discarded.Any(SanguoshaCharacterSkills.IsShaLike))
-        {
-            await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-            if (IsUpgraded)
-            {
-                SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
-            }
-        }
+            Math.Min(DynamicVars["Discard"].IntValue, cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards.Count),
+            minCards: Math.Min(DynamicVars["Discard"].IntValue, cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards.Count));
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["MaxCards"].UpgradeValueBy(1);
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars["Draw"].UpgradeValueBy(1);
+        DynamicVars["Discard"].UpgradeValueBy(1);
     }
 }
 
@@ -117,8 +104,10 @@ public sealed class RenDeCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Heal", 2m),
-        new BlockVar(4, ValueProp.Move),
-        new DynamicVar("Draw", 1m)
+        new BlockVar(3, ValueProp.Move),
+        new DynamicVar("Draw", 1m),
+        new EnergyVar(1),
+        new DynamicVar("NextShaDamage", 3m)
     ];
 
     public RenDeCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
@@ -133,18 +122,28 @@ public sealed class RenDeCard : SanguoshaCard
             return;
         }
 
+        var card = discarded[0];
         await SanguoshaCardFx.Heal(cardPlay, DynamicVars["Heal"].BaseValue);
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        if (discarded[0].Type == CardType.Skill)
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+        if (SanguoshaCharacterSkills.IsShaLike(card))
         {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+            SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
+        }
+        else if (card is ShanCard)
+        {
+            await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        }
+        else if (card.Type == CardType.Skill)
+        {
+            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
         }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Heal"].UpgradeValueBy(1);
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars.Block.UpgradeValueBy(1);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
         EnergyCost.SetCustomBaseCost(0);
     }
 }
@@ -155,7 +154,8 @@ public sealed class TuXiCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Draw", 1m),
         new DynamicVar("StrengthDown", 1m),
-        new DynamicVar("Vulnerable", 1m)
+        new DynamicVar("Vulnerable", 1m),
+        new EnergyVar(1)
     ];
 
     public TuXiCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
@@ -164,8 +164,16 @@ public sealed class TuXiCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         var target = cardPlay.Target!;
+        if (target.Block > 0)
+        {
+            target.LoseBlockInternal(target.Block);
+            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+            return;
+        }
+
+        cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         if (target.Powers.Any(power => power is StrengthPower))
         {
             await PowerCmd.Apply<StrengthPower>(
@@ -175,11 +183,10 @@ public sealed class TuXiCard : SanguoshaCard
                 cardPlay.Card.Owner.Creature,
                 cardPlay.Card,
                 false);
+            return;
         }
-        else
-        {
-            await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
-        }
+
+        await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
     }
 
     protected override void OnUpgrade()
@@ -214,13 +221,18 @@ public sealed class QiXiCard : SanguoshaCard
         }
 
         var target = cardPlay.Target!;
-        if (target.Block > 0)
+        var hadBlock = target.Block > 0;
+        if (hadBlock)
         {
             target.LoseBlockInternal(target.Block);
+            await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
         }
-
-        await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
-        if (IsUpgraded)
+        else
+        {
+            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(1);
+        }
+        if (IsUpgraded && hadBlock)
         {
             await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         }
@@ -228,6 +240,8 @@ public sealed class QiXiCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars["Vulnerable"].UpgradeValueBy(1);
+        DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }
 
@@ -236,11 +250,12 @@ public sealed class GuaGuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Heal", 3m),
-        new BlockVar(4, ValueProp.Move),
+        new BlockVar(3, ValueProp.Move),
         new DynamicVar("Draw", 1m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+        IsUpgraded ? [] : [CardKeyword.Exhaust];
 
     public GuaGuCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {

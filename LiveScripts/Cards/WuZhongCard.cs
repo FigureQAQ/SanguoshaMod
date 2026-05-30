@@ -37,7 +37,6 @@ public sealed class WuZhongCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         DynamicVars["Draw"].UpgradeValueBy(1);
-        EnergyCost.SetCustomBaseCost(0);
     }
 }
 

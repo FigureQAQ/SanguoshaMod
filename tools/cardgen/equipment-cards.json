@@ -12,8 +12,10 @@
       "slug": "zhuge",
       "title": "诸葛连弩",
       "type": "装备牌 - 武器",
-      "description": "获得力量并生成 1 张免费杀。每回合开始时，手牌中前若干张杀本回合变为 0 费。失去时按本回合已打出的杀抽牌。",
-      "art": "zhuge.png"
+      "description": "装备武器。获得力量并生成免费杀；每回合开始使 1 张杀变为 0 费，升级后 2 张；失去时最多抽 2 张。",
+      "art": "zhuge.png",
+      "rarity": "Rare",
+      "cost": 2
     },
     {
       "id": "ZhangBaCard",
@@ -21,7 +23,8 @@
       "title": "丈八蛇矛",
       "type": "装备牌 - 武器",
       "description": "抽牌。只要你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。失去时获得能量并补蛇矛杀。",
-      "art": "zhangba.png"
+      "art": "zhangba.png",
+      "rarity": "Rare"
     },
     {
       "id": "QingGangCard",
@@ -29,7 +32,8 @@
       "title": "青釭剑",
       "type": "装备牌 - 武器",
       "description": "获得能量。你的杀无视敌人格挡。失去时获得能量。",
-      "art": "qinggang.png"
+      "art": "qinggang.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "GuanShiCard",
@@ -37,7 +41,8 @@
       "title": "贯石斧",
       "type": "装备牌 - 武器",
       "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时获得力量并强化下一张杀。",
-      "art": "guanshi.png"
+      "art": "guanshi.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "HanBingCard",
@@ -45,15 +50,17 @@
       "title": "寒冰剑",
       "type": "装备牌 - 武器",
       "description": "抽牌。你的杀命中后施加虚弱。失去时抽牌。",
-      "art": "hanbing.png"
+      "art": "hanbing.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "QiLinCard",
       "slug": "qilin",
       "title": "麒麟弓",
       "type": "装备牌 - 武器",
-      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害，并施加易伤。失去时获得力量并抽牌。",
-      "art": "qilin.png"
+      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害；每回合首次如此命中时施加易伤。失去时获得力量并抽牌。",
+      "art": "qilin.png",
+      "rarity": "Rare"
     },
     {
       "id": "GuDingCard",
@@ -61,7 +68,8 @@
       "title": "古锭刀",
       "type": "装备牌 - 武器",
       "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。失去时获得力量。",
-      "art": "guding.png"
+      "art": "guding.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "BaGuaCard",
@@ -69,15 +77,17 @@
       "title": "八卦阵",
       "type": "装备牌 - 防具",
       "description": "敌人攻击你时，从抽牌堆顶依次打出牌：若为闪，获得格挡并继续；直到不是闪或攻击被完全格挡。失去时抽牌并获得格挡。",
-      "art": "bagua.png"
+      "art": "bagua.png",
+      "rarity": "Rare"
     },
     {
       "id": "RenWangCard",
       "slug": "renwang",
       "title": "仁王盾",
       "type": "装备牌 - 防具",
-      "description": "获得敏捷。失去时获得敏捷。",
-      "art": "renwang.png"
+      "description": "获得格挡。每回合首次受到杀或普通攻击前，获得足量格挡；升级后触发时抽牌。失去时获得格挡并抽牌。",
+      "art": "renwang.png",
+      "rarity": "Rare"
     },
     {
       "id": "BaiYinCard",
@@ -85,7 +95,8 @@
       "title": "白银狮子",
       "type": "装备牌 - 防具",
       "description": "获得敏捷并回复生命。每回合开始时回复生命。每回合最大受到 15 点单次伤害。失去时回复生命。",
-      "art": "baiyin.png"
+      "art": "baiyin.png",
+      "rarity": "Rare"
     },
     {
       "id": "ChiTuCard",
@@ -93,7 +104,8 @@
       "title": "赤兔",
       "type": "装备牌 - 坐骑",
       "description": "获得力量和能量。失去时获得能量，并使手牌中的杀临时变为 0 费。",
-      "art": "chitu.png"
+      "art": "chitu.png",
+      "rarity": "Rare"
     },
     {
       "id": "DaWanCard",
@@ -101,7 +113,8 @@
       "title": "大宛",
       "type": "装备牌 - 坐骑",
       "description": "获得力量。失去时获得力量，并强化下一张杀。",
-      "art": "dawan.png"
+      "art": "dawan.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "DiLuCard",
@@ -109,15 +122,18 @@
       "title": "的卢",
       "type": "装备牌 - 坐骑",
       "description": "获得敏捷。失去时获得敏捷和格挡。",
-      "art": "dilu.png"
+      "art": "dilu.png",
+      "rarity": "Uncommon"
     },
     {
       "id": "YuXiCard",
       "slug": "yuxi",
       "title": "玉玺",
       "type": "装备牌 - 宝物",
-      "description": "获得能量、力量并抽牌。每回合开始时额外获得 1 点能量。失去时获得能量并抽牌。",
-      "art": "yuxi.png"
+      "description": "装备宝物。入场获得能量并抽牌；每回合开始额外获得能量；失去时抽牌。",
+      "art": "yuxi.png",
+      "rarity": "Rare",
+      "cost": 2
     },
     {
       "id": "MuNiuCard",
@@ -125,7 +141,8 @@
       "title": "木牛流马",
       "type": "装备牌 - 宝物",
       "description": "获得能量并抽牌。每回合前若干次打出锦囊牌后，抽 1 张牌。失去时抽牌。",
-      "art": "muniu.png"
+      "art": "muniu.png",
+      "rarity": "Rare"
     },
     {
       "id": "TaiPingCard",
@@ -133,7 +150,8 @@
       "title": "太平要术",
       "type": "装备牌 - 宝物",
       "description": "获得敏捷并回复生命。每回合开始时净化 1 个负面效果；若成功净化，获得能量并额外回复生命。失去时回复生命。",
-      "art": "taiping.png"
+      "art": "taiping.png",
+      "rarity": "Rare"
     },
     {
       "id": "GanJiangMoYeCard",
@@ -152,9 +170,9 @@
       "slug": "tengjia",
       "title": "藤甲",
       "type": "装备牌 - 防具",
-      "rarity": "Uncommon",
+      "rarity": "Rare",
       "cost": 1,
-      "description": "获得敏捷。敌人非杀伤害来临前，获得格挡。失去时获得格挡。",
+      "description": "获得格挡。每回合开始时获得 10 点格挡并失去 1 点生命。失去时获得格挡。",
       "art": "tengjia.png",
       "externalFileB64": "6Jek55SyLnBuZw==",
       "prompt": "藤甲，三国幻想防具卡牌插画，坚韧藤蔓编织的轻甲披在木架上，青绿藤纹与皮革护片交错，周围箭矢被藤蔓缠住，背景为南中密林和雾气，氛围灵巧、防护、自然，厚涂，强轮廓，竖版卡牌，无文字无边框。"
@@ -178,7 +196,7 @@
       "type": "装备牌 - 宝物",
       "rarity": "Rare",
       "cost": 1,
-      "description": "获得能量并抽牌。每回合首次打出锦囊牌后，获得能量，并使杀或锦囊牌临时变为 0 费。失去时获得能量并临时减费。",
+      "description": "装备宝物。首次打出锦囊后获得能量，并使 1 张杀或锦囊本回合费用降低 1。",
       "art": "mengdexinshu.png",
       "externalFileB64": "5a2f5b635paw5LmmLnBuZw==",
       "prompt": "孟德新书，三国幻想宝物卡牌插画，黑金兵书摊开在曹魏军帐的沙盘上，竹简、令牌、烛火与乌鸦羽毛环绕，书页浮现兵法光纹，背景为谋士剪影和战旗，氛围权谋、调度、智略，厚涂，强轮廓，竖版卡牌，无文字无边框。"

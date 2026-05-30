@@ -10,7 +10,8 @@ const root = path.resolve(__dirname, '../..');
 const batches = [
   { group: 'equipment', input: path.join(__dirname, 'equipment-cards.json'), artDir: path.join(__dirname, 'input', 'equipment-art') },
   { group: 'trick', input: path.join(__dirname, 'trick-cards.json'), artDir: path.join(__dirname, 'input', 'tricks-art') },
-  { group: 'core', input: path.join(__dirname, 'core-cards.json'), artDir: path.join(__dirname, 'input', 'core-art') }
+  { group: 'core', input: path.join(__dirname, 'core-cards.json'), artDir: path.join(__dirname, 'input', 'core-art') },
+  { group: 'role-basic', input: path.join(__dirname, 'role-basic-cards.json'), artDir: path.join(__dirname, 'input', 'core-art') }
 ];
 
 function parseArgs(argv) {
@@ -51,6 +52,7 @@ function classifyCard(card, group) {
   }
 
   if (['ShaCard', 'ShanCard', 'TaoCard', 'JiuCard'].includes(card.id)) return 'basic';
+  if (group === 'role-basic') return 'basic';
   if (group === 'core') return 'power';
   return 'trick';
 }

@@ -14,7 +14,7 @@ public sealed class TaoCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new HealVar(6),
         new DynamicVar("LowHpHeal", 3m),
-        new BlockVar(4, ValueProp.Move)
+        new BlockVar(2, ValueProp.Move)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -42,7 +42,7 @@ public sealed class TaoCard : SanguoshaCard
     {
         DynamicVars.Heal.UpgradeValueBy(2);
         DynamicVars["LowHpHeal"].UpgradeValueBy(1);
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars.Block.UpgradeValueBy(1);
     }
 }
 

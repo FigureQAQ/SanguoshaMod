@@ -6,11 +6,12 @@ namespace sanguosha.Patches;
 
 internal static class SanguoshaCardCatalog
 {
-    public static IReadOnlyList<CardModel>? TryGetCards()
+    public static IReadOnlyList<CardModel>? TryGetCards(bool includeGeneratedOnly = false)
     {
         try
         {
-            return [
+            var cards = new List<CardModel>
+            {
                 ModelDb.Card<BaGuaCard>(),
                 ModelDb.Card<BaiYinCard>(),
                 ModelDb.Card<BingLiangCard>(),
@@ -65,8 +66,16 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<JianXiongCard>(),
                 ModelDb.Card<GuiCaiCard>(),
                 ModelDb.Card<ZhangBaCard>(),
+                ModelDb.Card<ZhangBaShaCard>(),
+                ModelDb.Card<WangJianShaCard>(),
                 ModelDb.Card<ZhuGeCard>()
-            ];
+            };
+
+            return includeGeneratedOnly
+                ? cards.OrderBy(StableCardKey, StringComparer.Ordinal).ToList()
+                : cards.Where(card => card is not ZhangBaShaCard and not WangJianShaCard)
+                    .OrderBy(StableCardKey, StringComparer.Ordinal)
+                    .ToList();
         }
         catch (Exception ex)
         {
@@ -80,9 +89,9 @@ internal static class SanguoshaCardCatalog
         Func<CardModel, bool>? originalFilter = null)
     {
         var originalList = original.ToList();
-        if (originalList.Count == 0 || originalList.All(IsSanguoshaCard) || originalList.All(IsNonCollectible))
+        if (originalList.All(IsSanguoshaCard) || originalList.All(IsNonCollectible))
         {
-            return originalList;
+            return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
         }
 
         var cards = TryGetCards();
@@ -97,18 +106,37 @@ internal static class SanguoshaCardCatalog
 
         if (filtered.Count == 0)
         {
-            Entry.Logger.Warn("Sanguosha card replacement kept original cards because no Sanguosha card matched the original filter.");
-            return originalList;
+            Entry.Logger.Warn("Sanguosha card replacement ignored an incompatible original card filter and used the full Sanguosha pool.");
+            filtered = cards.ToList();
+        }
+
+        if (originalList.Count == 0)
+        {
+            return filtered.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
         }
 
         var shaped = KeepOriginalCollectibleShape(originalList, filtered);
         if (shaped.Count == 0)
         {
-            Entry.Logger.Warn("Sanguosha card replacement kept original cards because replacement candidates did not cover the original card types.");
-            return originalList;
+            Entry.Logger.Warn("Sanguosha card replacement kept the filtered Sanguosha pool because the original pool shape was incompatible.");
+            shaped = filtered;
         }
 
-        return shaped;
+        return shaped.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+    }
+
+    public static IEnumerable<CardModel> ReplaceAllCards(IEnumerable<CardModel> original)
+    {
+        var originalList = original.ToList();
+        if (originalList.Count == 0 || originalList.All(IsSanguoshaCard))
+        {
+            return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+        }
+
+        var cards = TryGetCards(includeGeneratedOnly: true);
+        return cards is null || cards.Count == 0
+            ? originalList
+            : cards;
     }
 
     public static IEnumerable<CardModel> ReplaceStartingDeck(IEnumerable<CardModel> original)
@@ -171,6 +199,11 @@ internal static class SanguoshaCardCatalog
         return cards.OfType<WuZhongCard>().First();
     }
 
+    public static bool IsSanguoshaBasicCard(CardModel card)
+    {
+        return card is ShaCard or ShanCard or TaoCard or JiuCard;
+    }
+
     private static bool IsSanguoshaCard(CardModel card)
     {
         return card is SanguoshaCard;
@@ -208,7 +241,8 @@ internal static class SanguoshaCardCatalog
         var originalRarities = collectibleOriginal.Select(card => card.Rarity).Distinct().ToList();
         var rarified = typed.Where(card => originalRarities.Contains(card.Rarity)).ToList();
 
-        return rarified.Count > 0 ? rarified : typed;
+        var shaped = rarified.Count > 0 ? rarified : typed;
+        return shaped.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
     }
 
     private static bool SafeMatches(Func<CardModel, bool> filter, CardModel card)
@@ -221,5 +255,10 @@ internal static class SanguoshaCardCatalog
         {
             return false;
         }
+    }
+
+    private static string StableCardKey(CardModel card)
+    {
+        return $"{(int)card.Type:D2}:{(int)card.Rarity:D2}:{card.GetType().FullName}";
     }
 }

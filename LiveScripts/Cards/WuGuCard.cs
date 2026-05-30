@@ -12,9 +12,9 @@ namespace sanguosha.Cards;
 public sealed class WuGuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(8, ValueProp.Move),
+        new BlockVar(4, ValueProp.Move),
         new EnergyVar(1),
-        new DynamicVar("Draw", 2m),
+        new DynamicVar("Draw", 1m),
         new DynamicVar("BonusDraw", 1m)
     ];
 
@@ -36,13 +36,15 @@ public sealed class WuGuCard : SanguoshaCard
         }
 
         var drawCount = DynamicVars["Draw"].IntValue + (consumed.Count > 0 ? DynamicVars["BonusDraw"].IntValue : 0);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, drawCount);
+        foreach (var player in SanguoshaCardFx.AliveCombatPlayers(cardPlay))
+        {
+            await SanguoshaCardFx.Draw(choiceContext, player, drawCount);
+        }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(2);
-        DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }
 

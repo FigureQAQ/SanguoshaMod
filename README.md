@@ -8,11 +8,11 @@
 - 20 张装备牌，分为武器、防具、坐骑、宝物四个槽位；同槽位只能装备一件，新装备会顶掉旧装备并触发旧装备的“失去时”效果。
 - 五个角色均有三国化命名、初始遗物和杀附魔机制。
 - 卡牌头像来自 `card_art`，装备栏图标来自 `power_icons` 与 `power_icons_big`。
-- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.5`。
+- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.6`。
 
 ## 联机安装
 
-推荐使用发布压缩包 `SanguoshaMod-0.1.0-multiplayer.zip`：
+推荐使用发布压缩包 `SanguoshaMod-0.1.2-multiplayer.zip`：
 
 1. 关闭 Slay the Spire 2。
 2. 将压缩包解压到 Slay the Spire 2 游戏根目录。
@@ -45,4 +45,7 @@ npm run cardgen:all
 - 装备说明：`docs/EQUIPMENT_CARDS_2026-05-29.md`
 - 角色附魔：`docs/CHARACTER_INFUSIONS_2026-05-29.md`
 - 平衡记录：`docs/BALANCE_PASS_2026-05-29.md`
+- 杀附魔节奏：`docs/SHA_INFUSION_BALANCE_2026-05-29.md`
+- 仁王盾重做：`docs/REN_WANG_REWORK_2026-05-29.md`
+- 机关卧龙星辉修正：`docs/DEFECT_THUNDER_STARS_FIX_2026-05-29.md`
 - RitsuLib 升级记录：`docs/RITSULIB_UPGRADE_2026-05-29.md`

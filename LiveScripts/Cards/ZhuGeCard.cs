@@ -30,7 +30,6 @@ public sealed class ZhuGeCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         DynamicVars["FreeSha"].UpgradeValueBy(1);
-        EnergyCost.SetCustomBaseCost(1);
     }
 }
 

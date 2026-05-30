@@ -12,7 +12,7 @@ namespace sanguosha.Cards;
 public sealed class ShanCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(5, ValueProp.Move)
+        new BlockVar(4, ValueProp.Move)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [];
@@ -28,6 +28,6 @@ public sealed class ShanCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars.Block.UpgradeValueBy(1);
     }
 }

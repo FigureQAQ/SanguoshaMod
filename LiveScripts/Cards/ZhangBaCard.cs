@@ -62,7 +62,7 @@ public sealed class ZhangBaShaCard : SanguoshaCard
             return;
         }
 
-        var upgraded = SanguoshaCharacterSkills.IsZhangBaUpgraded(cardPlay.Card.Owner);
+        var upgraded = IsUpgraded || SanguoshaCharacterSkills.IsZhangBaUpgraded(cardPlay.Card.Owner);
         var damage = DynamicVars.Damage.BaseValue + (upgraded ? DynamicVars["UpgradeDamage"].BaseValue : 0);
         await SanguoshaCardFx.Attack(choiceContext, cardPlay, damage);
         if (upgraded)
@@ -73,6 +73,8 @@ public sealed class ZhangBaShaCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        DynamicVars["UpgradeDamage"].UpgradeValueBy(1);
+        DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }
 

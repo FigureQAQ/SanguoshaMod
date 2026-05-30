@@ -2,6 +2,7 @@ using System.Reflection;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
 
@@ -21,7 +22,7 @@ internal static class CardPoolModelGetUnlockedCardsPatch
 {
     private static void Postfix(ref IEnumerable<CardModel> __result)
     {
-        __result = SanguoshaCardCatalog.ReplaceGeneratedCards(__result);
+        __result = SanguoshaCardCatalog.ReplaceAllCards(__result);
     }
 }
 
@@ -31,6 +32,38 @@ internal static class ModelDbAllCardsPatch
     private static void Postfix(ref IEnumerable<CardModel> __result)
     {
         __result = SanguoshaCardCatalog.ReplaceGeneratedCards(__result);
+    }
+}
+
+[HarmonyPatch]
+internal static class MerchantSanguoshaBasicCardFilterPatch
+{
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        var createForMerchant = nameof(CardFactory.CreateForMerchant);
+        return [
+            AccessTools.Method(
+                typeof(CardFactory),
+                createForMerchant,
+                [typeof(Player), typeof(IEnumerable<CardModel>), typeof(CardType)]),
+            AccessTools.Method(
+                typeof(CardFactory),
+                createForMerchant,
+                [typeof(Player), typeof(IEnumerable<CardModel>), typeof(CardRarity)])
+        ];
+    }
+
+    private static void Prefix(ref IEnumerable<CardModel> options)
+    {
+        var optionList = options.ToList();
+        var filtered = optionList
+            .Where(card => !SanguoshaCardCatalog.IsSanguoshaBasicCard(card))
+            .ToList();
+
+        if (filtered.Count > 0)
+        {
+            options = filtered;
+        }
     }
 }
 

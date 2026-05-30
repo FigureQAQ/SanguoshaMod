@@ -13,7 +13,7 @@ public sealed class BaGuaCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),
-        new BlockVar(6, ValueProp.Move)
+        new BlockVar(4, ValueProp.Move)
     ];
 
     public BaGuaCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -29,6 +29,6 @@ public sealed class BaGuaCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         EnergyCost.SetCustomBaseCost(0);
-        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars.Block.UpgradeValueBy(1);
     }
 }
