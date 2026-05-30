@@ -48,7 +48,7 @@ internal static class SanguoshaCardFx
             .Execute(context);
         if (isSha)
         {
-            await SanguoshaCharacterSkills.ApplyAttackFollowups(context, play, target);
+            await SanguoshaCharacterSkills.ApplyAttackFollowups(context, play, target, amount);
         }
 
         var splashMultiplier = isSha ? SanguoshaCharacterSkills.GetAttackSplashMultiplier(play.Card.Owner) : 0m;
@@ -90,7 +90,7 @@ internal static class SanguoshaCardFx
                 .Execute(context);
             if (isSha)
             {
-                await SanguoshaCharacterSkills.ApplyAttackFollowups(context, play, target);
+                await SanguoshaCharacterSkills.ApplyAttackFollowups(context, play, target, amount);
             }
         }
     }
@@ -731,7 +731,7 @@ public sealed class GanJiangMoYeCard : SanguoshaCard
 public sealed class TengJiaCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("HpLoss", 1m),
+        new DynamicVar("Slow", 1m),
         new BlockVar(10, ValueProp.Move)
     ];
 
@@ -739,10 +739,10 @@ public sealed class TengJiaCard : SanguoshaCard
     {
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         SanguoshaCharacterSkills.ActivateTengJia(cardPlay.Card.Owner, IsUpgraded);
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()

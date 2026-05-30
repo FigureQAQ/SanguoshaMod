@@ -35,15 +35,38 @@ internal static class SanguoshaCharacterSkills
     private static void ReplaceEquipment(Player player, CharacterSkillState state, EquipSlot slot, string newCardId, bool upgraded)
     {
         // 检查同槽是否有旧装备
-        if (state.ActiveEquip.TryGetValue(slot, out var oldCardId) && oldCardId != newCardId)
+        if (state.ActiveEquip.TryGetValue(slot, out var oldCardId))
         {
             var wasUpgraded = state.ActiveEquipUpgraded.TryGetValue(slot, out var up) && up;
-            RemoveDisplayPower(player, oldCardId);
-            _ = DoEquipmentReplaced(player, oldCardId, wasUpgraded);
-            ClearEquipmentFlags(state, slot);
+            _ = RevokeEquipmentStatBonus(player, oldCardId, wasUpgraded);
+            if (oldCardId != newCardId)
+            {
+                RemoveDisplayPower(player, oldCardId);
+                _ = DoEquipmentReplaced(player, oldCardId, wasUpgraded);
+                ClearEquipmentFlags(state, slot);
+            }
         }
         state.ActiveEquip[slot] = newCardId;
         state.ActiveEquipUpgraded[slot] = upgraded;
+    }
+
+    private static async Task RevokeEquipmentStatBonus(Player player, string oldCardId, bool wasUpgraded)
+    {
+        var strength = oldCardId switch
+        {
+            "ZhuGeCard" or "ChiTuCard" or "DaWanCard" or "GuanShiCard" or "QiLinCard" or "GanJiangMoYeCard" => 1,
+            "GuDingCard" => wasUpgraded ? 2 : 1,
+            _ => 0
+        };
+        var dexterity = oldCardId switch
+        {
+            "BaiYinCard" or "DiLuCard" or "TaiPingCard" => wasUpgraded ? 2 : 1,
+            "JueYingCard" => 1,
+            _ => 0
+        };
+
+        await AdjustPower<StrengthPower>(player, player.Creature, -strength, null);
+        await AdjustPower<DexterityPower>(player, player.Creature, -dexterity, null);
     }
 
     private static void ClearEquipmentFlags(CharacterSkillState state, EquipSlot slot)
@@ -64,7 +87,7 @@ internal static class SanguoshaCharacterSkills
                 state.BaiYinActive = false; state.BaiYinTurnHeal = 0; state.BaiYinDamageCap = 0;
                 state.RenWangActive = false; state.RenWangGuardBlock = 0; state.RenWangDraw = 0; state.RenWangUsedThisTurn = false;
                 state.BaGuaActive = false; state.BaGuaUpgraded = false;
-                state.TengJiaActive = false; state.TengJiaBlock = 0; state.TengJiaHpLoss = 0;
+                state.TengJiaActive = false; state.TengJiaBlock = 0; state.TengJiaSlow = 0;
                 break;
             case EquipSlot.Mount:
                 state.ChiTuActive = false;
@@ -112,18 +135,15 @@ internal static class SanguoshaCharacterSkills
                 player.PlayerCombatState!.GainEnergy(wasUpgraded ? 2 : 1);
                 break;
             case "GuanShiCard":
-                await ApplyPower<StrengthPower>(player, player.Creature, wasUpgraded ? 2 : 1, null);
                 EmpowerNextSha(player, wasUpgraded ? 8 : 5);
                 break;
             case "HanBingCard":
                 await Draw(player, wasUpgraded ? 2 : 1);
                 break;
             case "QiLinCard":
-                await ApplyPower<StrengthPower>(player, player.Creature, 1, null);
                 await Draw(player, wasUpgraded ? 2 : 1);
                 break;
             case "GuDingCard":
-                await ApplyPower<StrengthPower>(player, player.Creature, wasUpgraded ? 2 : 1, null);
                 break;
             case "GanJiangMoYeCard":
                 EmpowerNextSha(player, wasUpgraded ? 6 : 4);
@@ -137,11 +157,9 @@ internal static class SanguoshaCharacterSkills
                 MakeHandCardsFree(player, wasUpgraded ? 2 : 1, IsShaLike);
                 break;
             case "DaWanCard":
-                await ApplyPower<StrengthPower>(player, player.Creature, 1, null);
                 EmpowerNextSha(player, wasUpgraded ? 4 : 3);
                 break;
             case "DiLuCard":
-                await ApplyPower<DexterityPower>(player, player.Creature, 1, null);
                 await GainBlock(player, wasUpgraded ? 10 : 6, null);
                 break;
             case "JueYingCard":
@@ -416,7 +434,7 @@ internal static class SanguoshaCharacterSkills
         ReplaceEquipment(player, state, EquipSlot.Armor, "TengJiaCard", upgraded);
         state.TengJiaActive = true;
         state.TengJiaBlock = 10;
-        state.TengJiaHpLoss = 1;
+        state.TengJiaSlow = 1;
         RefreshDisplayPower<TengJiaDisplayPower>(player);
     }
 
@@ -673,7 +691,11 @@ internal static class SanguoshaCharacterSkills
         return bonus;
     }
 
-    public static async Task ApplyAttackFollowups(PlayerChoiceContext context, CardPlay play, Creature target)
+    public static async Task ApplyAttackFollowups(
+        PlayerChoiceContext context,
+        CardPlay play,
+        Creature target,
+        decimal shaAmount)
     {
         if (!target.IsAlive)
         {
@@ -701,7 +723,7 @@ internal static class SanguoshaCharacterSkills
 
         if (IsShaLike(play.Card))
         {
-            await ApplyShaInfusionFollowup(context, play, target, state);
+            await ApplyShaInfusionFollowup(context, play, target, state, shaAmount);
         }
 
         if (state.WuShuangActive
@@ -725,7 +747,8 @@ internal static class SanguoshaCharacterSkills
         PlayerChoiceContext context,
         CardPlay play,
         Creature target,
-        CharacterSkillState state)
+        CharacterSkillState state,
+        decimal shaAmount)
     {
         var player = play.Card.Owner;
         switch (state.ShaInfusion)
@@ -779,7 +802,8 @@ internal static class SanguoshaCharacterSkills
                 break;
             case ShaInfusion.Calamity:
                 state.Soul = Math.Min(10, state.Soul + 1);
-                await ApplyPower<DoomPower>(player, target, 1, play.Card);
+                var doomAmount = Math.Max(1, (int)Math.Ceiling(shaAmount / 2m));
+                await ApplyPower<DoomPower>(player, target, doomAmount, play.Card);
                 if (state.HealedThisTurn)
                 {
                     await DamageTarget(player, target, 2, play.Card);
@@ -810,7 +834,7 @@ internal static class SanguoshaCharacterSkills
     public static void DoubleNextAttackDamage(Player player)
     {
         var state = GetState(player);
-        state.JiuNextAttackDamageMultiplier = Math.Max(1m, state.JiuNextAttackDamageMultiplier) * 2m;
+        state.JiuNextAttackDamageMultiplier = Math.Max(2m, state.JiuNextAttackDamageMultiplier);
     }
 
     private static void ClearJiuAttackDamageMultiplier(CharacterSkillState state)
@@ -1048,25 +1072,30 @@ internal static class SanguoshaCharacterSkills
             case SanguoshaSkill.Ironclad:
                 state.ShaInfusion = ShaInfusion.Fire;
                 _ = ApplyPower<StrengthPower>(player, player.Creature, 1, null);
+                RefreshDisplayPower<IroncladSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Silent:
                 state.ShaInfusion = ShaInfusion.Poison;
                 state.Ingenuity = Math.Max(state.Ingenuity, 2);
                 _ = Draw(player, 1);
+                RefreshDisplayPower<SilentSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Defect:
                 state.ShaInfusion = ShaInfusion.Thunder;
                 state.Thunder = Math.Max(state.Thunder, 1);
+                RefreshDisplayPower<DefectSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Necrobinder:
                 state.ShaInfusion = ShaInfusion.Calamity;
                 _ = HealIfWounded(player, 3);
                 state.Soul = Math.Max(state.Soul, 3);
+                RefreshDisplayPower<NecrobinderSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Regent:
                 state.ShaInfusion = ShaInfusion.Stored;
                 state.Command = Math.Max(state.Command, 1);
                 player.PlayerCombatState!.GainStars(1);
+                RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
     }
@@ -1269,7 +1298,7 @@ internal static class SanguoshaCharacterSkills
         if (state.TengJiaActive)
         {
             await GainBlock(player, Math.Max(1, state.TengJiaBlock), null);
-            await LoseHp(player, Math.Max(0, state.TengJiaHpLoss), null);
+            await ApplyPower<SlowPower>(player, player.Creature, Math.Max(0, state.TengJiaSlow), null);
         }
     }
 
@@ -1366,6 +1395,11 @@ internal static class SanguoshaCharacterSkills
             await HealIfWounded(player, 2);
         }
 
+        if (card is ShanCard && card.CombatState is not null)
+        {
+            await LoseHpAllEnemies(card.CombatState, player, 3, card);
+        }
+
         if (card is JieDaoCard)
         {
             state.Soul = Math.Min(10, state.Soul + 1);
@@ -1376,11 +1410,11 @@ internal static class SanguoshaCharacterSkills
             state.Soul = Math.Min(10, state.Soul + 3);
         }
 
-        if (state.Soul >= 3)
+        if (state.Soul >= 4)
         {
-            state.Soul -= 3;
-            var healed = await HealIfWounded(player, 3);
-            var overflow = Math.Max(0, 3 - healed);
+            state.Soul -= 4;
+            var healed = await HealIfWounded(player, 2);
+            var overflow = Math.Max(0, 2 - healed);
             if (overflow > 0 && card.CombatState is not null)
             {
                 var overflowTarget = card.CombatState.HittableEnemies
@@ -1644,6 +1678,14 @@ internal static class SanguoshaCharacterSkills
             : PowerCmd.Apply<TPower>(NewContext(), target, amount, player.Creature, source!, false);
     }
 
+    private static Task AdjustPower<TPower>(Player player, Creature target, decimal amount, CardModel? source)
+        where TPower : PowerModel, new()
+    {
+        return amount == 0
+            ? Task.CompletedTask
+            : PowerCmd.Apply<TPower>(NewContext(), target, amount, player.Creature, source!, false);
+    }
+
     internal static async Task TryApplyBaGuaShan(
         PlayerChoiceContext choiceContext,
         Player player,
@@ -1785,6 +1827,14 @@ internal static class SanguoshaCharacterSkills
             : CreatureCmd.Damage(NewContext(), player.Creature, amount, ValueProp.Unblockable, player.Creature, source!);
     }
 
+    private static Task LoseHpAllEnemies(ICombatState combat, Player player, decimal amount, CardModel? source)
+    {
+        var targets = combat.HittableEnemies.Where(enemy => enemy.IsAlive).ToList();
+        return targets.Count == 0 || amount <= 0
+            ? Task.CompletedTask
+            : CreatureCmd.Damage(NewContext(), targets, amount, ValueProp.Unblockable, player.Creature, source!);
+    }
+
     private static Task DamageAll(ICombatState combat, Player player, decimal amount, CardModel? source)
     {
         var targets = combat.HittableEnemies.Where(enemy => enemy.IsAlive).ToList();
@@ -1899,7 +1949,7 @@ internal static class SanguoshaCharacterSkills
         public bool TieSuoThisTurn { get; set; }
         public decimal TieSuoSplashMultiplier { get; set; }
         public int TengJiaBlock { get; set; }
-        public int TengJiaHpLoss { get; set; }
+        public int TengJiaSlow { get; set; }
         public int JueYingBlock { get; set; }
         public bool JueYingUsedThisTurn { get; set; }
         public bool MengDeXinShuActive { get; set; }

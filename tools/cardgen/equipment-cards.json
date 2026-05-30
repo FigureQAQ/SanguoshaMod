@@ -40,7 +40,7 @@
       "slug": "guanshi",
       "title": "贯石斧",
       "type": "装备牌 - 武器",
-      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时获得力量并强化下一张杀。",
+      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时强化下一张杀。",
       "art": "guanshi.png",
       "rarity": "Uncommon"
     },
@@ -58,7 +58,7 @@
       "slug": "qilin",
       "title": "麒麟弓",
       "type": "装备牌 - 武器",
-      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害；每回合首次如此命中时施加易伤。失去时获得力量并抽牌。",
+      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害；每回合首次如此命中时施加易伤。失去时抽牌。",
       "art": "qilin.png",
       "rarity": "Rare"
     },
@@ -67,7 +67,7 @@
       "slug": "guding",
       "title": "古锭刀",
       "type": "装备牌 - 武器",
-      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。失去时获得力量。",
+      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。",
       "art": "guding.png",
       "rarity": "Uncommon"
     },
@@ -112,7 +112,7 @@
       "slug": "dawan",
       "title": "大宛",
       "type": "装备牌 - 坐骑",
-      "description": "获得力量。你的杀额外造成伤害。失去时获得力量，并强化下一张杀。",
+      "description": "获得力量。你的杀额外造成伤害。失去时强化下一张杀。",
       "art": "dawan.png",
       "rarity": "Uncommon"
     },
@@ -121,7 +121,7 @@
       "slug": "dilu",
       "title": "的卢",
       "type": "装备牌 - 坐骑",
-      "description": "获得敏捷。失去时获得敏捷和格挡。",
+      "description": "获得敏捷。失去时获得格挡。",
       "art": "dilu.png",
       "rarity": "Uncommon"
     },
@@ -172,7 +172,7 @@
       "type": "装备牌 - 防具",
       "rarity": "Rare",
       "cost": 1,
-      "description": "获得格挡。每回合开始时获得 10 点格挡并失去 1 点生命。失去时获得格挡。",
+      "description": "下回合开始，每回合获得 10 点格挡并获得 1 层减速。失去时获得格挡。",
       "art": "tengjia.png",
       "externalFileB64": "6Jek55SyLnBuZw==",
       "prompt": "藤甲，三国幻想防具卡牌插画，坚韧藤蔓编织的轻甲披在木架上，青绿藤纹与皮革护片交错，周围箭矢被藤蔓缠住，背景为南中密林和雾气，氛围灵巧、防护、自然，厚涂，强轮廓，竖版卡牌，无文字无边框。"

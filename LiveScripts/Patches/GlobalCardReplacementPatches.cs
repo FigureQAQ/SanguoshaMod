@@ -26,15 +26,6 @@ internal static class CardPoolModelGetUnlockedCardsPatch
     }
 }
 
-[HarmonyPatch(typeof(ModelDb), "get_AllCards")]
-internal static class ModelDbAllCardsPatch
-{
-    private static void Postfix(ref IEnumerable<CardModel> __result)
-    {
-        __result = SanguoshaCardCatalog.ReplaceGeneratedCards(__result);
-    }
-}
-
 [HarmonyPatch]
 internal static class MerchantSanguoshaBasicCardFilterPatch
 {

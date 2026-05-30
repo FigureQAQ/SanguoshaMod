@@ -1,7 +1,7 @@
 {
   "object": "sanguosha-game-card-assets",
   "version": 1,
-  "generatedAt": "2026-05-30T12:51:33.525Z",
+  "generatedAt": "2026-05-30T13:59:46.942Z",
   "portraitSize": {
     "width": 1024,
     "height": 752
@@ -54,7 +54,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时获得力量并强化下一张杀。",
+      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时强化下一张杀。",
       "portrait": "guanshi.png",
       "portraitPath": "res://mods/sanguosha/card_art/guanshi.png",
       "sourceArt": "tools/cardgen/input/equipment-art/guanshi.png"
@@ -80,7 +80,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Rare",
-      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害；每回合首次如此命中时施加易伤。失去时获得力量并抽牌。",
+      "description": "获得力量并抽牌。杀命中已有负面效果的敌人时额外造成伤害；每回合首次如此命中时施加易伤。失去时抽牌。",
       "portrait": "qilin.png",
       "portraitPath": "res://mods/sanguosha/card_art/qilin.png",
       "sourceArt": "tools/cardgen/input/equipment-art/qilin.png"
@@ -93,7 +93,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。失去时获得力量。",
+      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。",
       "portrait": "guding.png",
       "portraitPath": "res://mods/sanguosha/card_art/guding.png",
       "sourceArt": "tools/cardgen/input/equipment-art/guding.png"
@@ -158,7 +158,7 @@
       "type": "装备牌 - 坐骑",
       "category": "mount",
       "rarity": "Uncommon",
-      "description": "获得力量。你的杀额外造成伤害。失去时获得力量，并强化下一张杀。",
+      "description": "获得力量。你的杀额外造成伤害。失去时强化下一张杀。",
       "portrait": "dawan.png",
       "portraitPath": "res://mods/sanguosha/card_art/dawan.png",
       "sourceArt": "tools/cardgen/input/equipment-art/dawan.png"
@@ -171,7 +171,7 @@
       "type": "装备牌 - 坐骑",
       "category": "mount",
       "rarity": "Uncommon",
-      "description": "获得敏捷。失去时获得敏捷和格挡。",
+      "description": "获得敏捷。失去时获得格挡。",
       "portrait": "dilu.png",
       "portraitPath": "res://mods/sanguosha/card_art/dilu.png",
       "sourceArt": "tools/cardgen/input/equipment-art/dilu.png"
@@ -236,7 +236,7 @@
       "type": "装备牌 - 防具",
       "category": "armor",
       "rarity": "Rare",
-      "description": "获得格挡。每回合开始时获得 10 点格挡并失去 1 点生命。失去时获得格挡。",
+      "description": "下回合开始，每回合获得 10 点格挡并获得 1 层减速。失去时获得格挡。",
       "portrait": "tengjia.png",
       "portraitPath": "res://mods/sanguosha/card_art/tengjia.png",
       "sourceArt": "tools/cardgen/input/equipment-art/tengjia.png"
@@ -535,7 +535,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Uncommon",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu.png"
@@ -769,7 +769,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Common",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu_ironclad.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu_ironclad.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu_ironclad.png"
@@ -821,7 +821,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Common",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu_silent.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu_silent.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu_silent.png"
@@ -873,7 +873,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Common",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu_defect.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu_defect.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu_defect.png"
@@ -886,7 +886,7 @@
       "type": "基础牌 - 灾厄杀",
       "category": "basic",
       "rarity": "Common",
-      "description": "造成伤害并施加虚弱和减速；魂值满时追加伤害。",
+      "description": "造成伤害并施加杀数值一半的灾厄；魂值满 4 点时回复生命并追加伤害。",
       "portrait": "sha_calamity.png",
       "portraitPath": "res://mods/sanguosha/card_art/sha_calamity.png",
       "sourceArt": "tools/cardgen/input/core-art/sha_calamity.png"
@@ -925,7 +925,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Common",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu_necrobinder.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu_necrobinder.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu_necrobinder.png"
@@ -977,7 +977,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Common",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "portrait": "jiu_regent.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu_regent.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu_regent.png"

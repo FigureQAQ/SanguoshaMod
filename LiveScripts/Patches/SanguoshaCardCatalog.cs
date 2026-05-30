@@ -88,7 +88,12 @@ internal static class SanguoshaCardCatalog
         IEnumerable<CardModel> original,
         Func<CardModel, bool>? originalFilter = null)
     {
-        var originalList = original.ToList();
+        var originalList = TrySnapshot(original);
+        if (originalList is null)
+        {
+            return original;
+        }
+
         if (originalList.All(IsSanguoshaCard) || originalList.All(IsNonCollectible))
         {
             return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
@@ -127,7 +132,12 @@ internal static class SanguoshaCardCatalog
 
     public static IEnumerable<CardModel> ReplaceAllCards(IEnumerable<CardModel> original)
     {
-        var originalList = original.ToList();
+        var originalList = TrySnapshot(original);
+        if (originalList is null)
+        {
+            return original;
+        }
+
         if (originalList.Count == 0 || originalList.All(IsSanguoshaCard))
         {
             return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
@@ -141,7 +151,12 @@ internal static class SanguoshaCardCatalog
 
     public static IEnumerable<CardModel> ReplaceStartingDeck(IEnumerable<CardModel> original)
     {
-        var originalList = original.ToList();
+        var originalList = TrySnapshot(original);
+        if (originalList is null)
+        {
+            return original;
+        }
+
         if (originalList.Count == 0 || originalList.All(IsSanguoshaCard))
         {
             return originalList;
@@ -254,6 +269,19 @@ internal static class SanguoshaCardCatalog
         catch
         {
             return false;
+        }
+    }
+
+    private static List<CardModel>? TrySnapshot(IEnumerable<CardModel> cards)
+    {
+        try
+        {
+            return cards.ToList();
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("You monster", StringComparison.OrdinalIgnoreCase))
+        {
+            Entry.Logger.Warn("Skipped Sanguosha card replacement for an internal mock card pool.");
+            return null;
         }
     }
 

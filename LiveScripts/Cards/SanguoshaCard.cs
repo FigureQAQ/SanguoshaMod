@@ -130,7 +130,7 @@ public abstract class SanguoshaCard(
 
     private string? GetCharacterUiAssetName(string assetPrefix)
     {
-        var characterKey = GetCharacterSkinKey(this);
+        var characterKey = GetCharacterSkinKey(this, allowRunFallback: true);
         if (characterKey is null)
         {
             return null;
@@ -147,7 +147,7 @@ public abstract class SanguoshaCard(
 
     private string? GetCharacterEnergyIconAssetName()
     {
-        var characterKey = GetCharacterSkinKey(this);
+        var characterKey = GetCharacterSkinKey(this, allowRunFallback: true);
         return characterKey is null ? null : $"energy_{characterKey}";
     }
 
@@ -156,23 +156,67 @@ public abstract class SanguoshaCard(
         return $"res://mods/{Entry.ModId}/card_art/ui/{assetName}.png";
     }
 
-    private static string? GetCharacterSkinKey(CardModel card)
+    private static string? GetCharacterSkinKey(CardModel card, bool allowRunFallback)
     {
-        var ownerKey = ResolveCharacterSkinKey(card.Owner?.Character.GetType().Name);
+        var ownerKey = ResolveCharacterSkinKey(TryGetOwnerCharacterName(card));
         if (ownerKey is not null)
         {
             return ownerKey;
         }
 
-        var poolKey = ResolveCharacterSkinKey(EnergyIconHelper.GetPrefix(card));
+        var poolKey = ResolveCharacterSkinKey(TryGetEnergyIconPrefix(card));
         if (poolKey is not null)
         {
             return poolKey;
         }
 
-        return RunManager.Instance.IsInProgress
-            ? ResolveCharacterSkinKey(RunManager.Instance.GetLocalCharacterEnergyIconPrefix())
-            : null;
+        if (allowRunFallback)
+        {
+            var runKey = GetLocalRunCharacterSkinKey();
+            if (runKey is not null)
+            {
+                return runKey;
+            }
+        }
+
+        return null;
+    }
+
+    private static string? TryGetOwnerCharacterName(CardModel card)
+    {
+        try
+        {
+            return card.Owner?.Character.GetType().Name;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string? TryGetEnergyIconPrefix(CardModel card)
+    {
+        try
+        {
+            return EnergyIconHelper.GetPrefix(card);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string? GetLocalRunCharacterSkinKey()
+    {
+        try
+        {
+            return ResolveCharacterSkinKey(RunManager.Instance?.GetLocalCharacterEnergyIconPrefix());
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"Unable to resolve local run character for Sanguosha card UI: {ex.Message}");
+            return null;
+        }
     }
 
     private static string? ResolveCharacterSkinKey(string? key)
@@ -200,7 +244,7 @@ public abstract class SanguoshaCard(
 
     private string GetPortraitSlug()
     {
-        var characterName = Owner?.Character.GetType().Name;
+        var characterName = TryGetOwnerCharacterName(this);
         if (characterName is not null
             && GetCharacterBasicPortraitSlug(characterName, GetType().Name) is { } characterSlug)
         {

@@ -362,3 +362,48 @@ internal sealed class GuiCaiDisplayPower : SanguoshaEquipmentDisplayPower
     protected override string LocKey => "SANGUOSHA_POWER_GUI_CAI_DISPLAY_POWER";
 
 }
+
+[RegisterPower]
+internal sealed class IroncladSkillDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "guanshi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_IRONCLAD_SKILL_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class SilentSkillDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "qilin";
+
+    protected override string LocKey => "SANGUOSHA_POWER_SILENT_SKILL_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class DefectSkillDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "bagua";
+
+    protected override string LocKey => "SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class NecrobinderSkillDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "baiyin";
+
+    protected override string LocKey => "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class RegentSkillDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "yuxi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER";
+
+}

@@ -1,3 +1,4 @@
+using System.Reflection;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Combat;
@@ -239,7 +240,7 @@ internal static class SpiralingWhirlpoolSanguoshaObservePatch
     {
         var selectedCards = await CardSelectCmd.FromDeckForEnchantment(
             eventModel.Owner!,
-            new Spiral(),
+            ModelDb.Enchantment<Spiral>(),
             1,
             card => card is not null && SanguoshaRuntimeCardEventHelpers.IsShaOrShanLike(card),
             new CardSelectorPrefs(CardSelectorPrefs.EnchantSelectionPrompt, 1));
@@ -501,6 +502,65 @@ internal static class LeadPaperweightSanguoshaCardPatch
     }
 }
 
+[HarmonyPatch]
+internal static class CircletSanguoshaClonePatch
+{
+    private static bool Prepare()
+    {
+        var canPatch = AccessTools.Method(typeof(Circlet), nameof(Circlet.AfterObtained)) is not null;
+        if (!canPatch)
+        {
+            Entry.Logger.Warn("Skipped Circlet clone patch because Circlet.AfterObtained was not found in this game version.");
+        }
+
+        return canPatch;
+    }
+
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        var method = AccessTools.Method(typeof(Circlet), nameof(Circlet.AfterObtained));
+        return method is null ? [] : [method];
+    }
+
+    private static bool Prefix(Circlet __instance, ref Task __result)
+    {
+        __result = EnchantOneCard(__instance.Owner!);
+        return false;
+    }
+
+    private static async Task EnchantOneCard(Player player)
+    {
+        var eligibleCards = player.Deck.Cards
+            .Where(card => card is not null)
+            .ToList();
+        if (eligibleCards.Count == 0)
+        {
+            return;
+        }
+
+        IEnumerable<CardModel> selectedCards;
+        try
+        {
+            selectedCards = await CardSelectCmd.FromDeckForEnchantment(
+                player,
+                ModelDb.Enchantment<Clone>(),
+                1,
+                card => card is not null,
+                new CardSelectorPrefs(CardSelectorPrefs.EnchantSelectionPrompt, 1));
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("Cannot wait for remote choice", StringComparison.Ordinal))
+        {
+            Entry.Logger.Warn("Circlet clone selection was unavailable during run setup; enchanting the first eligible deck card instead.");
+            selectedCards = eligibleCards.Take(1);
+        }
+
+        foreach (var card in selectedCards)
+        {
+            CardCmd.Enchant<Clone>(card, 2);
+        }
+    }
+}
+
 [HarmonyPatch(typeof(ScrollBoxes), nameof(ScrollBoxes.IsAllowedAtNeow))]
 internal static class ScrollBoxesSanguoshaAllowedPatch
 {
@@ -639,7 +699,8 @@ internal static class RoomFullOfCheeseGorgeSanguoshaCardPatch
         var rewardOptions = SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(
             __instance.Owner!,
             8,
-            card => card.Rarity == CardRarity.Rare);
+            card => card.Rarity == CardRarity.Common,
+            exactRarity: true);
         __result = SanguoshaRuntimeCardEventHelpers.ChooseCardsAndAddToDeck(
             __instance.Owner!,
             rewardOptions,

@@ -46,7 +46,7 @@
       "type": "基础牌 - 爆发",
       "palette": "skill",
       "character": "ironclad",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu_ironclad.png"
     },
     {
@@ -86,7 +86,7 @@
       "type": "基础牌 - 爆发",
       "palette": "skill",
       "character": "silent",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu_silent.png"
     },
     {
@@ -126,7 +126,7 @@
       "type": "基础牌 - 爆发",
       "palette": "skill",
       "character": "defect",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu_defect.png"
     },
     {
@@ -136,7 +136,7 @@
       "type": "基础牌 - 灾厄杀",
       "palette": "attack",
       "character": "necrobinder",
-      "description": "造成伤害并施加虚弱和减速；魂值满时追加伤害。",
+      "description": "造成伤害并施加杀数值一半的灾厄；魂值满 4 点时回复生命并追加伤害。",
       "art": "sha_calamity.png"
     },
     {
@@ -166,7 +166,7 @@
       "type": "基础牌 - 爆发",
       "palette": "skill",
       "character": "necrobinder",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu_necrobinder.png"
     },
     {
@@ -206,7 +206,7 @@
       "type": "基础牌 - 爆发",
       "palette": "skill",
       "character": "regent",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu_regent.png"
     }
   ]

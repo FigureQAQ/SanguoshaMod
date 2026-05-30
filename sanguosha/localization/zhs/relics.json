@@ -1,17 +1,17 @@
 {
   "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title": "武魂：火杀",
-  "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description": "赤壁猛将的武魂。战斗开始获得 1 点力量；你的杀均为火杀，命中后追加 2 点伤害。生命不高于一半时，每回合首次火杀追加伤害提高到 4，并施加 1 层易伤。",
+  "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description": "战斗开始：获得 1 点力量。杀附魔：火杀，命中后追加 2 点伤害；生命不高于一半时，每回合首次火杀改为追加 4 点伤害并施加 1 层易伤。",
   "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.flavor": "血火铸甲，赤壁开锋。",
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.title": "武魂：毒杀",
-  "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.description": "锦囊夜行的武魂。战斗开始抽 1 张牌并获得机巧；你的杀均为毒杀，命中后施加 2 层中毒，若目标原本没有中毒则额外施加 1 层。每回合首次打出技能牌会强化下一张毒杀；命中已中毒目标时每回合首次回复 1 点能量。",
+  "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.description": "战斗开始：抽 1 张牌并获得 2 点机巧。杀附魔：毒杀，命中后施加 2 层中毒；若目标原本没有中毒，额外施加 1 层。每回合首次打出技能牌强化下一张毒杀；每回合首次命中已中毒目标时获得 1 点能量。",
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.flavor": "胜负不在手牌里，在别人以为你没有手牌时。",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.title": "武魂：雷杀",
-  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.description": "机关卧龙的武魂。战斗开始获得雷势；你的杀均为雷杀，命中后追加雷击并获得雷势。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害；每回合最多爆发 1 次。",
+  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.description": "战斗开始：获得 1 点雷势。杀附魔：雷杀，命中后获得 1 点雷势，并对目标追加 1 点雷击、对其他敌人追加 2 点雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害；每回合最多触发 1 次。",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.flavor": "风起之前，星位已经变了。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title": "武魂：青囊急救",
-  "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description": "青囊魂医的武魂。治疗与部分技能牌积累魂值；灾厄杀命中后施加灾厄；若你本回合回复过生命则追加灾厄伤害。魂值满时回复生命并补充手牌；若治疗溢出，则对生命最低的敌人造成等量灾厄伤害，最多 4 点。",
+  "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description": "战斗开始：回复 3 点生命并获得 3 点魂值。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗魂值，回复生命、抽牌或追加伤害。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor": "刀兵之后，总有人要把命从鬼门关边上拉回来。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "武魂：储能杀",
-  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "汉室仁主的武魂。战斗开始获得号令和星辉；你的杀均为储能杀，命中后获得铸剑。铸剑达到 3 时消耗 3 点，生成 1 张 0 费王剑杀。星辉达到 3 时每回合最多发动 1 次诏令：获得能量、抽牌、提升号令、推进铸剑，并使 1 张杀或技能牌本回合免费。",
+  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "战斗开始：获得 1 点号令和 1 点星辉。杀附魔：储能杀，命中后获得铸剑；铸剑达到 3 时生成 1 张 0 费王剑杀。星辉达到 3 时每回合最多发动 1 次诏令：获得能量、抽牌、提升号令、推进铸剑，并使 1 张杀或技能牌本回合免费。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor": "仁德不是软弱，是让每一次出牌都有人响应。"
 }

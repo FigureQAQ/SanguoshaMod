@@ -1,17 +1,17 @@
 {
   "IRONCLAD.title": "赤壁猛将",
   "IRONCLAD.titleObject": "赤壁猛将",
-  "IRONCLAD.description": "赤壁猛将以血火开锋：所有杀视为火杀，命中后追加火焰伤害；生命不高于一半时，每回合首次火杀施加易伤。",
+  "IRONCLAD.description": "武魂：火杀。定位：攻击强化与低生命爆发。",
   "SILENT.title": "锦囊夜行",
   "SILENT.titleObject": "锦囊夜行",
-  "SILENT.description": "锦囊夜行以暗谋入局：用技能牌连段、机巧资源、抽牌和负面效果掌控战局。",
+  "SILENT.description": "武魂：毒杀。定位：中毒叠加、技能牌联动与回能。",
   "DEFECT.title": "机关卧龙",
   "DEFECT.titleObject": "机关卧龙",
-  "DEFECT.description": "机关卧龙以奇门驭雷：所有杀视为雷杀，命中后积累雷势，雷势满时爆发全体伤害。",
+  "DEFECT.description": "武魂：雷杀。定位：雷势积累、连锁伤害与群体爆发。",
   "NECROBINDER.title": "青囊魂医",
   "NECROBINDER.titleObject": "青囊魂医",
-  "NECROBINDER.description": "青囊魂医以魂术济危：用治疗、魂值和闪避续航拖出优势。",
+  "NECROBINDER.description": "武魂：灾厄杀。定位：治疗续航、魂值循环与闪避反击。",
   "REGENT.title": "汉室仁主",
   "REGENT.titleObject": "汉室仁主",
-  "REGENT.description": "汉室仁主以王道统御：所有杀视为储能杀，并用号令、星辉和交替出牌扩大团队节奏；星辉达到 3 时发动诏令。"
+  "REGENT.description": "武魂：储能杀。定位：号令成长、星辉诏令与团队节奏。"
 }

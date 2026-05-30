@@ -58,7 +58,7 @@
       "type": "基础牌 - 爆发",
       "rarity": "Uncommon",
       "palette": "skill",
-      "description": "下一张攻击牌造成的伤害翻倍。",
+      "description": "下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
       "art": "jiu.png",
       "externalFileB64": "6YWSLnBuZw==",
       "prompt": "Jiu wine power card, a fierce general drinks from a bronze cup before battle, red aura and rising strength, war drums in torchlight."
