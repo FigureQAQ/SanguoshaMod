@@ -779,7 +779,7 @@ internal static class SanguoshaCharacterSkills
                 break;
             case ShaInfusion.Calamity:
                 state.Soul = Math.Min(10, state.Soul + 1);
-                await ApplyPower<MegaCrit.Sts2.Core.Models.Powers.CalamityPower>(player, target, 1, play.Card);
+                await ApplyPower<DoomPower>(player, target, 1, play.Card);
                 if (state.HealedThisTurn)
                 {
                     await DamageTarget(player, target, 2, play.Card);
