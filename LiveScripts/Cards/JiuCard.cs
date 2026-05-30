@@ -10,8 +10,9 @@ namespace sanguosha.Cards;
 [RegisterCard(typeof(ColorlessCardPool))]
 public sealed class JiuCard : SanguoshaCard
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
 
     public JiuCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
@@ -21,6 +22,11 @@ public sealed class JiuCard : SanguoshaCard
     {
         SanguoshaCharacterSkills.DoubleNextAttackDamage(cardPlay.Card.Owner);
         return Task.CompletedTask;
+    }
+
+    protected override void OnUpgrade()
+    {
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 }
 

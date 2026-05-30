@@ -254,8 +254,9 @@ public sealed class GuaGuCard : SanguoshaCard
         new DynamicVar("Draw", 1m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
 
     public GuaGuCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
@@ -279,6 +280,7 @@ public sealed class GuaGuCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars["Heal"].UpgradeValueBy(1);
     }
 }

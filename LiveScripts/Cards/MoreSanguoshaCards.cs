@@ -1146,8 +1146,9 @@ public sealed class TieSuoCard : SanguoshaCard
         new DynamicVar("SplashPercent", 50m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
     public TieSuoCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy)
     {
     }
@@ -1175,6 +1176,7 @@ public sealed class TieSuoCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars.Damage.UpgradeValueBy(3);
         DynamicVars["Slow"].UpgradeValueBy(1);
         DynamicVars["SplashPercent"].UpgradeValueBy(25);
@@ -1298,8 +1300,9 @@ public sealed class WuXieCard : SanguoshaCard
         new EnergyVar(1)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
     public WuXieCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
@@ -1327,6 +1330,7 @@ public sealed class WuXieCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
         EnergyCost.SetCustomBaseCost(0);
         DynamicVars.Block.UpgradeValueBy(1);
         DynamicVars["CleanseBlock"].UpgradeValueBy(1);

@@ -20,8 +20,9 @@ public sealed class GuanXingCard : SanguoshaCard
         new BlockVar(2, ValueProp.Move)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
     public GuanXingCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
@@ -55,6 +56,7 @@ public sealed class GuanXingCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars["Look"].UpgradeValueBy(2);
         DynamicVars["Discard"].UpgradeValueBy(1);
         DynamicVars.Block.UpgradeValueBy(1);

@@ -1,7 +1,7 @@
 {
   "object": "sanguosha-game-card-assets",
   "version": 1,
-  "generatedAt": "2026-05-30T09:19:47.888Z",
+  "generatedAt": "2026-05-30T10:43:15.412Z",
   "portraitSize": {
     "width": 1024,
     "height": 752
@@ -15,7 +15,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Rare",
-      "description": "装备武器。获得力量并生成免费杀；每回合开始使 1 张杀变为 0 费，升级后 2 张；失去时最多抽 2 张。",
+      "description": "装备武器。获得力量并生成免费杀；每回合开始使若干张杀变为 0 费；失去时最多抽 2 张。",
       "portrait": "zhuge.png",
       "portraitPath": "res://mods/sanguosha/card_art/zhuge.png",
       "sourceArt": "tools/cardgen/input/equipment-art/zhuge.png"
@@ -119,7 +119,7 @@
       "type": "装备牌 - 防具",
       "category": "armor",
       "rarity": "Rare",
-      "description": "获得格挡。每回合首次受到杀或普通攻击前，获得足量格挡；升级后触发时抽牌。失去时获得格挡并抽牌。",
+      "description": "获得格挡。每回合首次受到杀或普通攻击前，获得足量格挡。失去时获得格挡并抽牌。",
       "portrait": "renwang.png",
       "portraitPath": "res://mods/sanguosha/card_art/renwang.png",
       "sourceArt": "tools/cardgen/input/equipment-art/renwang.png"
@@ -535,7 +535,7 @@
       "type": "基础牌 - 爆发",
       "category": "basic",
       "rarity": "Uncommon",
-      "description": "下一张攻击牌造成的伤害翻倍；升级后不再消耗。",
+      "description": "下一张攻击牌造成的伤害翻倍。",
       "portrait": "jiu.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiu.png",
       "sourceArt": "tools/cardgen/input/core-art/jiu.png"
@@ -574,7 +574,7 @@
       "type": "锦囊牌 - 调度",
       "category": "power",
       "rarity": "Common",
-      "description": "抽 1 张牌，然后弃 1 张牌。升级后抽 2 张牌，然后弃 2 张牌。",
+      "description": "抽牌，然后弃等量手牌。",
       "portrait": "diaodu.png",
       "portraitPath": "res://mods/sanguosha/card_art/diaodu.png",
       "sourceArt": "tools/cardgen/input/core-art/diaodu.png"
@@ -665,7 +665,7 @@
       "type": "能力牌 - 杀势",
       "category": "power",
       "rarity": "Rare",
-      "description": "能力。每回合前 2 次杀命中后追加无双伤害，升级后 3 次；追加伤害不触发杀命中。",
+      "description": "能力。每回合前若干次杀命中后追加无双伤害；追加伤害不触发杀命中。",
       "portrait": "wushuang.png",
       "portraitPath": "res://mods/sanguosha/card_art/wushuang.png",
       "sourceArt": "tools/cardgen/input/core-art/wushuang.png"

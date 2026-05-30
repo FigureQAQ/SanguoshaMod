@@ -16,8 +16,9 @@ public sealed class WuZhongCard : SanguoshaCard
         new DynamicVar("BonusDraw", 1m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
     public WuZhongCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
@@ -36,6 +37,7 @@ public sealed class WuZhongCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }

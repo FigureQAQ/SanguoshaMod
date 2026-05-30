@@ -58,7 +58,7 @@
       "type": "基础牌 - 爆发",
       "rarity": "Uncommon",
       "palette": "skill",
-      "description": "下一张攻击牌造成的伤害翻倍；升级后不再消耗。",
+      "description": "下一张攻击牌造成的伤害翻倍。",
       "art": "jiu.png",
       "externalFileB64": "6YWSLnBuZw==",
       "prompt": "Jiu wine power card, a fierce general drinks from a bronze cup before battle, red aura and rising strength, war drums in torchlight."
@@ -97,7 +97,7 @@
       "type": "锦囊牌 - 调度",
       "rarity": "Common",
       "palette": "skill",
-      "description": "抽 1 张牌，然后弃 1 张牌。升级后抽 2 张牌，然后弃 2 张牌。",
+      "description": "抽牌，然后弃等量手牌。",
       "art": "diaodu.png",
       "externalFileB64": "6LCD5bqmLnBuZw==",
       "prompt": "Diao Du tactical dispatch card, messengers move command flags across a military map, troops redeploying at dawn, efficient battlefield logistics."
@@ -185,7 +185,7 @@
       "cost": 2,
       "type": "能力牌 - 杀势",
       "rarity": "Rare",
-      "description": "能力。每回合前 2 次杀命中后追加无双伤害，升级后 3 次；追加伤害不触发杀命中。",
+      "description": "能力。每回合前若干次杀命中后追加无双伤害；追加伤害不触发杀命中。",
       "art": "wushuang.png",
       "externalFileB64": "5peg5Y+MLnBuZw==",
       "prompt": "Lu Bu unrivaled power, an unstoppable halberd warrior surrounded by red-black battle aura, enemies thrown back, legendary dominance."

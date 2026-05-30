@@ -23,6 +23,7 @@ public static class Entry
         ModTypeDiscoveryHub.RegisterModAssembly(ModId, assembly);
         SanguoshaPowerIconAssets.Register();
         SanguoshaCardPortraitLoader.RegisterAll();
+        SanguoshaCardUiTextureLoader.RegisterAll();
         SanguoshaCharacterSkills.Register();
         RegisterSanguoshaStarterCompatibility();
         Logger.Info("Sanguosha mod initialized.");
