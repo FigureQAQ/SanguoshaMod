@@ -94,11 +94,13 @@ npm run cardgen:export
 
 ## 文档
 
-- 装备说明：`docs/EQUIPMENT_CARDS_2026-05-29.md`
-- 角色附魔：`docs/CHARACTER_INFUSIONS_2026-05-29.md`
-- 平衡记录：`docs/BALANCE_PASS_2026-05-30.md`
-- 杀附魔节奏：`docs/SHA_INFUSION_BALANCE_2026-05-29.md`
-- 仁王盾重做：`docs/REN_WANG_REWORK_2026-05-29.md`
-- 机关卧龙星辉修正：`docs/DEFECT_THUNDER_STARS_FIX_2026-05-29.md`
-- RitsuLib 升级记录：`docs/RITSULIB_UPGRADE_2026-05-29.md`
-- 实现审计：`docs/IMPLEMENTATION_AUDIT_2026-05-30.md`
+以下文档文件名保留创建日期，列表中的更新时间按当前仓库文件时间同步。
+
+- 装备说明：`docs/EQUIPMENT_CARDS_2026-05-29.md`（更新：2026-05-30 19:07）
+- 角色附魔：`docs/CHARACTER_INFUSIONS_2026-05-29.md`（更新：2026-05-30 19:07）
+- 平衡记录：`docs/BALANCE_PASS_2026-05-30.md`（更新：2026-05-30 19:07）
+- 杀附魔节奏：`docs/SHA_INFUSION_BALANCE_2026-05-29.md`（更新：2026-05-30 19:07）
+- 仁王盾重做：`docs/REN_WANG_REWORK_2026-05-29.md`（更新：2026-05-30 19:07）
+- 机关卧龙星辉修正：`docs/DEFECT_THUNDER_STARS_FIX_2026-05-29.md`（更新：2026-05-30 19:07）
+- RitsuLib 升级记录：`docs/RITSULIB_UPGRADE_2026-05-29.md`（更新：2026-05-30 19:07）
+- 实现审计：`docs/IMPLEMENTATION_AUDIT_2026-05-30.md`（更新：2026-05-30 19:07）
