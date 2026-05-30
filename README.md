@@ -1,49 +1,28 @@
 # SanguoshaMod
 
-三国杀主题的 Slay the Spire 2 玩法模组。它把「杀、闪、桃、酒」、装备槽位、角色武魂和三国式技能牌接入 STS2 的战斗节奏里，并为五个角色制作了专属基础牌卡面、边框和能量样式。
+三国杀主题的 Slay the Spire 2 玩法模组。模组将“杀、闪、桃、酒”、装备槽位、角色杀附魔和三国式技能牌接入 STS2 的战斗节奏，并为不同角色准备了专属基础牌图、卡牌边框和能量样式。
 
 [最新 Release：v0.1.6-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.6-multiplayer)
 
-## 卡牌预览
+## 当前说明
 
-这些图片来自模组的完整牌面渲染，包含实际使用的卡框、费用、类型栏和正文布局。
+README 不再展示离线工具生成的“完整卡牌预览图”。这些图片不是游戏内真实渲染结果，边框、能量、材质和文字排版可能与实际游戏不一致。
 
-### 角色基础牌
+后续添加到 GitHub README 的卡牌图片，应当来自游戏内真实画面：
 
-| 火杀 | 毒杀 | 雷杀 | 灾厄杀 | 储能杀 |
-| --- | --- | --- | --- | --- |
-| <img src="docs/images/cards/sha-fire.png" width="160" alt="火杀"> | <img src="docs/images/cards/sha-poison.png" width="160" alt="毒杀"> | <img src="docs/images/cards/sha-thunder.png" width="160" alt="雷杀"> | <img src="docs/images/cards/sha-calamity.png" width="160" alt="灾厄杀"> | <img src="docs/images/cards/sha-stored.png" width="160" alt="储能杀"> |
+- 战斗、奖励、牌库或卡牌预览界面的实际截图。
+- 从真实截图裁切出的单张卡牌。
+- 截图需能看到游戏实际渲染的卡牌边框、能量样式、类型栏、卡图和文本。
 
-### 技能牌
-
-| 突袭 | 奇袭 | 顺手牵羊 |
-| --- | --- | --- |
-| <img src="docs/images/cards/tuxi.png" width="180" alt="突袭"> | <img src="docs/images/cards/qixi.png" width="180" alt="奇袭"> | <img src="docs/images/cards/shunshou.png" width="180" alt="顺手牵羊"> |
-
-### 装备牌
-
-| 赤兔 | 大宛 | 绝影 | 孟德新书 |
-| --- | --- | --- | --- |
-| <img src="docs/images/cards/chitu.png" width="170" alt="赤兔"> | <img src="docs/images/cards/dawan.png" width="170" alt="大宛"> | <img src="docs/images/cards/jueying.png" width="170" alt="绝影"> | <img src="docs/images/cards/mengdexinshu.png" width="170" alt="孟德新书"> |
-
-完整卡池预览：
-
-| 装备牌 | 基础/能力/扩展牌 |
-| --- | --- |
-| ![装备牌预览](docs/images/equipment-cards.png) | ![基础与能力牌预览](docs/images/core-cards.png) |
-
-| 技能牌 |
-| --- |
-| ![技能牌预览](docs/images/trick-cards.png) |
+离线生成素材仍可作为开发参考，但不再作为 README 的卡牌样式展示。
 
 ## 玩法内容
 
-- `75` 张已导出的卡牌头像和牌面资源。
-- 基础牌包括「杀、闪、桃、酒」，并为五个角色绘制了不同风格的角色基础牌。
-- 攻击牌、技能牌、能力牌和装备牌都已接入游戏卡池。
-- 装备牌分为武器、防具、坐骑、宝物四个槽位；同槽位只能装备一件，新装备会顶掉旧装备并触发旧装备的失去效果。
+- 基础牌包括“杀、闪、桃、酒”，并为五个角色绘制不同风格的角色基础牌。
+- 攻击牌、技能牌、能力牌和装备牌已接入游戏卡池。
+- 装备牌分为武器、防具、坐骑、宝物四个槽位；同槽位只保留一件，新装备会顶掉旧装备并正确移除旧装备提供的属性。
 - 五个角色拥有三国化命名、初始遗物和杀附魔机制。
-- 卡牌头像来自 `card_art`，完整牌面预览来自 `docs/images`，装备栏图标来自 `power_icons` 与 `power_icons_big`。
+- 卡牌头像资源位于 `card_art`，装备栏图标位于 `power_icons` 和 `power_icons_big`。
 - 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.6`。
 
 ## 角色特色
@@ -80,11 +59,11 @@
 
 ## 卡牌资源生成
 
+离线资源生成命令：
+
 ```powershell
 npm run cardgen:all
 ```
-
-该命令会重新生成牌面预览、游戏头像和 `card_art/cards.generated.json`。
 
 常用单项命令：
 
@@ -96,11 +75,21 @@ npm run cardgen:role-basic
 npm run cardgen:export
 ```
 
-要继续给 README 添加图片，请把完整牌面或截图放到 `docs/images/` 或 `docs/images/cards/`，再用相对路径引用：
+注意：这些命令生成的是开发用卡图、卡面预览和导出资源，不等同于游戏内真实卡牌渲染。不要直接把工具生成的完整牌面预览作为 GitHub README 的游戏截图。
+
+## 添加真实截图
+
+如果要继续给 README 添加图片，请把游戏内真实截图放到 `docs/images/real-game/`，再用相对路径引用：
 
 ```markdown
-![图片说明](docs/images/cards/your-card.png)
+![游戏内卡牌截图](docs/images/real-game/example.png)
 ```
+
+推荐截图内容：
+
+- 一张战斗中的手牌截图，能看到不同角色边框和能量样式。
+- 一张卡牌奖励或牌库截图，能看到技能牌、能力牌和装备牌分类。
+- 一张角色基础牌截图，能看到杀、闪、桃、酒和属性杀的真实游戏内样式。
 
 ## 文档
 
