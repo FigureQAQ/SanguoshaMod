@@ -12,7 +12,7 @@
 
 ## 联机安装
 
-推荐使用发布压缩包 `SanguoshaMod-0.1.2-multiplayer.zip`：
+推荐使用发布压缩包 `SanguoshaMod-0.1.4-multiplayer.zip`：
 
 1. 关闭 Slay the Spire 2。
 2. 将压缩包解压到 Slay the Spire 2 游戏根目录。

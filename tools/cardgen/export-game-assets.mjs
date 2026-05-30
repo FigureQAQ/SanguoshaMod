@@ -51,6 +51,8 @@ function classifyCard(card, group) {
     return 'equipment';
   }
 
+  if (type.includes('能力牌')) return 'power';
+  if (type.includes('技能牌')) return 'trick';
   if (['ShaCard', 'ShanCard', 'TaoCard', 'JiuCard'].includes(card.id)) return 'basic';
   if (group === 'role-basic') return 'basic';
   if (group === 'core') return 'power';

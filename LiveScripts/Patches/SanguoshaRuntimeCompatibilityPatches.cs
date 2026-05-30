@@ -24,6 +24,23 @@ using sanguosha.Characters;
 
 namespace sanguosha.Patches;
 
+[HarmonyPatch(typeof(CardModel), nameof(CardModel.CanPlayTargeting))]
+internal static class KongChengAttackLockCanPlayTargetingPatch
+{
+    private static bool Prefix(CardModel __instance, ref bool __result)
+    {
+        if (__instance.Type == CardType.Attack
+            && __instance.Owner is { } owner
+            && SanguoshaCharacterSkills.IsKongChengAttackLocked(owner))
+        {
+            __result = false;
+            return false;
+        }
+
+        return true;
+    }
+}
+
 [HarmonyPatch(typeof(Hook), nameof(Hook.BeforeDamageReceived))]
 internal static class BaGuaBeforeDamageReceivedPatch
 {

@@ -94,7 +94,7 @@ public sealed class LongDanCard : SanguoshaCard
         new BlockVar(4, ValueProp.Move),
         new DynamicVar("Draw", 1m)
     ];
-    public LongDanCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public LongDanCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

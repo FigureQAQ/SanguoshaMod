@@ -473,8 +473,13 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         state.KongChengActive = true;
         state.KongChengIntangible = Math.Max(1, intangible);
-        state.KongChengTriggeredThisTurn = false;
+        state.KongChengPendingNextTurn = true;
         RefreshDisplayPower<KongChengDisplayPower>(player);
+    }
+
+    public static bool IsKongChengAttackLocked(Player player)
+    {
+        return GetState(player).KongChengAttackLockedThisTurn;
     }
 
     public static void ActivateLongDan(Player player)
@@ -915,7 +920,7 @@ internal static class SanguoshaCharacterSkills
                 state.RenWangUsedThisTurn = false;
                 state.MuNiuTrickDrawsUsed = 0;
                 state.MengDeXinShuUsedThisTurn = false;
-                state.KongChengTriggeredThisTurn = false;
+                state.KongChengAttackLockedThisTurn = false;
                 state.LianYingTriggersUsedThisTurn = 0;
                 state.ZhangBaGeneratedThisTurn = false;
                 state.LongDanFreeUsedThisTurn = false;
@@ -925,6 +930,7 @@ internal static class SanguoshaCharacterSkills
                 state.LastCardType = null;
                 BaiYinDamageCapPatch.ResetDamageThisTurn(player);
 
+                await ApplyKongChengTurnStart(player, state);
                 ApplyZhuGeTurnStart(player, state);
                 RefreshLongDanFreeCard(player, state);
                 await ApplyEquipmentTurnStart(player, state);
@@ -975,7 +981,6 @@ internal static class SanguoshaCharacterSkills
             await ApplyLowHpEmergency(player, state, evt.CombatState, card);
             await RunCardPlayedSkill(player, state, evt.CombatState, cardPlay);
             await ApplyLianYingIfEmpty(player, state, card);
-            await ApplyKongChengIfEmpty(player, state, card);
             RefreshLongDanFreeCard(player, state);
 
             state.LastCardType = card.Type;
@@ -1484,17 +1489,16 @@ internal static class SanguoshaCharacterSkills
         }
     }
 
-    private static Task ApplyKongChengIfEmpty(Player player, CharacterSkillState state, CardModel source)
+    private static Task ApplyKongChengTurnStart(Player player, CharacterSkillState state)
     {
-        if (!state.KongChengActive
-            || state.KongChengTriggeredThisTurn
-            || player.PlayerCombatState!.Hand.Cards.Count > 0)
+        if (!state.KongChengActive || !state.KongChengPendingNextTurn)
         {
             return Task.CompletedTask;
         }
 
-        state.KongChengTriggeredThisTurn = true;
-        return ApplyPower<IntangiblePower>(player, player.Creature, state.KongChengIntangible, source);
+        state.KongChengPendingNextTurn = false;
+        state.KongChengAttackLockedThisTurn = true;
+        return ApplyPower<IntangiblePower>(player, player.Creature, state.KongChengIntangible, null);
     }
 
     private static bool IsLowHp(Player player, decimal threshold)
@@ -1870,7 +1874,8 @@ internal static class SanguoshaCharacterSkills
         public int TaiPingTurnHeal { get; set; }
         public bool KongChengActive { get; set; }
         public int KongChengIntangible { get; set; }
-        public bool KongChengTriggeredThisTurn { get; set; }
+        public bool KongChengPendingNextTurn { get; set; }
+        public bool KongChengAttackLockedThisTurn { get; set; }
         public bool LongDanActive { get; set; }
         public bool LongDanFreeUsedThisTurn { get; set; }
         public bool GuanShiActive { get; set; }

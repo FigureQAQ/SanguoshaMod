@@ -32,7 +32,7 @@
   "SANGUOSHA_POWER_TAI_PING_DISPLAY_POWER.title": "太平要术",
   "SANGUOSHA_POWER_TAI_PING_DISPLAY_POWER.description": "装备：宝物。回合开始净化 1 个负面效果；若成功净化，获得能量，额外回复生命。",
   "SANGUOSHA_POWER_KONG_CHENG_DISPLAY_POWER.title": "空城",
-  "SANGUOSHA_POWER_KONG_CHENG_DISPLAY_POWER.description": "每回合首次在你打出牌结算后没有手牌时，获得 1 层无实体。",
+  "SANGUOSHA_POWER_KONG_CHENG_DISPLAY_POWER.description": "下回合开始时获得 1 层无实体，但该回合不能打出攻击牌。",
   "SANGUOSHA_POWER_ZHI_HENG_DISPLAY_POWER.title": "制衡",
   "SANGUOSHA_POWER_ZHI_HENG_DISPLAY_POWER.description": "能力。每回合首次打出技能牌后抽牌。",
   "SANGUOSHA_POWER_WU_SHUANG_DISPLAY_POWER.title": "无双",

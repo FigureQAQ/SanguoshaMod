@@ -161,7 +161,7 @@
       "cost": 1,
       "type": "能力牌 - 格挡",
       "rarity": "Rare",
-      "description": "获得格挡。每回合首次打出牌后若没有手牌，获得无实体。",
+      "description": "获得格挡。下回合开始时获得无实体，但该回合不能打出攻击牌。",
       "art": "kongcheng.png",
       "externalFileB64": "56m65Z+OLnBuZw==",
       "prompt": "Empty Fort strategy, Zhuge Liang calmly plays a qin on an open city gate while enemy scouts hesitate before silent walls and drifting banners."

@@ -208,9 +208,9 @@
       "slug": "longdan",
       "title": "龙胆",
       "cost": 1,
-      "type": "技能牌 - 武技",
+      "type": "能力牌 - 武技",
       "rarity": "Uncommon",
-      "description": "消耗任意张杀或闪，生成等量本回合 0 费的相反牌。",
+      "description": "获得格挡。此后每回合第一张杀或闪本回合费用变为 0。",
       "art": "longdan.png",
       "externalFileB64": "6b6Z6IOGLnBuZw==",
       "prompt": "Zhao Yun Dragon Courage technique, a white-armored spear hero swaps offense and defense in a blue dragon aura, cutting through arrows and blades."
