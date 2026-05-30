@@ -1,10 +1,10 @@
 # Real Game Screenshots
 
-Only put screenshots captured from Slay the Spire 2 here.
+这里仅放从 Slay the Spire 2 游戏内直接截取的三国杀模组画面。
 
-Accepted images:
+可以放：
 
-- Full in-game screenshots that show Sanguosha cards in combat, rewards, card library, or card preview UI.
-- Cropped cards taken from those real screenshots.
+- 战斗、奖励、牌库或卡牌预览界面的完整游戏截图。
+- 从这些真实截图中裁切出的单张卡牌。
 
-Do not put cardgen output or manually composed card mockups in this folder.
+不要放离线 cardgen 输出或手动拼出来的卡牌 mockup。

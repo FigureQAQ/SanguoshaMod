@@ -4,17 +4,23 @@
 
 [最新 Release：v0.1.6-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.6-multiplayer)
 
-## 当前说明
+## 游戏内截图
 
-README 不再展示离线工具生成的“完整卡牌预览图”。这些图片不是游戏内真实渲染结果，边框、能量、材质和文字排版可能与实际游戏不一致。
+README 展示图只使用游戏内真实截图或从真实截图裁切出的卡牌，不再使用离线工具生成的完整卡面预览。
 
-后续添加到 GitHub README 的卡牌图片，应当来自游戏内真实画面：
+![赤壁猛将角色选择](docs/images/real-game/character-select-ironclad.jpg)
 
-- 战斗、奖励、牌库或卡牌预览界面的实际截图。
-- 从真实截图裁切出的单张卡牌。
-- 截图需能看到游戏实际渲染的卡牌边框、能量样式、类型栏、卡图和文本。
+![战斗中的三国杀基础牌](docs/images/real-game/combat-hand-ironclad.jpg)
 
-离线生成素材仍可作为开发参考，但不再作为 README 的卡牌样式展示。
+![赤壁猛将牌库中的真实卡牌样式](docs/images/real-game/library-ironclad.jpg)
+
+![骨妹牌库中的真实卡牌样式](docs/images/real-game/library-necrobinder.jpg)
+
+### 升级卡牌样式
+
+| 杀+ | 闪+ | 桃+ | 酒+ | 遗计+ | 诸葛连弩+ |
+| --- | --- | --- | --- | --- | --- |
+| <img src="docs/images/real-game/cards/sha-upgraded.png" width="150"> | <img src="docs/images/real-game/cards/shan-upgraded.png" width="150"> | <img src="docs/images/real-game/cards/tao-upgraded.png" width="150"> | <img src="docs/images/real-game/cards/jiu-upgraded.png" width="150"> | <img src="docs/images/real-game/cards/yiji-upgraded.png" width="150"> | <img src="docs/images/real-game/cards/zhuge-upgraded.png" width="150"> |
 
 ## 玩法内容
 
@@ -22,7 +28,6 @@ README 不再展示离线工具生成的“完整卡牌预览图”。这些图�
 - 攻击牌、技能牌、能力牌和装备牌已接入游戏卡池。
 - 装备牌分为武器、防具、坐骑、宝物四个槽位；同槽位只保留一件，新装备会顶掉旧装备并正确移除旧装备提供的属性。
 - 五个角色拥有三国化命名、初始遗物和杀附魔机制。
-- 卡牌头像资源位于 `card_art`，装备栏图标位于 `power_icons` 和 `power_icons_big`。
 - 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.6`。
 
 ## 角色特色
@@ -31,7 +36,7 @@ README 不再展示离线工具生成的“完整卡牌预览图”。这些图�
 | --- | --- | --- |
 | 赤壁猛将 | 火杀 | 追加火焰伤害，低生命时爆发更高。 |
 | 锦囊夜行 | 毒杀 | 叠中毒，攻击中毒敌人时获得额外节奏。 |
-| 机关卧龙 | 雷杀 | 连锁电击并积累雷势，满层后爆发全体伤害。 |
+| 机关卧龙 | 雷杀 | 连锁电击并积累雷力，满层后爆发全体伤害。 |
 | 青囊魂医 | 灾厄杀 | 用治疗、魂值和灾厄压制敌人。 |
 | 汉室仁主 | 储能杀 | 用号令、星辉和储能把单牌收益转成团队节奏。 |
 
@@ -55,7 +60,7 @@ README 不再展示离线工具生成的“完整卡牌预览图”。这些图�
 & 'C:\Program Files\dotnet\dotnet.exe' build .\SanguoshaMod.csproj -c Release --no-restore
 ```
 
-构建目标会把 DLL、manifest、本地化文件、卡牌头像和装备图标复制到配置的 `mods\sanguosha` 目录。
+构建目标会把 DLL、manifest、卡牌头像和装备图标复制到配置的 `mods\sanguosha` 目录。运行时中文文本由 DLL 内的本地化补丁提供。
 
 ## 卡牌资源生成
 
@@ -75,21 +80,17 @@ npm run cardgen:role-basic
 npm run cardgen:export
 ```
 
-注意：这些命令生成的是开发用卡图、卡面预览和导出资源，不等同于游戏内真实卡牌渲染。不要直接把工具生成的完整牌面预览作为 GitHub README 的游戏截图。
+这些命令生成的是开发用卡图、卡面预览和导出资源，不等同于游戏内真实卡牌渲染。不要直接把工具生成的完整牌面预览作为 GitHub README 的游戏截图。
 
 ## 添加真实截图
 
-如果要继续给 README 添加图片，请把游戏内真实截图放到 `docs/images/real-game/`，再用相对路径引用：
-
-```markdown
-![游戏内卡牌截图](docs/images/real-game/example.png)
-```
+继续给 README 添加图片时，请把游戏内真实截图放到 `docs/images/real-game/`，再用相对路径引用。
 
 推荐截图内容：
 
-- 一张战斗中的手牌截图，能看到不同角色边框和能量样式。
-- 一张卡牌奖励或牌库截图，能看到技能牌、能力牌和装备牌分类。
-- 一张角色基础牌截图，能看到杀、闪、桃、酒和属性杀的真实游戏内样式。
+- 战斗中的手牌截图，能看到不同角色边框和能量样式。
+- 卡牌奖励或牌库截图，能看到技能牌、能力牌和装备牌分类。
+- 角色基础牌截图，能看到杀、闪、桃、酒和属性杀的真实游戏内样式。
 
 ## 文档
 
