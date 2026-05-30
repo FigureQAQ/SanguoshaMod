@@ -1,10 +1,7 @@
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Characters;
 using STS2RitsuLib.Interop.AutoRegistration;
@@ -153,7 +150,6 @@ public sealed class TuXiCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Draw", 1m),
-        new DynamicVar("StrengthDown", 1m),
         new DynamicVar("Vulnerable", 1m),
         new EnergyVar(1)
     ];
@@ -168,24 +164,10 @@ public sealed class TuXiCard : SanguoshaCard
         if (target.Block > 0)
         {
             target.LoseBlockInternal(target.Block);
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-            return;
         }
 
         cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
         await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-        if (target.Powers.Any(power => power is StrengthPower))
-        {
-            await PowerCmd.Apply<StrengthPower>(
-                choiceContext,
-                target,
-                -DynamicVars["StrengthDown"].BaseValue,
-                cardPlay.Card.Owner.Creature,
-                cardPlay.Card,
-                false);
-            return;
-        }
-
         await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
     }
 
@@ -221,21 +203,13 @@ public sealed class QiXiCard : SanguoshaCard
         }
 
         var target = cardPlay.Target!;
-        var hadBlock = target.Block > 0;
-        if (hadBlock)
+        if (target.Block > 0)
         {
             target.LoseBlockInternal(target.Block);
-            await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
         }
-        else
-        {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(1);
-        }
-        if (IsUpgraded && hadBlock)
-        {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-        }
+
+        await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
     }
 
     protected override void OnUpgrade()

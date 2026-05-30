@@ -1188,7 +1188,6 @@ public sealed class ShunShouCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DamageVar(5, ValueProp.Move),
         new BlockVar(3, ValueProp.Move),
-        new EnergyVar(1),
         new DynamicVar("Draw", 1m),
         new DynamicVar("FreeCards", 1m)
     ];
@@ -1208,12 +1207,6 @@ public sealed class ShunShouCard : SanguoshaCard
 
         await SanguoshaCardFx.Damage(choiceContext, cardPlay, target, DynamicVars.Damage.BaseValue);
         await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-        if (stolenBlock > 0)
-        {
-            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
-            return;
-        }
-
         SanguoshaCardFx.MakeHandCardsFree(cardPlay, DynamicVars["FreeCards"].IntValue);
     }
 

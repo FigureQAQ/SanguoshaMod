@@ -66,7 +66,7 @@
   "SANGUOSHA_CARD_TIE_SUO_CARD.title": "铁索连环",
   "SANGUOSHA_CARD_TIE_SUO_CARD.description": "施加 {Slow:diff()} 层减速。本回合你的杀会对其他敌人造成 {SplashPercent:diff()}% 溅射伤害；溅射不触发杀命中、武魂或武器追击。判定抽牌堆顶 1 张牌并置入弃牌堆；若判定牌是技能牌或能力牌，其他敌人受到 {Damage:diff()} 点伤害并获得 {Energy:diff()} 点能量，否则抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_SHUN_SHOU_CARD.title": "顺手牵羊",
-  "SANGUOSHA_CARD_SHUN_SHOU_CARD.description": "移除目标至多 {Block:diff()} 点格挡并获得等量格挡，造成 {Damage:diff()} 点伤害，抽 {Draw:diff()} 张牌。若成功偷取格挡，获得 {Energy:diff()} 点能量；否则使手牌中至多 {FreeCards:diff()} 张牌本回合变为 0 费。",
+  "SANGUOSHA_CARD_SHUN_SHOU_CARD.description": "移除目标至多 {Block:diff()} 点格挡并获得等量格挡。造成 {Damage:diff()} 点伤害，抽 {Draw:diff()} 张牌，并使手牌中至多 {FreeCards:diff()} 张牌本回合变为 0 费。",
   "SANGUOSHA_CARD_TAO_YUAN_CARD.title": "桃园结义",
   "SANGUOSHA_CARD_TAO_YUAN_CARD.description": "所有玩家回复 {Heal:diff()} 点生命。你获得 {Block:diff()} 点格挡、{Energy:diff()} 点能量并抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_WAN_JIAN_CARD.title": "万箭齐发",
@@ -99,7 +99,10 @@
   "SANGUOSHA_CARD_JUE_YING_CARD.description": "装备：坐骑。获得 {Dexterity:diff()} 点敏捷。每回合首次敌人即将造成伤害时，获得 {Block:diff()} 点格挡。失去时获得格挡。",
   "SANGUOSHA_CARD_MENG_DE_XIN_SHU_CARD.title": "孟德新书",
   "SANGUOSHA_CARD_MENG_DE_XIN_SHU_CARD.description": "装备：宝物。获得 {Energy:diff()} 点能量并抽 {Draw:diff()} 张牌。每回合首次打出技能牌后，获得 1 点能量，并使 1 张杀或技能牌本回合费用降低 1。失去时获得能量并降低 1 张牌费用。",
+  "SANGUOSHA_CARD_TU_XI_CARD.title": "突袭",
+  "SANGUOSHA_CARD_TU_XI_CARD.description": "移除目标所有格挡。获得 {Energy:diff()} 点能量，抽 {Draw:diff()} 张牌，并施加 {Vulnerable:diff()} 层易伤。",
   "SANGUOSHA_CARD_QI_XI_CARD.title": "奇袭",
+  "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title": "王剑杀",
   "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "由铸剑生成。视为杀造成 {Damage:diff()} 点伤害，并额外造成等同于号令的伤害；不会触发储能杀的铸剑效果。"
 }

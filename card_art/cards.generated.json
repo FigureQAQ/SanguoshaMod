@@ -1,7 +1,7 @@
 {
   "object": "sanguosha-game-card-assets",
   "version": 1,
-  "generatedAt": "2026-05-30T12:28:33.881Z",
+  "generatedAt": "2026-05-30T12:51:33.525Z",
   "portraitSize": {
     "width": 1024,
     "height": 752
@@ -418,7 +418,7 @@
       "type": "技能牌 - 偷袭",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "偷取目标格挡并造成伤害、抽牌。偷取成功获得能量，否则让手牌临时变为 0 费。",
+      "description": "偷取目标格挡并造成伤害、抽牌。使手牌临时变为 0 费。",
       "portrait": "shunshou.png",
       "portraitPath": "res://mods/sanguosha/card_art/shunshou.png",
       "sourceArt": "tools/cardgen/input/tricks-art/shunshou.png"
@@ -597,10 +597,10 @@
       "slug": "tuxi",
       "title": "突袭",
       "cost": 1,
-      "type": "技能牌 - 削弱",
+      "type": "技能牌 - 压制",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "抽牌。若目标有格挡，移除其所有格挡；否则获得能量，并削减目标力量或施加易伤。",
+      "description": "移除目标所有格挡。获得能量，抽牌，并施加易伤。",
       "portrait": "tuxi.png",
       "portraitPath": "res://mods/sanguosha/card_art/tuxi.png",
       "sourceArt": "tools/cardgen/input/core-art/tuxi.png"
@@ -610,10 +610,10 @@
       "slug": "qixi",
       "title": "奇袭",
       "cost": 0,
-      "type": "技能牌 - 破阵",
+      "type": "技能牌 - 谋略",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "消耗 1 张技能牌；若目标有格挡，移除其所有格挡并施加易伤；否则抽牌并获得能量。",
+      "description": "消耗 1 张技能牌。移除目标所有格挡，施加易伤并抽牌。",
       "portrait": "qixi.png",
       "portraitPath": "res://mods/sanguosha/card_art/qixi.png",
       "sourceArt": "tools/cardgen/input/core-art/qixi.png"

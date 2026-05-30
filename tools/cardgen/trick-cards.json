@@ -150,7 +150,7 @@
       "cost": 1,
       "type": "技能牌 - 偷袭",
       "rarity": "Uncommon",
-      "description": "偷取目标格挡并造成伤害、抽牌。偷取成功获得能量，否则让手牌临时变为 0 费。",
+      "description": "偷取目标格挡并造成伤害、抽牌。使手牌临时变为 0 费。",
       "art": "shunshou.png",
       "externalFileB64": "6aG65omL54m1576KLnBuZw==",
       "prompt": "Clever theft in a war camp, a nimble strategist steals a guarded banner and supply token while soldiers look the wrong way."
