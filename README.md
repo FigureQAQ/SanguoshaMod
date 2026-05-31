@@ -2,7 +2,7 @@
 
 三国杀主题的 Slay the Spire 2 玩法模组。模组将“杀、闪、桃、酒”、装备槽位、角色杀附魔和三国式技能牌接入 STS2 的战斗节奏，并为不同角色准备了专属基础牌图、卡牌边框和能量样式。
 
-[最新 Release：v0.1.7-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.7-multiplayer)
+[最新 Release：v0.1.8-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.8-multiplayer)
 
 ## 游戏内截图
 
@@ -28,7 +28,7 @@ README 展示图只使用游戏内真实截图或从真实截图裁切出的卡�
 - 攻击牌、技能牌、能力牌和装备牌已接入游戏卡池。
 - 装备牌分为武器、防具、坐骑、宝物四个槽位；同槽位只保留一件，新装备会顶掉旧装备并正确移除旧装备提供的属性。
 - 五个角色拥有三国化命名、初始遗物和杀附魔机制。
-- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.6`。
+- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.8`。
 
 ## 角色特色
 
@@ -102,5 +102,5 @@ npm run cardgen:export
 - 杀附魔节奏：`docs/SHA_INFUSION_BALANCE_2026-05-29.md`（更新：2026-05-30 19:07）
 - 仁王盾重做：`docs/REN_WANG_REWORK_2026-05-29.md`（更新：2026-05-30 19:07）
 - 机关卧龙星辉修正：`docs/DEFECT_THUNDER_STARS_FIX_2026-05-29.md`（更新：2026-05-30 19:07）
-- RitsuLib 升级记录：`docs/RITSULIB_UPGRADE_2026-05-29.md`（更新：2026-05-30 19:07）
+- RitsuLib 升级记录：`docs/RITSULIB_UPGRADE_2026-05-29.md`（更新：2026-05-31 10:35）
 - 实现审计：`docs/IMPLEMENTATION_AUDIT_2026-05-30.md`（更新：2026-05-30 19:07）
