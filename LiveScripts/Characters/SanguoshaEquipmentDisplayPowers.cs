@@ -12,8 +12,10 @@ using STS2RitsuLib.Scaffolding.Content.Patches;
 
 namespace sanguosha.Characters;
 
-internal abstract class SanguoshaEquipmentDisplayPower : ModPowerTemplate, IPowerExtraIconAmountLabelsProvider
+internal abstract class SanguoshaEquipmentDisplayPower : ModPowerTemplate, IPowerExtraIconAmountLabelsProvider, IPowerExtraIconAmountLabelsChangeSource
 {
+    public event Action? PowerExtraIconAmountLabelsInvalidated;
+
     protected abstract string IconBaseName { get; }
 
     internal string SanguoshaIconBaseName => IconBaseName;
@@ -36,7 +38,15 @@ internal abstract class SanguoshaEquipmentDisplayPower : ModPowerTemplate, IPowe
 
     public override string CustomBigIconPath => ModIconPath("power_icons_big", IconBaseName);
 
-    public virtual IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots() => [];
+    public virtual IReadOnlyList<ExtraIconAmountLabelSlot> GetPowerExtraIconAmountLabelSlots()
+    {
+        return SanguoshaCharacterSkills.GetDisplayPowerCounters(this);
+    }
+
+    internal void InvalidateExtraIconAmountLabels()
+    {
+        PowerExtraIconAmountLabelsInvalidated?.Invoke();
+    }
 
     internal static string ModIconPath(string folder, string iconBaseName)
     {

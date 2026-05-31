@@ -502,29 +502,17 @@ internal static class LeadPaperweightSanguoshaCardPatch
     }
 }
 
-[HarmonyPatch]
+[HarmonyPatch(typeof(RelicModel), nameof(RelicModel.AfterObtained))]
 internal static class CircletSanguoshaClonePatch
 {
-    private static bool Prepare()
+    private static bool Prefix(RelicModel __instance, ref Task __result)
     {
-        var canPatch = AccessTools.Method(typeof(Circlet), nameof(Circlet.AfterObtained)) is not null;
-        if (!canPatch)
+        if (__instance is not Circlet)
         {
-            Entry.Logger.Warn("Skipped Circlet clone patch because Circlet.AfterObtained was not found in this game version.");
+            return true;
         }
 
-        return canPatch;
-    }
-
-    private static IEnumerable<MethodBase> TargetMethods()
-    {
-        var method = AccessTools.Method(typeof(Circlet), nameof(Circlet.AfterObtained));
-        return method is null ? [] : [method];
-    }
-
-    private static bool Prefix(Circlet __instance, ref Task __result)
-    {
-        __result = EnchantOneCard(__instance.Owner!);
+        __result = EnchantOneCard(__instance.Owner);
         return false;
     }
 

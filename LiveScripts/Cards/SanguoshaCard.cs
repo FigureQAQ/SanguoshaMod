@@ -4,6 +4,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Runs;
 using STS2RitsuLib.Scaffolding.Content;
 
@@ -111,6 +112,7 @@ public abstract class SanguoshaCard(
     public override string CustomFramePath => GetCharacterUiPath("frame") ?? base.CustomFramePath ?? string.Empty;
     public override string CustomPortraitBorderPath => GetCharacterUiPath("portrait_border") ?? base.CustomPortraitBorderPath ?? string.Empty;
     public override string CustomEnergyIconPath => GetCharacterEnergyIconPath() ?? base.CustomEnergyIconPath ?? string.Empty;
+    public override CardPoolModel VisualCardPool => GetCharacterVisualCardPool() ?? base.VisualCardPool;
 
     internal string SanguoshaPortraitSlug => GetPortraitSlug();
     internal string? CharacterFrameAssetName => GetCharacterUiAssetName("frame");
@@ -229,6 +231,19 @@ public abstract class SanguoshaCard(
             "necrobinder" => "necrobinder",
             "regent" => "regent",
             _ => null
+        };
+    }
+
+    private CardPoolModel? GetCharacterVisualCardPool()
+    {
+        return GetCharacterSkinKey(this, allowRunFallback: true) switch
+        {
+            "ironclad" => ModelDb.CardPool<IroncladCardPool>(),
+            "silent" => ModelDb.CardPool<SilentCardPool>(),
+            "defect" => ModelDb.CardPool<DefectCardPool>(),
+            "necrobinder" => ModelDb.CardPool<NecrobinderCardPool>(),
+            "regent" => ModelDb.CardPool<RegentCardPool>(),
+            _ => ModelDb.CardPool<IroncladCardPool>()
         };
     }
 

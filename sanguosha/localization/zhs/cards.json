@@ -86,7 +86,7 @@
   "SANGUOSHA_CARD_LIAN_YING_CARD.title": "连营",
   "SANGUOSHA_CARD_LIAN_YING_CARD.description": "能力牌。抽 1 张牌。每回合前 {Triggers:diff()} 次你主动打出牌后没有手牌时，抽 {Draw:diff()} 张牌，并使其中 1 张杀或技能牌本回合费用降低 1。",
   "SANGUOSHA_CARD_YI_JI_CARD.title": "遗计",
-  "SANGUOSHA_CARD_YI_JI_CARD.description": "能力牌。抽 1 张牌。每回合首次敌人即将对你造成可被格挡的伤害时，抽 {Draw:diff()} 张牌；若触发前手牌不超过 3 张，额外抽 {LowHandDraw:diff()} 张牌。然后使手牌中至多 {FreeCards:diff()} 张杀或技能牌本回合变为 0 费。",
+  "SANGUOSHA_CARD_YI_JI_CARD.description": "能力牌。抽 1 张牌。此后每回合首次敌人即将对你造成可被格挡的伤害时，抽 {Draw:diff()} 张牌；若触发前手牌不超过 3 张，额外抽 {LowHandDraw:diff()} 张牌。然后使手牌中至多 {FreeCards:diff()} 张杀或技能牌本回合变为 0 费。",
   "SANGUOSHA_CARD_JIAN_XIONG_CARD.title": "奸雄",
   "SANGUOSHA_CARD_JIAN_XIONG_CARD.description": "能力牌。获得 1 点力量。每回合首次敌人即将对你造成伤害时，抽 {Draw:diff()} 张牌，你的下一张杀额外造成 {NextShaDamage:diff()} 点伤害。",
   "SANGUOSHA_CARD_GUI_CAI_CARD.title": "鬼才",
