@@ -15,14 +15,68 @@ function ConvertFrom-Utf8Base64([string] $Value) {
 }
 
 function Get-B64FromPayload([string] $Payload) {
-  $match = [regex]::Match($Payload, '"b64_json"\s*:\s*"([^"]+)"')
+  try {
+    $json = $Payload | ConvertFrom-Json -Depth 100
+    $found = Find-B64Json $json
+    if ($found) {
+      return $found
+    }
+  }
+  catch {
+    # Some SSE proxies split a single JSON object across multiple data lines.
+    # Fall back to a regex over the accumulated raw payload.
+  }
+
+  $match = [regex]::Match($Payload, '"b64_json"\s*:\s*"([^"]+)"', [System.Text.RegularExpressions.RegexOptions]::Singleline)
   if ($match.Success) {
     return $match.Groups[1].Value
   }
   return $null
 }
 
-function Invoke-PinAIImageGeneration([string] $Prompt) {
+function Find-B64Json($Value) {
+  if ($null -eq $Value) {
+    return $null
+  }
+
+  if ($Value -is [string]) {
+    return $null
+  }
+
+  if ($Value -is [System.Collections.IEnumerable] -and $Value -isnot [System.Management.Automation.PSCustomObject]) {
+    foreach ($item in $Value) {
+      $found = Find-B64Json $item
+      if ($found) {
+        return $found
+      }
+    }
+    return $null
+  }
+
+  foreach ($property in $Value.PSObject.Properties) {
+    if ($property.Name -eq "b64_json" -and $property.Value) {
+      return [string] $property.Value
+    }
+
+    $found = Find-B64Json $property.Value
+    if ($found) {
+      return $found
+    }
+  }
+
+  return $null
+}
+
+function Write-PinAIRawLog([string] $Slug, [string] $RawPayload) {
+  $logDir = Join-Path $ExternalOutDir ".pinai-logs"
+  New-Item -ItemType Directory -Force -Path $logDir | Out-Null
+  $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
+  $logPath = Join-Path $logDir "$stamp-$Slug.sse.log"
+  Set-Content -LiteralPath $logPath -Encoding UTF8 -Value $RawPayload
+  return $logPath
+}
+
+function Invoke-PinAIImageGeneration([string] $Prompt, [string] $Slug) {
   $body = @{
     model = "gpt-image-2"
     prompt = $Prompt
@@ -47,29 +101,45 @@ function Invoke-PinAIImageGeneration([string] $Prompt) {
     $stream = $response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()
     $reader = [System.IO.StreamReader]::new($stream)
     $raw = [System.Text.StringBuilder]::new()
+    $eventData = [System.Collections.Generic.List[string]]::new()
     $b64 = $null
+    $processPayload = {
+      param([string] $payload)
+      if (-not $payload -or $payload -eq "[DONE]") { return }
+      if ($payload -match '"error"\s*:') {
+        throw "PinAI image generation returned an error: $payload"
+      }
+
+      $found = Get-B64FromPayload $payload
+      if ($found) { Set-Variable -Name b64 -Scope 1 -Value $found }
+    }
 
     while (-not $reader.EndOfStream) {
       $line = $reader.ReadLine()
-      if (-not $line) { continue }
       [void] $raw.AppendLine($line)
 
-      if ($line.StartsWith("data:")) {
-        $payload = $line.Substring(5).Trim()
-        if ($payload -eq "[DONE]") { continue }
-        if ($payload -match '"error"\s*:') {
-          throw "PinAI image generation returned an error: $payload"
+      if ([string]::IsNullOrWhiteSpace($line)) {
+        if ($eventData.Count -gt 0) {
+          & $processPayload ($eventData -join "`n")
+          $eventData.Clear()
         }
-        $found = Get-B64FromPayload $payload
-        if ($found) { $b64 = $found }
+        continue
+      }
+
+      if ($line.StartsWith("data:")) {
+        $eventData.Add($line.Substring(5).TrimStart())
       }
     }
 
+    if ($eventData.Count -gt 0) {
+      & $processPayload ($eventData -join "`n")
+    }
     if (-not $b64) {
       $b64 = Get-B64FromPayload $raw.ToString()
     }
     if (-not $b64) {
-      throw "No b64_json image found in PinAI response."
+      $logPath = Write-PinAIRawLog $Slug $raw.ToString()
+      throw "No b64_json image found in PinAI response. Raw SSE saved to $logPath"
     }
 
     return [Convert]::FromBase64String($b64)
@@ -138,7 +208,7 @@ foreach ($item in $selected) {
   }
 
   Write-Host "GENERATE $($item.slug) $externalFile $Size"
-  $bytes = Invoke-PinAIImageGeneration $prompt
+  $bytes = Invoke-PinAIImageGeneration $prompt $item.slug
   [System.IO.File]::WriteAllBytes($externalPath, $bytes)
   Copy-Item -LiteralPath $externalPath -Destination $projectPath -Force
   Write-Host "SAVED $externalPath"

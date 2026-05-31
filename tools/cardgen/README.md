@@ -37,6 +37,16 @@ npm run cardgen:art -- -Card zhuge,zhangba
 npm run cardgen:art -- -Card chitu -Force
 ```
 
+### PinAI 流式返回排障
+
+PinAI 的 `gpt-image-2` 生图通常需要几十秒，脚本使用 `stream=true` 按 SSE 流式读取结果。后台如果显示请求已经成功计费，但本地没有生成对应 PNG，优先检查：
+
+- 是否被调用端中途停止，或终端会话被关闭。
+- `C:\Users\Administrator\Pictures\三国杀mod\image2\<分类>\.pinai-logs\` 下是否有同名时间戳日志。
+- 日志里是否存在 `b64_json`，或返回的是错误、URL、空事件、其他包装结构。
+
+脚本会按完整 SSE 事件块解析 `b64_json`，并递归查找嵌套字段；如果仍找不到图片，会保存原始 SSE 日志后报错，便于对照 PinAI 后台使用记录继续定位。
+
 生成技能牌插画：
 
 ```powershell
