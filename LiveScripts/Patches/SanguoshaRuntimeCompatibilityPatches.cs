@@ -171,10 +171,10 @@ internal static class DelayedBingLiangStatusCardPatchHelper
     ])]
 internal static class DelayedBingLiangStatusCardPileTypeSinglePatch
 {
-    private static bool Prefix(CardModel card, AbstractModel? source, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel __0, AbstractModel? __3, ref Task<CardPileAddResult> __result)
     {
-        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, sourceCreature, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(__3);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(__0, sourceCreature, ref __result);
     }
 }
 
@@ -190,10 +190,10 @@ internal static class DelayedBingLiangStatusCardPileTypeSinglePatch
     ])]
 internal static class DelayedBingLiangStatusCardPileSinglePatch
 {
-    private static bool Prefix(CardModel card, AbstractModel? source, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel __0, AbstractModel? __3, ref Task<CardPileAddResult> __result)
     {
-        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, sourceCreature, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(__3);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(__0, sourceCreature, ref __result);
     }
 }
 
@@ -209,10 +209,10 @@ internal static class DelayedBingLiangStatusCardPileSinglePatch
     ])]
 internal static class DelayedBingLiangStatusCardsPileTypePatch
 {
-    private static bool Prefix(ref IEnumerable<CardModel> cards, AbstractModel? source, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> __0, AbstractModel? __3, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, sourceCreature, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(__3);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref __0, sourceCreature, ref __result);
     }
 }
 
@@ -228,10 +228,10 @@ internal static class DelayedBingLiangStatusCardsPileTypePatch
     ])]
 internal static class DelayedBingLiangStatusCardsPilePatch
 {
-    private static bool Prefix(ref IEnumerable<CardModel> cards, AbstractModel? source, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> __0, AbstractModel? __3, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, sourceCreature, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(__3);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref __0, sourceCreature, ref __result);
     }
 }
 
@@ -244,12 +244,14 @@ internal static class DelayedBingLiangGeneratedStatusCardSinglePatch
             .Where(method =>
                 method.Name == nameof(CardPileCmd.AddGeneratedCardToCombat)
                 && method.ReturnType == typeof(Task<CardPileAddResult>)
-                && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(CardModel));
+                && method.GetParameters() is { Length: >= 3 } parameters
+                && parameters[0].ParameterType == typeof(CardModel)
+                && parameters[2].ParameterType == typeof(Player));
     }
 
-    private static bool Prefix(CardModel card, Player? player, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel __0, Player? __2, ref Task<CardPileAddResult> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, player?.Creature, ref __result);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(__0, __2?.Creature, ref __result);
     }
 }
 
@@ -262,12 +264,14 @@ internal static class DelayedBingLiangGeneratedStatusCardsPatch
             .Where(method =>
                 method.Name == nameof(CardPileCmd.AddGeneratedCardsToCombat)
                 && method.ReturnType == typeof(Task<IReadOnlyList<CardPileAddResult>>)
-                && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(IEnumerable<CardModel>));
+                && method.GetParameters() is { Length: >= 3 } parameters
+                && parameters[0].ParameterType == typeof(IEnumerable<CardModel>)
+                && parameters[2].ParameterType == typeof(Player));
     }
 
-    private static bool Prefix(ref IEnumerable<CardModel> cards, Player? player, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> __0, Player? __2, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, player?.Creature, ref __result);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref __0, __2?.Creature, ref __result);
     }
 }
 
