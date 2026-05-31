@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Events;
@@ -40,6 +41,159 @@ internal static class KongChengAttackLockCanPlayTargetingPatch
         }
 
         return true;
+    }
+}
+
+[HarmonyPatch(typeof(Hook), nameof(Hook.ModifyDamage))]
+internal static class DelayedLeBuModifyDamagePatch
+{
+    private static void Postfix(Creature? target, Creature? dealer, ref decimal __result)
+    {
+        if (target is { IsPlayer: true }
+            && dealer is { IsPlayer: false }
+            && SanguoshaCharacterSkills.IsLeBuAttackPrevented(dealer))
+        {
+            __result = 0;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Hook), nameof(Hook.ModifyPowerAmountGiven))]
+internal static class DelayedBingLiangPowerAmountPatch
+{
+    private static void Postfix(PowerModel power, Creature giver, Creature? target, ref decimal __result)
+    {
+        if (__result > 0
+            && power.Type == PowerType.Debuff
+            && target is not null
+            && SanguoshaCharacterSkills.ShouldBlockBingLiangDebuff(giver, target))
+        {
+            __result = 0;
+        }
+    }
+}
+
+internal static class DelayedBingLiangStatusCardPatchHelper
+{
+    public static bool PrefixSingle(CardModel card, ref Task<CardPileAddResult> __result)
+    {
+        if (!IsBlockedStatusCard(card))
+        {
+            return true;
+        }
+
+        __result = Task.FromResult(new CardPileAddResult { cardAdded = card, success = false });
+        return false;
+    }
+
+    public static bool PrefixMany(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    {
+        var cardList = cards.ToList();
+        if (cardList.Count == 0)
+        {
+            return true;
+        }
+
+        var blocked = cardList
+            .Where(card => IsBlockedStatusCard(card))
+            .ToList();
+        if (blocked.Count == 0)
+        {
+            return true;
+        }
+
+        var allowed = cardList.Except(blocked).ToList();
+        if (allowed.Count > 0)
+        {
+            cards = allowed;
+            return true;
+        }
+
+        __result = Task.FromResult<IReadOnlyList<CardPileAddResult>>(
+            blocked
+                .Select(card => new CardPileAddResult { cardAdded = card, success = false })
+                .ToList());
+        return false;
+    }
+
+    public static bool IsBlockedStatusCard(CardModel card)
+    {
+        return card.Owner is { } owner
+            && SanguoshaCharacterSkills.ShouldBlockBingLiangStatusCards(owner)
+            && (card.Type is CardType.Status or CardType.Curse or CardType.Quest
+                || card.Rarity is CardRarity.Status or CardRarity.Curse or CardRarity.Quest);
+    }
+}
+
+[HarmonyPatch(
+    typeof(CardPileCmd),
+    nameof(CardPileCmd.Add),
+    [
+        typeof(CardModel),
+        typeof(PileType),
+        typeof(CardPilePosition),
+        typeof(AbstractModel),
+        typeof(bool)
+    ])]
+internal static class DelayedBingLiangStatusCardPileTypeSinglePatch
+{
+    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+    }
+}
+
+[HarmonyPatch(
+    typeof(CardPileCmd),
+    nameof(CardPileCmd.Add),
+    [
+        typeof(CardModel),
+        typeof(CardPile),
+        typeof(CardPilePosition),
+        typeof(AbstractModel),
+        typeof(bool)
+    ])]
+internal static class DelayedBingLiangStatusCardPileSinglePatch
+{
+    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+    }
+}
+
+[HarmonyPatch(
+    typeof(CardPileCmd),
+    nameof(CardPileCmd.Add),
+    [
+        typeof(IEnumerable<CardModel>),
+        typeof(PileType),
+        typeof(CardPilePosition),
+        typeof(AbstractModel),
+        typeof(bool)
+    ])]
+internal static class DelayedBingLiangStatusCardsPileTypePatch
+{
+    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
+    }
+}
+
+[HarmonyPatch(
+    typeof(CardPileCmd),
+    nameof(CardPileCmd.Add),
+    [
+        typeof(IEnumerable<CardModel>),
+        typeof(CardPile),
+        typeof(CardPilePosition),
+        typeof(AbstractModel),
+        typeof(bool)
+    ])]
+internal static class DelayedBingLiangStatusCardsPilePatch
+{
+    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
     }
 }
 

@@ -16,10 +16,20 @@ using STS2RitsuLib;
 
 namespace sanguosha.Characters;
 
+internal enum DelayedJudgmentKind
+{
+    BingLiang,
+    LeBu,
+    ShanDian
+}
+
 internal static class SanguoshaCharacterSkills
 {
     private static readonly List<IDisposable> Subscriptions = [];
     private static readonly Dictionary<ulong, CharacterSkillState> States = [];
+    private static readonly List<DelayedJudgment> PendingDelayedJudgments = [];
+    private static readonly HashSet<uint> ActiveLeBuAttackLocks = [];
+    private static readonly HashSet<uint> ActiveBingLiangDebuffLocks = [];
 
     private static EquipSlot GetEquipSlot(string cardId)
     {
@@ -61,7 +71,7 @@ internal static class SanguoshaCharacterSkills
         };
         var dexterity = oldCardId switch
         {
-            "BaiYinCard" or "DiLuCard" or "TaiPingCard" => wasUpgraded ? 2 : 1,
+            "DiLuCard" or "TaiPingCard" => wasUpgraded ? 2 : 1,
             "JueYingCard" => 1,
             _ => 0
         };
@@ -88,7 +98,7 @@ internal static class SanguoshaCharacterSkills
                 state.BaiYinActive = false; state.BaiYinTurnHeal = 0; state.BaiYinDamageCap = 0;
                 state.RenWangActive = false; state.RenWangGuardBlock = 0; state.RenWangDraw = 0; state.RenWangUsedThisTurn = false;
                 state.BaGuaActive = false; state.BaGuaUpgraded = false;
-                state.TengJiaActive = false; state.TengJiaBlock = 0; state.TengJiaSlow = 0;
+                state.TengJiaActive = false; state.TengJiaBlock = 0; state.TengJiaSlow = 0; state.TengJiaSlowCap = 0;
                 break;
             case EquipSlot.Mount:
                 state.ChiTuActive = false;
@@ -110,7 +120,7 @@ internal static class SanguoshaCharacterSkills
         switch (oldCardId)
         {
             case "BaiYinCard":
-                await HealIfWounded(player, wasUpgraded ? 12 : 8);
+                await HealIfWounded(player, 10);
                 break;
             case "RenWangCard":
                 await GainBlock(player, wasUpgraded ? 14 : 10, null);
@@ -332,7 +342,7 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         ReplaceEquipment(player, state, EquipSlot.Armor, "BaiYinCard", upgraded);
         state.BaiYinActive = true;
-        state.BaiYinTurnHeal = upgraded ? 2 : 1;
+        state.BaiYinTurnHeal = 0;
         state.BaiYinDamageCap = upgraded ? 15 : 20;
         RefreshDisplayPower<BaiYinDisplayPower>(player);
     }
@@ -436,6 +446,7 @@ internal static class SanguoshaCharacterSkills
         state.TengJiaActive = true;
         state.TengJiaBlock = 10;
         state.TengJiaSlow = 1;
+        state.TengJiaSlowCap = upgraded ? 3 : 5;
         RefreshDisplayPower<TengJiaDisplayPower>(player);
     }
 
@@ -513,6 +524,65 @@ internal static class SanguoshaCharacterSkills
 
         RefreshLongDanFreeCard(player, state);
         RefreshDisplayPower<LongDanDisplayPower>(player);
+    }
+
+    public static void RegisterTemporaryStolenBuff(Player player, ModelId powerId, int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        GetState(player).TemporaryStolenBuffs.Add(new TemporaryPowerAmount(powerId, amount));
+    }
+
+    public static void AddDelayedJudgment(
+        Player source,
+        Creature target,
+        DelayedJudgmentKind kind,
+        int value,
+        CardModel sourceCard)
+    {
+        if (!target.IsAlive)
+        {
+            return;
+        }
+
+        PendingDelayedJudgments.RemoveAll(judgment =>
+            judgment.TargetCombatId == CreatureKey(target) && judgment.Kind == kind);
+        PendingDelayedJudgments.Add(new DelayedJudgment(source, CreatureKey(target), kind, Math.Max(0, value), sourceCard));
+    }
+
+    public static bool IsLeBuAttackPrevented(Creature creature)
+    {
+        return ActiveLeBuAttackLocks.Contains(CreatureKey(creature));
+    }
+
+    public static bool ShouldBlockBingLiangDebuff(Creature? giver, Creature target)
+    {
+        return giver is not null
+            && target.IsPlayer
+            && ActiveBingLiangDebuffLocks.Contains(CreatureKey(giver));
+    }
+
+    public static bool ShouldBlockBingLiangStatusCards(Player player)
+    {
+        return player.Creature.IsAlive && ActiveBingLiangDebuffLocks.Count > 0;
+    }
+
+    internal static void ClampTengJiaSlow(Player player, SlowPower slowPower)
+    {
+        var state = GetState(player);
+        if (!state.TengJiaActive || state.TengJiaSlowCap <= 0)
+        {
+            return;
+        }
+
+        var slowAmount = slowPower.DynamicVars["SlowAmount"];
+        if (slowAmount.BaseValue > state.TengJiaSlowCap)
+        {
+            slowAmount.BaseValue = state.TengJiaSlowCap;
+        }
     }
 
     internal static IReadOnlyList<ExtraIconAmountLabelSlot> GetDisplayPowerCounters(SanguoshaEquipmentDisplayPower power)
@@ -938,6 +1008,7 @@ internal static class SanguoshaCharacterSkills
         Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<CombatEndedEvent>(_ =>
         {
             States.Clear();
+            ClearDelayedJudgmentState();
             BaiYinDamageCapPatch.Clear();
         }));
 
@@ -959,6 +1030,7 @@ internal static class SanguoshaCharacterSkills
                 return;
             }
 
+            ClearDelayedJudgmentState();
             foreach (var player in combat.Players)
             {
                 var state = ResetCombatState(player);
@@ -973,6 +1045,35 @@ internal static class SanguoshaCharacterSkills
 
     private static async void OnSideTurnStarted(SideTurnStartedEvent evt)
     {
+        try
+        {
+            foreach (var player in evt.CombatState.Players.Where(player => player.Creature.IsAlive))
+            {
+                await ClearTemporaryStolenBuffs(player);
+            }
+        }
+        catch (Exception ex)
+        {
+            Entry.Logger.Warn($"Sanguosha temporary buff cleanup failed: {ex}");
+        }
+
+        if (evt.Side == CombatSide.Enemy)
+        {
+            try
+            {
+                await ResolveDelayedJudgments(evt.CombatState);
+            }
+            catch (Exception ex)
+            {
+                Entry.Logger.Warn($"Sanguosha delayed judgment failed: {ex}");
+            }
+
+            return;
+        }
+
+        ActiveLeBuAttackLocks.Clear();
+        ActiveBingLiangDebuffLocks.Clear();
+
         if (evt.Side != CombatSide.Player)
         {
             return;
@@ -1339,7 +1440,7 @@ internal static class SanguoshaCharacterSkills
 
     private static async Task ApplyEquipmentTurnStart(Player player, CharacterSkillState state)
     {
-        if (state.BaiYinActive)
+        if (state.BaiYinActive && state.BaiYinTurnHeal > 0)
         {
             await HealIfWounded(player, state.BaiYinTurnHeal);
         }
@@ -1364,6 +1465,10 @@ internal static class SanguoshaCharacterSkills
         {
             await GainBlock(player, Math.Max(1, state.TengJiaBlock), null);
             await ApplyPower<SlowPower>(player, player.Creature, Math.Max(0, state.TengJiaSlow), null);
+            if (player.Creature.GetPower<SlowPower>() is { } slowPower)
+            {
+                ClampTengJiaSlow(player, slowPower);
+            }
         }
     }
 
@@ -1627,6 +1732,87 @@ internal static class SanguoshaCharacterSkills
     {
         return card.Type is CardType.Status or CardType.Curse or CardType.Quest
             || card.Rarity is CardRarity.Status or CardRarity.Curse or CardRarity.Quest;
+    }
+
+    private static async Task ClearTemporaryStolenBuffs(Player player)
+    {
+        var state = GetState(player);
+        if (state.TemporaryStolenBuffs.Count == 0)
+        {
+            return;
+        }
+
+        var stolenBuffs = state.TemporaryStolenBuffs.ToList();
+        state.TemporaryStolenBuffs.Clear();
+        foreach (var stolenBuff in stolenBuffs)
+        {
+            var power = player.Creature.GetPower(stolenBuff.PowerId);
+            if (power is not null)
+            {
+                await PowerCmd.ModifyAmount(NewContext(), power, -stolenBuff.Amount, null, null, true);
+            }
+        }
+    }
+
+    private static async Task ResolveDelayedJudgments(ICombatState combat)
+    {
+        if (PendingDelayedJudgments.Count == 0)
+        {
+            return;
+        }
+
+        ActiveLeBuAttackLocks.Clear();
+        ActiveBingLiangDebuffLocks.Clear();
+
+        var pending = PendingDelayedJudgments.ToList();
+        PendingDelayedJudgments.Clear();
+        foreach (var judgment in pending)
+        {
+            var target = combat.HittableEnemies.FirstOrDefault(enemy =>
+                enemy.IsAlive && CreatureKey(enemy) == judgment.TargetCombatId);
+            if (target is null)
+            {
+                continue;
+            }
+
+            var roll = judgment.Source.PlayerRng.Rewards.NextInt(100);
+            if (roll % 2 != 0)
+            {
+                continue;
+            }
+
+            switch (judgment.Kind)
+            {
+                case DelayedJudgmentKind.BingLiang:
+                    ActiveBingLiangDebuffLocks.Add(CreatureKey(target));
+                    break;
+                case DelayedJudgmentKind.LeBu:
+                    ActiveLeBuAttackLocks.Add(CreatureKey(target));
+                    break;
+                case DelayedJudgmentKind.ShanDian:
+                    var damage = Math.Ceiling(target.MaxHp * judgment.Value * 0.08m);
+                    await CreatureCmd.Damage(
+                        NewContext(),
+                        target,
+                        damage,
+                        ValueProp.Move,
+                        judgment.Source.Creature,
+                        judgment.SourceCard);
+                    break;
+            }
+        }
+    }
+
+    private static void ClearDelayedJudgmentState()
+    {
+        PendingDelayedJudgments.Clear();
+        ActiveLeBuAttackLocks.Clear();
+        ActiveBingLiangDebuffLocks.Clear();
+    }
+
+    private static uint CreatureKey(Creature creature)
+    {
+        return creature.CombatId ?? 0;
     }
 
     private static PlayerChoiceContext NewContext()
@@ -2017,6 +2203,7 @@ internal static class SanguoshaCharacterSkills
         public decimal TieSuoSplashMultiplier { get; set; }
         public int TengJiaBlock { get; set; }
         public int TengJiaSlow { get; set; }
+        public int TengJiaSlowCap { get; set; }
         public int JueYingBlock { get; set; }
         public bool JueYingUsedThisTurn { get; set; }
         public bool MengDeXinShuActive { get; set; }
@@ -2025,7 +2212,17 @@ internal static class SanguoshaCharacterSkills
         public CardType? LastCardType { get; set; }
         public Dictionary<EquipSlot, string> ActiveEquip = new();
         public Dictionary<EquipSlot, bool> ActiveEquipUpgraded = new();
+        public List<TemporaryPowerAmount> TemporaryStolenBuffs = new();
     }
+
+    private readonly record struct TemporaryPowerAmount(ModelId PowerId, int Amount);
+
+    private readonly record struct DelayedJudgment(
+        Player Source,
+        uint TargetCombatId,
+        DelayedJudgmentKind Kind,
+        int Value,
+        CardModel SourceCard);
 
     private enum SanguoshaSkill
     {

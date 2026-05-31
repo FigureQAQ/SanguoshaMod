@@ -1,6 +1,7 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Models.Powers;
 using sanguosha.Characters;
 
 namespace sanguosha.Patches;
@@ -45,5 +46,17 @@ internal static class BaiYinDamageCapPatch
         if (SanguoshaCharacterSkills.GetBaiYinDamageCap(__instance.Player) <= 0) return;
         DamageThisTurnByPlayer[__instance.Player.NetId] =
             DamageThisTurnByPlayer.GetValueOrDefault(__instance.Player.NetId) + Math.Max(0, __0);
+    }
+}
+
+[HarmonyPatch(typeof(SlowPower), nameof(SlowPower.AfterCardPlayed))]
+internal static class TengJiaSlowCapPatch
+{
+    private static void Postfix(SlowPower __instance)
+    {
+        if (__instance.Owner.IsPlayer && __instance.Owner.Player is { } player)
+        {
+            SanguoshaCharacterSkills.ClampTengJiaSlow(player, __instance);
+        }
     }
 }

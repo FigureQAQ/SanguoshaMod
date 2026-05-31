@@ -101,9 +101,7 @@ public sealed class RenDeCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Heal", 2m),
-        new BlockVar(3, ValueProp.Move),
         new DynamicVar("Draw", 1m),
-        new EnergyVar(1),
         new DynamicVar("NextShaDamage", 3m)
     ];
 
@@ -126,20 +124,11 @@ public sealed class RenDeCard : SanguoshaCard
         {
             SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
         }
-        else if (card is ShanCard)
-        {
-            await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        }
-        else if (card.Type == CardType.Skill)
-        {
-            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
-        }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Heal"].UpgradeValueBy(1);
-        DynamicVars.Block.UpgradeValueBy(1);
         DynamicVars["NextShaDamage"].UpgradeValueBy(1);
         EnergyCost.SetCustomBaseCost(0);
     }
