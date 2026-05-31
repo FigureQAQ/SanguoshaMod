@@ -32,13 +32,14 @@ internal static class SanguoshaCardFx
         var target = play.Target!;
         var isSha = SanguoshaCharacterSkills.IsShaLike(play.Card);
         var cardMultiplier = SanguoshaCharacterSkills.GetAttackCardDamageMultiplier(play.Card);
+        var targetHadBlock = target.Block > 0;
         var finalAmount = isSha
-            ? amount + SanguoshaCharacterSkills.GetAttackFlatBonus(play.Card.Owner, target)
+            ? amount + SanguoshaCharacterSkills.GetAttackFlatBonus(play.Card.Owner, target, targetHadBlock)
             : amount;
         PreparePierceBlock(play, target);
         if (isSha)
         {
-            finalAmount *= SanguoshaCharacterSkills.GetAttackDamageMultiplier(play.Card.Owner, target);
+            finalAmount *= SanguoshaCharacterSkills.GetAttackDamageMultiplier(play.Card.Owner, target, targetHadBlock);
         }
         finalAmount *= cardMultiplier;
 
@@ -74,13 +75,14 @@ internal static class SanguoshaCardFx
         var targets = AliveEnemies(play);
         foreach (var target in targets)
         {
+            var targetHadBlock = target.Block > 0;
             var finalAmount = isSha
-                ? amount + SanguoshaCharacterSkills.GetAttackFlatBonus(play.Card.Owner, target)
+                ? amount + SanguoshaCharacterSkills.GetAttackFlatBonus(play.Card.Owner, target, targetHadBlock)
                 : amount;
             PreparePierceBlock(play, target);
             if (isSha)
             {
-                finalAmount *= SanguoshaCharacterSkills.GetAttackDamageMultiplier(play.Card.Owner, target);
+                finalAmount *= SanguoshaCharacterSkills.GetAttackDamageMultiplier(play.Card.Owner, target, targetHadBlock);
             }
             finalAmount *= cardMultiplier;
 
@@ -663,7 +665,7 @@ public sealed class GuanShiCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Strength", 1m),
         new EnergyVar(1),
-        new DynamicVar("BonusDamage", 6m)
+        new DynamicVar("BonusDamage", 4m)
     ];
     public GuanShiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
@@ -678,7 +680,7 @@ public sealed class GuanShiCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars["BonusDamage"].UpgradeValueBy(3);
+        DynamicVars["BonusDamage"].UpgradeValueBy(2);
     }
 }
 
@@ -1026,8 +1028,7 @@ public sealed class QiLinCard : SanguoshaCard
 public sealed class QingGangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1),
-        new DynamicVar("BonusDamage", 2m)
+        new EnergyVar(1)
     ];
     public QingGangCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
@@ -1042,7 +1043,6 @@ public sealed class QingGangCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         EnergyCost.SetCustomBaseCost(0);
-        DynamicVars["BonusDamage"].UpgradeValueBy(1);
     }
 }
 

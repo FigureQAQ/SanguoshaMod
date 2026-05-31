@@ -87,8 +87,8 @@ internal static class SanguoshaCharacterSkills
             case EquipSlot.Weapon:
                 state.ZhuGeActive = false; state.ZhuGeFreeShaPerTurn = 0;
                 state.ZhangBaActive = false; state.ZhangBaUpgraded = false; state.ZhangBaGeneratedThisTurn = false;
-                state.QingGangActive = false; state.QingGangBonusDamage = 0;
-                state.GuanShiActive = false; state.GuanShiBonusDamage = 0;
+                state.QingGangActive = false; state.QingGangBlockedTargetMultiplier = 1m;
+                state.GuanShiActive = false; state.GuanShiBonusDamage = 0; state.GuanShiUsedThisTurn = false;
                 state.HanBingActive = false; state.HanBingWeak = 0;
                 state.QiLinActive = false; state.QiLinBonusDamage = 0; state.QiLinVulnerable = 0;
                 state.GuDingActive = false;
@@ -377,7 +377,8 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         ReplaceEquipment(player, state, EquipSlot.Weapon, "GuanShiCard", upgraded);
         state.GuanShiActive = true;
-        state.GuanShiBonusDamage = upgraded ? 9 : 6;
+        state.GuanShiBonusDamage = upgraded ? 6 : 4;
+        state.GuanShiUsedThisTurn = false;
         RefreshDisplayPower<GuanShiDisplayPower>(player);
     }
 
@@ -416,7 +417,7 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         ReplaceEquipment(player, state, EquipSlot.Weapon, "QingGangCard", upgraded);
         state.QingGangActive = true;
-        state.QingGangBonusDamage = upgraded ? 3 : 2;
+        state.QingGangBlockedTargetMultiplier = upgraded ? 1.5m : 1m;
         RefreshDisplayPower<QingGangDisplayPower>(player);
     }
 
@@ -614,6 +615,7 @@ internal static class SanguoshaCharacterSkills
             MengDeXinShuDisplayPower => Available(state.MengDeXinShuUsedThisTurn),
             ZhuGeDisplayPower => Math.Max(1, state.ZhuGeFreeShaPerTurn),
             MuNiuDisplayPower => UsesRemaining(state.MuNiuTrickDrawsUsed, state.MuNiuTrickDraws),
+            GuanShiDisplayPower => Available(state.GuanShiUsedThisTurn),
             GanJiangMoYeDisplayPower => UsesRemaining(state.GanJiangMoYeTriggersUsedThisTurn, state.GanJiangMoYeTriggersPerTurn),
             RenWangDisplayPower => Available(state.RenWangUsedThisTurn),
             JueYingDisplayPower => Available(state.JueYingUsedThisTurn),
@@ -749,13 +751,26 @@ internal static class SanguoshaCharacterSkills
 
     public static decimal GetBlockPiercePercent(Player player)
     {
-        return GetState(player).QingGangActive ? 0.5m : 0m;
+        return GetState(player).QingGangActive ? 1m : 0m;
     }
 
-    public static decimal GetAttackDamageMultiplier(Player player, Creature target)
+    public static decimal GetAttackDamageMultiplier(Player player, Creature target, bool targetHadBlock)
     {
         var state = GetState(player);
-        return state.GuDingActive && target.Block <= 0 ? 1.5m : 1m;
+        var multiplier = 1m;
+        if (state.GuDingActive
+            && target.MaxHp > 0
+            && target.CurrentHp <= Math.Ceiling(target.MaxHp / 2m))
+        {
+            multiplier *= 1.5m;
+        }
+
+        if (state.QingGangActive && targetHadBlock)
+        {
+            multiplier *= Math.Max(1m, state.QingGangBlockedTargetMultiplier);
+        }
+
+        return multiplier;
     }
 
     public static decimal GetAttackCardDamageMultiplier(CardModel card)
@@ -789,7 +804,7 @@ internal static class SanguoshaCharacterSkills
         return state.JiuActiveAttackDamageMultiplier;
     }
 
-    public static decimal GetAttackFlatBonus(Player player, Creature target)
+    public static decimal GetAttackFlatBonus(Player player, Creature target, bool targetHadBlock)
     {
         var state = GetState(player);
         var bonus = 0m;
@@ -799,8 +814,9 @@ internal static class SanguoshaCharacterSkills
             bonus += state.JiuNextShaBonus;
         }
 
-        if (state.GuanShiActive && target.Block > 0)
+        if (state.GuanShiActive && !state.GuanShiUsedThisTurn)
         {
+            state.GuanShiUsedThisTurn = true;
             bonus += state.GuanShiBonusDamage;
         }
 
@@ -812,11 +828,6 @@ internal static class SanguoshaCharacterSkills
         if (state.DaWanActive)
         {
             bonus += state.DaWanBonusDamage;
-        }
-
-        if (state.QingGangActive && target.Block > 0)
-        {
-            bonus += state.QingGangBonusDamage;
         }
 
         return bonus;
@@ -1100,6 +1111,7 @@ internal static class SanguoshaCharacterSkills
                 state.JueYingUsedThisTurn = false;
                 state.DiLuTrickDrawUsedThisTurn = false;
                 state.RenWangUsedThisTurn = false;
+                state.GuanShiUsedThisTurn = false;
                 state.MuNiuTrickDrawsUsed = 0;
                 state.MengDeXinShuUsedThisTurn = false;
                 state.KongChengAttackLockedThisTurn = false;
@@ -2149,6 +2161,7 @@ internal static class SanguoshaCharacterSkills
         public bool LongDanFreeUsedThisTurn { get; set; }
         public bool GuanShiActive { get; set; }
         public int GuanShiBonusDamage { get; set; }
+        public bool GuanShiUsedThisTurn { get; set; }
         public bool HanBingActive { get; set; }
         public int HanBingWeak { get; set; }
         public bool QiLinActive { get; set; }
@@ -2159,7 +2172,7 @@ internal static class SanguoshaCharacterSkills
         public int RenWangDraw { get; set; }
         public bool RenWangUsedThisTurn { get; set; }
         public bool QingGangActive { get; set; }
-        public int QingGangBonusDamage { get; set; }
+        public decimal QingGangBlockedTargetMultiplier { get; set; } = 1m;
         public bool GuDingActive { get; set; }
         public bool GanJiangMoYeActive { get; set; }
         public int GanJiangMoYeBonusDamage { get; set; }

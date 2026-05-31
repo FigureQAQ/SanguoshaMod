@@ -24,7 +24,7 @@ public sealed class CiShaCard : SanguoshaCard
     {
         var target = cardPlay.Target!;
         var damage = DynamicVars.Damage.BaseValue;
-        if (target.Block <= 0)
+        if (SanguoshaCardFx.IsDebuffed(target))
         {
             damage += DynamicVars["BonusDamage"].BaseValue;
         }
