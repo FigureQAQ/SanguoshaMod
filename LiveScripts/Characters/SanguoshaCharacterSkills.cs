@@ -524,86 +524,35 @@ internal static class SanguoshaCharacterSkills
         }
 
         var state = GetState(player);
-        var slots = new List<ExtraIconAmountLabelSlot>(3);
-        void Add(ExtraIconAmountLabelCorner corner, string text)
-        {
-            if (!string.IsNullOrWhiteSpace(text))
-            {
-                slots.Add(ExtraIconAmountLabelSlot.At(corner, text));
-            }
-        }
 
-        static string UseAvailable(bool used) => used ? "0/1" : "1/1";
-        static string UsesRemaining(int used, int total)
-        {
-            total = Math.Max(0, total);
-            return total <= 0 ? string.Empty : $"{Math.Max(0, total - used)}/{total}";
-        }
+        static int Available(bool used) => used ? 0 : 1;
+        static int UsesRemaining(int used, int total) => Math.Max(0, Math.Max(0, total) - used);
 
-        switch (power)
+        var amount = power switch
         {
-            case IroncladSkillDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopLeft, $"杀{state.TurnShaPlayed}");
-                Add(ExtraIconAmountLabelCorner.TopRight, $"易{UseAvailable(!IsLowHp(player, 0.5m) || state.FireVulnerableUsedThisTurn)}");
-                break;
-            case SilentSkillDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopLeft, $"机{state.Ingenuity}/{state.IngenuityCap}");
-                Add(ExtraIconAmountLabelCorner.TopRight, $"能{UseAvailable(state.IngenuityEnergyGrantedThisTurn)}");
-                break;
-            case DefectSkillDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopLeft, $"雷{state.Thunder}/4");
-                Add(ExtraIconAmountLabelCorner.TopRight, $"爆{UseAvailable(state.ThunderDischargedThisTurn)}");
-                break;
-            case NecrobinderSkillDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopLeft, $"魂{state.Soul}/4");
-                break;
-            case RegentSkillDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopLeft, $"令{state.Command}");
-                Add(ExtraIconAmountLabelCorner.TopRight, $"铸{state.StoredShaCharge}/3");
-                if (player.PlayerCombatState is not null)
-                {
-                    Add(ExtraIconAmountLabelCorner.BottomLeft, $"星{player.PlayerCombatState.Stars}/3");
-                }
-                break;
-            case LongDanDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.LongDanFreeUsedThisTurn));
-                break;
-            case WuShuangDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UsesRemaining(state.WuShuangRepeatsUsedThisTurn, state.WuShuangRepeatsPerTurn));
-                break;
-            case LianYingDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UsesRemaining(state.LianYingTriggersUsedThisTurn, state.LianYingTriggersPerTurn));
-                break;
-            case YiJiDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.YiJiTriggeredThisTurn));
-                break;
-            case JianXiongDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.JianXiongTriggeredThisTurn));
-                break;
-            case ZhiHengDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.ZhiHengTrickDrawUsedThisTurn));
-                break;
-            case MengDeXinShuDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.MengDeXinShuUsedThisTurn));
-                break;
-            case ZhuGeDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, $"杀{Math.Max(1, state.ZhuGeFreeShaPerTurn)}");
-                break;
-            case MuNiuDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UsesRemaining(state.MuNiuTrickDrawsUsed, state.MuNiuTrickDraws));
-                break;
-            case GanJiangMoYeDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UsesRemaining(state.GanJiangMoYeTriggersUsedThisTurn, state.GanJiangMoYeTriggersPerTurn));
-                break;
-            case RenWangDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.RenWangUsedThisTurn));
-                break;
-            case JueYingDisplayPower:
-                Add(ExtraIconAmountLabelCorner.TopRight, UseAvailable(state.JueYingUsedThisTurn));
-                break;
-        }
+            IroncladSkillDisplayPower => state.TurnShaPlayed,
+            SilentSkillDisplayPower => state.Ingenuity,
+            DefectSkillDisplayPower => state.Thunder,
+            NecrobinderSkillDisplayPower => state.Soul,
+            RegentSkillDisplayPower => state.Command,
+            LongDanDisplayPower => Available(state.LongDanFreeUsedThisTurn),
+            WuShuangDisplayPower => UsesRemaining(state.WuShuangRepeatsUsedThisTurn, state.WuShuangRepeatsPerTurn),
+            LianYingDisplayPower => UsesRemaining(state.LianYingTriggersUsedThisTurn, state.LianYingTriggersPerTurn),
+            YiJiDisplayPower => Available(state.YiJiTriggeredThisTurn),
+            JianXiongDisplayPower => Available(state.JianXiongTriggeredThisTurn),
+            ZhiHengDisplayPower => Available(state.ZhiHengTrickDrawUsedThisTurn),
+            MengDeXinShuDisplayPower => Available(state.MengDeXinShuUsedThisTurn),
+            ZhuGeDisplayPower => Math.Max(1, state.ZhuGeFreeShaPerTurn),
+            MuNiuDisplayPower => UsesRemaining(state.MuNiuTrickDrawsUsed, state.MuNiuTrickDraws),
+            GanJiangMoYeDisplayPower => UsesRemaining(state.GanJiangMoYeTriggersUsedThisTurn, state.GanJiangMoYeTriggersPerTurn),
+            RenWangDisplayPower => Available(state.RenWangUsedThisTurn),
+            JueYingDisplayPower => Available(state.JueYingUsedThisTurn),
+            _ => (int?)null
+        };
 
-        return slots;
+        return amount is null
+            ? []
+            : [ExtraIconAmountLabelSlot.At(ExtraIconAmountLabelCorner.BottomRight, amount.Value.ToString())];
     }
 
     private static Player? TryGetPowerPlayer(PowerModel power)

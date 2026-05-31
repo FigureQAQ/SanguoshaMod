@@ -2,7 +2,7 @@
 
 三国杀主题的 Slay the Spire 2 玩法模组。模组将“杀、闪、桃、酒”、装备槽位、角色杀附魔和三国式技能牌接入 STS2 的战斗节奏，并为不同角色准备了专属基础牌图、卡牌边框和能量样式。
 
-[最新 Release：v0.1.10-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.10-multiplayer)
+[最新 Release：v0.1.11-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.11-multiplayer)
 
 ## 游戏内截图
 
