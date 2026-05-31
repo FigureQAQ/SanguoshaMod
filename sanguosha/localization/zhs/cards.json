@@ -106,7 +106,5 @@
   "SANGUOSHA_CARD_TU_XI_CARD.title": "突袭",
   "SANGUOSHA_CARD_TU_XI_CARD.description": "移除目标所有格挡。获得 {Energy:diff()} 点能量，抽 {Draw:diff()} 张牌，并施加 {Vulnerable:diff()} 层易伤。",
   "SANGUOSHA_CARD_QI_XI_CARD.title": "奇袭",
-  "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。",
-  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title": "王剑杀",
-  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "消耗 1 点辉星打出。视为杀造成 {Damage:diff()} 点伤害；消耗牌堆每有 1 张牌，额外造成 {ExhaustBonus:diff()} 点伤害。"
+  "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。"
 }

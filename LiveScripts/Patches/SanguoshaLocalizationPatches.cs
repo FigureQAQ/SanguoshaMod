@@ -101,8 +101,6 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_CARD_ZHANG_BA_CARD.description"] = new("cards", "装备：武器。抽 {Draw:diff()} 张牌。每回合一次，若你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀：可将任意两张牌当杀打出。失去时获得 1 点能量并补 1 张蛇矛杀。"),
         ["SANGUOSHA_CARD_ZHANG_BA_SHA_CARD.title"] = new("cards", "蛇矛杀"),
         ["SANGUOSHA_CARD_ZHANG_BA_SHA_CARD.description"] = new("cards", "消耗任意 2 张其他手牌，视为杀造成 {Damage:diff()} 点伤害。"),
-        ["SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title"] = new("cards", "王剑杀"),
-        ["SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description"] = new("cards", "消耗 1 点辉星打出。视为杀造成 {Damage:diff()} 点伤害；消耗牌堆每有 1 张牌，额外造成 {ExhaustBonus:diff()} 点伤害。"),
         ["SANGUOSHA_CARD_BA_GUA_CARD.title"] = new("cards", "八卦阵"),
         ["SANGUOSHA_CARD_BA_GUA_CARD.description"] = new("cards", "装备：防具。敌人攻击你时，从抽牌堆顶判定；若为闪，获得 {Block:diff()} 点格挡并继续，直到本次攻击被完全格挡、判定次数用尽或判定牌不是闪。失去时抽牌并获得格挡。"),
         ["SANGUOSHA_CARD_REN_WANG_CARD.title"] = new("cards", "仁王盾"),
@@ -263,7 +261,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.title"] = new("powers", "灾厄杀"),
         ["SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description"] = new("powers", "战斗开始回复 2 点生命，回合开始回复 1 点生命。杀命中后施加杀数值一半的灾厄；打出闪时所有敌人失去 3 点生命。"),
         ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title"] = new("powers", "君王之剑"),
-        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description"] = new("powers", "每回合生成 1 张消耗王剑杀。王剑杀需要 1 点辉星打出，消耗牌堆越多伤害越高。"),
+        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description"] = new("powers", "战斗开始获得 3 点辉星。杀命中后锻造原版君王之剑，使悬剑伤害提高。"),
 
         ["IRONCLAD.title"] = new("characters", "赤壁猛将"),
         ["IRONCLAD.titleObject"] = new("characters", "赤壁猛将"),
@@ -279,7 +277,7 @@ internal static class SanguoshaLocalization
         ["NECROBINDER.description"] = new("characters", "初始遗物：灾厄杀。杀命中施加灾厄；闪会令所有敌人失去生命。"),
         ["REGENT.title"] = new("characters", "汉室仁主"),
         ["REGENT.titleObject"] = new("characters", "汉室仁主"),
-        ["REGENT.description"] = new("characters", "初始遗物：君王之剑。每回合生成王剑杀，消耗辉星打出；消耗牌堆越多伤害越高。"),
+        ["REGENT.description"] = new("characters", "初始遗物：君王之剑。战斗开始获得辉星；杀命中后锻造原版君王之剑，使悬剑伤害提高。"),
 
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title"] = new("relics", "火杀"),
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description"] = new("relics", "战斗开始：获得 1 点力量。杀附魔：火杀，命中后追加 2 点火焰伤害。"),
@@ -294,7 +292,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description"] = new("relics", "战斗开始：回复 2 点生命；回合开始回复 1 点生命。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄。打出闪时所有敌人失去 3 点生命。"),
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor"] = new("relics", "刀兵之后，总有人要把命从鬼门关边上拉回来。"),
         ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title"] = new("relics", "君王之剑"),
-        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "每回合生成 1 张消耗王剑杀。王剑杀需要 1 点辉星打出，消耗牌堆越多伤害越高。"),
+        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "战斗开始获得 3 点辉星。杀附魔：杀命中后锻造原版君王之剑，使悬剑伤害提高。"),
         ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor"] = new("relics", "仁德不是软弱，是让每一次出牌都有人响应。")
     };
 

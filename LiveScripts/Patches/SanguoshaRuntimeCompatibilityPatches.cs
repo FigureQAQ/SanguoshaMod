@@ -32,13 +32,6 @@ internal static class KongChengAttackLockCanPlayTargetingPatch
 {
     private static bool Prefix(CardModel __instance, ref bool __result)
     {
-        if (__instance is WangJianShaCard
-            && !SanguoshaCharacterSkills.CanPlayWangJianSha(__instance))
-        {
-            __result = false;
-            return false;
-        }
-
         if (__instance.Type == CardType.Attack
             && __instance.Owner is { } owner
             && SanguoshaCharacterSkills.IsKongChengAttackLocked(owner))
@@ -1303,8 +1296,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
         var options = cards
             .Where(card => card is not ShaCard
                 && card is not ShanCard
-                && card is not ZhangBaShaCard
-                && card is not WangJianShaCard)
+                && card is not ZhangBaShaCard)
             .ToList();
         return options.Count > 0 ? options : cards.ToList();
     }

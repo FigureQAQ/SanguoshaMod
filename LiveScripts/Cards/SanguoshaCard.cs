@@ -67,7 +67,6 @@ public abstract class SanguoshaCard(
         ["TieSuoCard"] = "tiesuo",
         ["TuXiCard"] = "tuxi",
         ["WanJianCard"] = "wanjian",
-        ["WangJianShaCard"] = "wangjiansha",
         ["WuGuCard"] = "wugu",
         ["WuShuangCard"] = "wushuang",
         ["WuXieCard"] = "wuxie",

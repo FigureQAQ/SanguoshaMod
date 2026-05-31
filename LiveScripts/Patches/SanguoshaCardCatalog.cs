@@ -68,13 +68,12 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<GuiCaiCard>(),
                 ModelDb.Card<ZhangBaCard>(),
                 ModelDb.Card<ZhangBaShaCard>(),
-                ModelDb.Card<WangJianShaCard>(),
                 ModelDb.Card<ZhuGeCard>()
             };
 
             return includeGeneratedOnly
                 ? cards.OrderBy(StableCardKey, StringComparer.Ordinal).ToList()
-                : cards.Where(card => card is not ZhangBaShaCard and not WangJianShaCard)
+                : cards.Where(card => card is not ZhangBaShaCard)
                     .OrderBy(StableCardKey, StringComparer.Ordinal)
                     .ToList();
         }
