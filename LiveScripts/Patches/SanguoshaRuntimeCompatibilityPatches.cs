@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -546,6 +547,81 @@ internal static class CircletSanguoshaClonePatch
         {
             CardCmd.Enchant<Clone>(card, 2);
         }
+    }
+}
+
+[HarmonyPatch(typeof(RestSiteOption), nameof(RestSiteOption.Generate))]
+internal static class CloneEnchantmentRestSiteOptionPatch
+{
+    private static void Postfix(Player player, ref List<RestSiteOption> __result)
+    {
+        if (!player.Deck.Cards.Any(SanguoshaCloneRestSiteHelpers.HasCloneEnchantment))
+        {
+            return;
+        }
+
+        if (__result.Any(option => option.OptionId == "CLONE"))
+        {
+            return;
+        }
+
+        __result.Add(new CloneRestSiteOption(player));
+    }
+}
+
+[HarmonyPatch(typeof(CloneRestSiteOption), nameof(CloneRestSiteOption.OnSelect))]
+internal static class CloneRestSiteOptionSelectionPatch
+{
+    private static bool Prefix(CloneRestSiteOption __instance, ref Task<bool> __result)
+    {
+        var owner = Traverse.Create(__instance).Property("Owner").GetValue<Player>();
+        __result = SanguoshaCloneRestSiteHelpers.CloneCards(owner);
+        return false;
+    }
+}
+
+internal static class SanguoshaCloneRestSiteHelpers
+{
+    public static bool HasCloneEnchantment(CardModel card)
+    {
+        var enchantment = card.Enchantment;
+        return enchantment is Clone
+            || enchantment?.Id == ModelDb.Enchantment<Clone>().Id;
+    }
+
+    public static async Task<bool> CloneCards(Player player)
+    {
+        var cloneCards = player.Deck.Cards
+            .Where(HasCloneEnchantment)
+            .ToList();
+        if (cloneCards.Count == 0)
+        {
+            Entry.Logger.Warn("Clone rest site option was selected, but no clone-enchanted cards were found.");
+            return false;
+        }
+
+        var results = new List<CardPileAddResult>(cloneCards.Count);
+        foreach (var sourceCard in cloneCards)
+        {
+            var card = player.RunState.CloneCard(sourceCard);
+            var result = await CardPileCmd.Add(
+                card,
+                PileType.Deck,
+                CardPilePosition.Bottom,
+                sourceCard.Enchantment,
+                skipVisuals: false);
+            if (result.success)
+            {
+                results.Add(result);
+            }
+        }
+
+        if (results.Count > 0)
+        {
+            CardCmd.PreviewCardPileAdd(results, 1.2f, CardPreviewStyle.MessyLayout);
+        }
+
+        return results.Count > 0;
     }
 }
 
