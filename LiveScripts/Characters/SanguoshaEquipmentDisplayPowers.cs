@@ -374,6 +374,132 @@ internal sealed class GuiCaiDisplayPower : SanguoshaEquipmentDisplayPower
 }
 
 [RegisterPower]
+internal sealed class YingZiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "yuxi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_YING_ZI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class JiZhiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "mengdexinshu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_JI_ZHI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class LuoYiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "dawan";
+
+    protected override string LocKey => "SANGUOSHA_POWER_LUO_YI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class TieQiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "chitu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_TIE_QI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class QingNangDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "taiping";
+
+    protected override string LocKey => "SANGUOSHA_POWER_QING_NANG_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class XiaoJiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "muniu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_XIAO_JI_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class FenYingDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "fenying";
+
+    protected override string LocKey => "SANGUOSHA_POWER_FEN_YING_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class PoZhuDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "pozhu";
+
+    protected override string LocKey => "SANGUOSHA_POWER_PO_ZHU_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class BathOfBloodDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "guanshi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_BATH_OF_BLOOD_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class NightfallSchemeDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "qilin";
+
+    protected override string LocKey => "SANGUOSHA_POWER_NIGHTFALL_SCHEME_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class ThunderMandateDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "bagua";
+
+    protected override string LocKey => "SANGUOSHA_POWER_THUNDER_MANDATE_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class SoulHealerFormDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "baiyin";
+
+    protected override string LocKey => "SANGUOSHA_POWER_SOUL_HEALER_FORM_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class ImperialEdictDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "yuxi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_IMPERIAL_EDICT_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
+internal sealed class GoodLuckDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "yuxi";
+
+    protected override string LocKey => "SANGUOSHA_POWER_GOOD_LUCK_DISPLAY_POWER";
+
+}
+
+[RegisterPower]
 internal sealed class IroncladSkillDisplayPower : SanguoshaEquipmentDisplayPower
 {
     protected override string IconBaseName => "guanshi";

@@ -1,53 +1,46 @@
-﻿using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Characters;
 using STS2RitsuLib.Interop.AutoRegistration;
 
 namespace sanguosha.Cards;
 
 [RegisterCard(typeof(ColorlessCardPool))]
-public sealed class WuGuCard : SanguoshaCard
+public sealed class HongBaoCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(4, ValueProp.Move),
-        new EnergyVar(1),
         new DynamicVar("Draw", 1m),
-        new DynamicVar("GoodLuck", 1m)
+        new DynamicVar("Heal", 3m),
+        new DynamicVar("GoodLuck", 1m),
+        new EnergyVar(1)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
         CardKeyword.Exhaust
     ];
-    public WuGuCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+
+    public HongBaoCard() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CreatureCmd.GainBlock(cardPlay.Card.Owner.Creature, DynamicVars.Block, cardPlay, false);
-
-        var consumed = await SanguoshaCardFx.ExhaustFromHand(choiceContext, cardPlay, 1);
-        if (consumed.Count > 0)
-        {
-            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
-        }
-
-        foreach (var player in SanguoshaCardFx.AliveCombatPlayers(cardPlay))
+        var owner = cardPlay.Card.Owner;
+        foreach (var player in SanguoshaCardFx.AliveCombatPlayers(cardPlay).Where(player => player != owner))
         {
             await SanguoshaCardFx.Draw(choiceContext, player, DynamicVars["Draw"].IntValue);
+            await SanguoshaCardFx.Heal(player, DynamicVars["Heal"].BaseValue);
             SanguoshaCharacterSkills.AddGoodLuck(player, DynamicVars["GoodLuck"].IntValue);
         }
+
+        owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2);
         DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }
-
-

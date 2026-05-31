@@ -6,12 +6,12 @@
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.description": "战斗开始：抽 1 张牌。杀附魔：毒杀，命中后施加 3 层中毒。每回合首次打出技能牌时抽 1 张牌。",
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.flavor": "胜负不在手牌里，在别人以为你没有手牌时。",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.title": "雷杀",
-  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.description": "杀附魔：雷杀，命中后获得 1 点雷势并追加 2 点雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害。",
+  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.description": "杀附魔：雷杀，命中后获得 1 点雷势并追加 2 点雷击。雷势达到 4 时蓄成 1 次雷暴；之后下一张杀命中时消耗雷暴，对所有敌人造成 8 点伤害。",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.flavor": "风起之前，星位已经变了。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title": "灾厄杀",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description": "战斗开始：回复 2 点生命；回合开始回复 1 点生命。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄。打出闪时所有敌人失去 3 点生命。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor": "刀兵之后，总有人要把命从鬼门关边上拉回来。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "君王之剑",
-  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "战斗开始获得 3 点辉星。杀附魔：杀命中后锻造原版君王之剑，使悬剑伤害提高。",
+  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "战斗开始获得 2 点辉星。杀附魔：杀命中后锻造原版君王之剑；锻造出的王者之剑为 0 费、保留、消耗。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor": "仁德不是软弱，是让每一次出牌都有人响应。"
 }

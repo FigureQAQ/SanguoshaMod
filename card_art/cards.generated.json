@@ -1,7 +1,7 @@
 {
   "object": "sanguosha-game-card-assets",
   "version": 1,
-  "generatedAt": "2026-05-30T13:59:46.942Z",
+  "generatedAt": "2026-05-31T15:47:32.779Z",
   "portraitSize": {
     "width": 1024,
     "height": 752
@@ -28,7 +28,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Rare",
-      "description": "抽牌。只要你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。失去时获得能量并补蛇矛杀。",
+      "description": "抽牌。每回合一次，若你有至少 2 张其他手牌，生成 1 张 0 费蛇矛杀。失去时获得能量并补蛇矛杀。",
       "portrait": "zhangba.png",
       "portraitPath": "res://mods/sanguosha/card_art/zhangba.png",
       "sourceArt": "tools/cardgen/input/equipment-art/zhangba.png"
@@ -41,7 +41,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得能量。你的杀无视目标一半格挡，并在目标有格挡时额外造成伤害。失去时获得能量。",
+      "description": "获得能量。你的杀无视格挡；若目标原本有格挡，伤害倍率提高。",
       "portrait": "qinggang.png",
       "portraitPath": "res://mods/sanguosha/card_art/qinggang.png",
       "sourceArt": "tools/cardgen/input/equipment-art/qinggang.png"
@@ -54,7 +54,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得力量和能量。杀命中有格挡的敌人时额外造成伤害。失去时强化下一张杀。",
+      "description": "获得力量和能量。每回合首次杀额外造成伤害。失去时强化下一张杀。",
       "portrait": "guanshi.png",
       "portraitPath": "res://mods/sanguosha/card_art/guanshi.png",
       "sourceArt": "tools/cardgen/input/equipment-art/guanshi.png"
@@ -93,7 +93,7 @@
       "type": "装备牌 - 武器",
       "category": "weapon",
       "rarity": "Uncommon",
-      "description": "获得力量。杀命中没有格挡的敌人时，造成 150% 伤害。",
+      "description": "获得力量。杀命中生命不高于一半的敌人时，造成 150% 伤害。",
       "portrait": "guding.png",
       "portraitPath": "res://mods/sanguosha/card_art/guding.png",
       "sourceArt": "tools/cardgen/input/equipment-art/guding.png"
@@ -132,7 +132,7 @@
       "type": "装备牌 - 防具",
       "category": "armor",
       "rarity": "Rare",
-      "description": "获得敏捷并回复生命。每回合开始时回复生命。每回合最大受到 15 点单次伤害。失去时回复生命。",
+      "description": "每回合失去生命有上限。失去时回复生命。",
       "portrait": "baiyin.png",
       "portraitPath": "res://mods/sanguosha/card_art/baiyin.png",
       "sourceArt": "tools/cardgen/input/equipment-art/baiyin.png"
@@ -184,7 +184,7 @@
       "type": "装备牌 - 宝物",
       "category": "treasure",
       "rarity": "Rare",
-      "description": "装备宝物。入场获得能量并抽牌；每回合开始额外获得能量；失去时抽牌。",
+      "description": "装备宝物。入场获得能量；每回合开始额外获得能量；失去时抽牌。",
       "portrait": "yuxi.png",
       "portraitPath": "res://mods/sanguosha/card_art/yuxi.png",
       "sourceArt": "tools/cardgen/input/equipment-art/yuxi.png"
@@ -197,7 +197,7 @@
       "type": "装备牌 - 宝物",
       "category": "treasure",
       "rarity": "Rare",
-      "description": "获得能量并抽牌。每回合前若干次打出技能牌后，抽 1 张牌。失去时抽牌。",
+      "description": "获得能量。每回合前若干次打出技能牌后，抽 1 张牌。失去时抽牌。",
       "portrait": "muniu.png",
       "portraitPath": "res://mods/sanguosha/card_art/muniu.png",
       "sourceArt": "tools/cardgen/input/equipment-art/muniu.png"
@@ -262,7 +262,7 @@
       "type": "装备牌 - 宝物",
       "category": "treasure",
       "rarity": "Rare",
-      "description": "装备宝物。首次打出技能牌后获得能量，并使 1 张杀或技能牌本回合费用降低 1。",
+      "description": "装备宝物。入场获得能量；每回合首次打出技能牌后获得能量，并临时降低若干张杀或技能牌费用。",
       "portrait": "mengdexinshu.png",
       "portraitPath": "res://mods/sanguosha/card_art/mengdexinshu.png",
       "sourceArt": "tools/cardgen/input/equipment-art/mengdexinshu.png"
@@ -288,7 +288,7 @@
       "type": "技能牌 - 过牌",
       "category": "trick",
       "rarity": "Rare",
-      "description": "可消耗 1 张手牌。抽牌；若成功消耗，获得能量并额外抽牌。",
+      "description": "可消耗 1 张手牌；若如此做，获得能量。抽牌。",
       "portrait": "wuzhong.png",
       "portraitPath": "res://mods/sanguosha/card_art/wuzhong.png",
       "sourceArt": "tools/cardgen/input/tricks-art/wuzhong.png"
@@ -301,7 +301,7 @@
       "type": "技能牌 - 补给",
       "category": "trick",
       "rarity": "Rare",
-      "description": "获得格挡。可消耗 1 张手牌；所有玩家抽牌，成功消耗时你获得能量，所有玩家额外抽牌。",
+      "description": "获得格挡。可消耗 1 张手牌；若如此做，你获得能量。所有玩家抽牌。",
       "portrait": "wugu.png",
       "portraitPath": "res://mods/sanguosha/card_art/wugu.png",
       "sourceArt": "tools/cardgen/input/tricks-art/wugu.png"
@@ -314,7 +314,7 @@
       "type": "技能牌 - 控制",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "判定牌堆顶。若判定牌费用为 0，抽牌；否则施加虚弱和减速。若判定牌是技能牌、能力牌或费用不低于 2，额外施加虚弱和减速。",
+      "description": "延迟判定。若判定成功，目标本回合不能施加负面效果或塞牌。",
       "portrait": "bingliang.png",
       "portraitPath": "res://mods/sanguosha/card_art/bingliang.png",
       "sourceArt": "tools/cardgen/input/tricks-art/bingliang.png"
@@ -327,7 +327,7 @@
       "type": "技能牌 - 破阵",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "移除目标格挡，造成伤害并施加虚弱和易伤。移除足量格挡时获得能量并抽牌。",
+      "description": "移除目标本回合所有正面效果。若至少移除 1 个，抽牌。",
       "portrait": "guohe.png",
       "portraitPath": "res://mods/sanguosha/card_art/guohe.png",
       "sourceArt": "tools/cardgen/input/tricks-art/guohe.png"
@@ -340,7 +340,7 @@
       "type": "技能牌 - 火攻",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。弃杀额外伤害，弃闪获得格挡，弃能力牌施加易伤。",
+      "description": "可弃 1 张手牌。造成伤害并施加中毒；若弃牌，额外造成伤害。",
       "portrait": "huogong.png",
       "portraitPath": "res://mods/sanguosha/card_art/huogong.png",
       "sourceArt": "tools/cardgen/input/tricks-art/huogong.png"
@@ -353,7 +353,7 @@
       "type": "技能牌 - 借势",
       "category": "trick",
       "rarity": "Rare",
-      "description": "可消耗手牌中的杀提高伤害，并对所有敌人施加减速；没有消耗杀则抽牌。",
+      "description": "可消耗手牌中的杀提高伤害，并对所有敌人施加减速。",
       "portrait": "jiedao.png",
       "portraitPath": "res://mods/sanguosha/card_art/jiedao.png",
       "sourceArt": "tools/cardgen/input/tricks-art/jiedao.png"
@@ -366,10 +366,23 @@
       "type": "技能牌 - 控制",
       "category": "trick",
       "rarity": "Rare",
-      "description": "判定牌堆顶并施加减速；若判定不是杀，额外减速、易伤、伤害并获得能量。",
+      "description": "延迟判定。若判定成功，目标本回合不能攻击。",
       "portrait": "lebu.png",
       "portraitPath": "res://mods/sanguosha/card_art/lebu.png",
       "sourceArt": "tools/cardgen/input/tricks-art/lebu.png"
+    },
+    {
+      "id": "HongBaoCard",
+      "slug": "hongbao",
+      "title": "发红包",
+      "cost": 0,
+      "type": "技能牌 - 支援",
+      "category": "trick",
+      "rarity": "Uncommon",
+      "description": "其他玩家抽牌、回复生命并获得好运。你获得能量。",
+      "portrait": "hongbao.png",
+      "portraitPath": "res://mods/sanguosha/card_art/hongbao.png",
+      "sourceArt": "tools/cardgen/input/tricks-art/hongbao.png"
     },
     {
       "id": "NanManCard",
@@ -392,7 +405,7 @@
       "type": "技能牌 - 判定",
       "category": "trick",
       "rarity": "Rare",
-      "description": "判定牌堆顶。造成随判定牌费用和稀有度提高的伤害；稀有或能力牌额外易伤。",
+      "description": "X 费延迟判定。若判定成功，按 X 造成目标最大生命百分比伤害。",
       "portrait": "shandian.png",
       "portraitPath": "res://mods/sanguosha/card_art/shandian.png",
       "sourceArt": "tools/cardgen/input/tricks-art/shandian.png"
@@ -405,7 +418,7 @@
       "type": "技能牌 - 连环",
       "category": "trick",
       "rarity": "Rare",
-      "description": "技能牌。杀获得溅射，但溅射不触发杀命中后续；判定技能牌或能力时追加群体伤害和能量。",
+      "description": "施加减速。本回合你的杀对其他敌人造成溅射伤害。",
       "portrait": "tiesuo.png",
       "portraitPath": "res://mods/sanguosha/card_art/tiesuo.png",
       "sourceArt": "tools/cardgen/input/tricks-art/tiesuo.png"
@@ -418,7 +431,7 @@
       "type": "技能牌 - 偷袭",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "偷取目标格挡并造成伤害、抽牌。使手牌临时变为 0 费。",
+      "description": "转移目标本回合所有正面效果。若至少转移 1 个，抽牌。",
       "portrait": "shunshou.png",
       "portraitPath": "res://mods/sanguosha/card_art/shunshou.png",
       "sourceArt": "tools/cardgen/input/tricks-art/shunshou.png"
@@ -431,7 +444,7 @@
       "type": "技能牌 - 回复",
       "category": "trick",
       "rarity": "Rare",
-      "description": "所有玩家回复生命。你获得格挡、能量并抽牌。",
+      "description": "所有玩家回复生命、获得格挡、抽牌并获得好运。你获得能量。",
       "portrait": "taoyuan.png",
       "portraitPath": "res://mods/sanguosha/card_art/taoyuan.png",
       "sourceArt": "tools/cardgen/input/tricks-art/taoyuan.png"
@@ -444,7 +457,7 @@
       "type": "攻击牌 - 群攻",
       "category": "attack",
       "rarity": "Rare",
-      "description": "对所有敌人造成伤害。所有玩家获得力量。你获得格挡。",
+      "description": "对所有敌人造成伤害。所有玩家获得力量和好运。你获得格挡。",
       "portrait": "wanjian.png",
       "portraitPath": "res://mods/sanguosha/card_art/wanjian.png",
       "sourceArt": "tools/cardgen/input/tricks-art/wanjian.png"
@@ -548,7 +561,7 @@
       "type": "攻击牌 - 突袭",
       "category": "attack",
       "rarity": "Common",
-      "description": "造成伤害。若目标没有格挡，额外造成伤害。",
+      "description": "造成伤害。若目标已有负面效果，额外造成伤害。",
       "portrait": "cisha.png",
       "portraitPath": "res://mods/sanguosha/card_art/cisha.png",
       "sourceArt": "tools/cardgen/input/core-art/cisha.png"
@@ -561,10 +574,62 @@
       "type": "技能牌 - 格挡",
       "category": "trick",
       "rarity": "Common",
-      "description": "获得格挡。若本回合还没有打出过杀，抽牌。",
+      "description": "获得格挡。若本回合没有打出过攻击牌，本牌本场战斗中格挡值提高。",
       "portrait": "shoushi.png",
       "portraitPath": "res://mods/sanguosha/card_art/shoushi.png",
       "sourceArt": "tools/cardgen/input/core-art/shoushi.png"
+    },
+    {
+      "id": "KuRouCard",
+      "slug": "kurou",
+      "title": "苦肉",
+      "cost": 0,
+      "type": "技能牌 - 回费",
+      "category": "trick",
+      "rarity": "Common",
+      "description": "失去生命，获得能量。",
+      "portrait": "kurou.png",
+      "portraitPath": "res://mods/sanguosha/card_art/kurou.png",
+      "sourceArt": "tools/cardgen/input/core-art/kurou.png"
+    },
+    {
+      "id": "JiXingCard",
+      "slug": "jixing",
+      "title": "急行",
+      "cost": 0,
+      "type": "技能牌 - 回费",
+      "category": "trick",
+      "rarity": "Uncommon",
+      "description": "消耗。获得能量；升级后抽牌。",
+      "portrait": "jixing.png",
+      "portraitPath": "res://mods/sanguosha/card_art/jixing.png",
+      "sourceArt": "tools/cardgen/input/core-art/jixing.png"
+    },
+    {
+      "id": "FenYingCard",
+      "slug": "fenying",
+      "title": "焚营",
+      "cost": 1,
+      "type": "能力牌 - 烧牌",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "能力。每当你消耗手牌中的牌，获得格挡。",
+      "portrait": "fenying.png",
+      "portraitPath": "res://mods/sanguosha/card_art/fenying.png",
+      "sourceArt": "tools/cardgen/input/core-art/fenying.png"
+    },
+    {
+      "id": "PoZhuCard",
+      "slug": "pozhu",
+      "title": "破竹",
+      "cost": 1,
+      "type": "技能牌 - 成长",
+      "category": "trick",
+      "rarity": "Rare",
+      "description": "施加易伤。此后每当你施加易伤，每层易伤获得力量。",
+      "portrait": "pozhu.png",
+      "portraitPath": "res://mods/sanguosha/card_art/pozhu.png",
+      "sourceArt": "tools/cardgen/input/core-art/pozhu.png"
     },
     {
       "id": "DiaoDuCard",
@@ -580,6 +645,58 @@
       "sourceArt": "tools/cardgen/input/core-art/diaodu.png"
     },
     {
+      "id": "YangGongCard",
+      "slug": "yanggong",
+      "title": "佯攻",
+      "cost": 0,
+      "type": "攻击牌 - 试探",
+      "category": "attack",
+      "rarity": "Common",
+      "description": "造成少量伤害。若目标已有负面效果，抽牌。",
+      "portrait": "yanggong.png",
+      "portraitPath": "res://mods/sanguosha/card_art/yanggong.png",
+      "sourceArt": "tools/cardgen/input/core-art/yanggong.png"
+    },
+    {
+      "id": "XuShiCard",
+      "slug": "xushi",
+      "title": "蓄势",
+      "cost": 0,
+      "type": "技能牌 - 杀势",
+      "category": "trick",
+      "rarity": "Common",
+      "description": "强化下一张杀。若手牌中没有其他杀，抽牌。",
+      "portrait": "xushi.png",
+      "portraitPath": "res://mods/sanguosha/card_art/xushi.png",
+      "sourceArt": "tools/cardgen/input/core-art/xushi.png"
+    },
+    {
+      "id": "PoZhenCard",
+      "slug": "pozhen",
+      "title": "破阵",
+      "cost": 1,
+      "type": "技能牌 - 破防",
+      "category": "trick",
+      "rarity": "Common",
+      "description": "移除目标所有格挡并施加易伤。若移除了格挡，抽牌。",
+      "portrait": "pozhen.png",
+      "portraitPath": "res://mods/sanguosha/card_art/pozhen.png",
+      "sourceArt": "tools/cardgen/input/core-art/pozhen.png"
+    },
+    {
+      "id": "BuFangCard",
+      "slug": "bufang",
+      "title": "布防",
+      "cost": 1,
+      "type": "技能牌 - 格挡",
+      "category": "trick",
+      "rarity": "Common",
+      "description": "获得格挡。若本回合没有打出过攻击牌，降低一张杀或技能牌费用。",
+      "portrait": "bufang.png",
+      "portraitPath": "res://mods/sanguosha/card_art/bufang.png",
+      "sourceArt": "tools/cardgen/input/core-art/bufang.png"
+    },
+    {
       "id": "RenDeCard",
       "slug": "rende",
       "title": "仁德",
@@ -587,7 +704,7 @@
       "type": "技能牌 - 回复",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "弃 1 张手牌，回复生命并抽牌。弃杀强化下一张杀，弃闪获得格挡，弃技能牌获得能量。",
+      "description": "弃 1 张手牌，回复生命并获得能量。弃杀强化下一张杀。",
       "portrait": "rende.png",
       "portraitPath": "res://mods/sanguosha/card_art/rende.png",
       "sourceArt": "tools/cardgen/input/core-art/rende.png"
@@ -600,7 +717,7 @@
       "type": "技能牌 - 压制",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "移除目标所有格挡。获得能量，抽牌，并施加易伤。",
+      "description": "移除目标所有格挡，抽牌并施加易伤。升级后变为 0 费。",
       "portrait": "tuxi.png",
       "portraitPath": "res://mods/sanguosha/card_art/tuxi.png",
       "sourceArt": "tools/cardgen/input/core-art/tuxi.png"
@@ -613,7 +730,7 @@
       "type": "技能牌 - 谋略",
       "category": "trick",
       "rarity": "Uncommon",
-      "description": "消耗 1 张技能牌。移除目标所有格挡，施加易伤并抽牌。",
+      "description": "消耗手牌中的技能牌。移除目标所有格挡，施加易伤并抽牌。",
       "portrait": "qixi.png",
       "portraitPath": "res://mods/sanguosha/card_art/qixi.png",
       "sourceArt": "tools/cardgen/input/core-art/qixi.png"
@@ -721,6 +838,149 @@
       "portrait": "guicai.png",
       "portraitPath": "res://mods/sanguosha/card_art/guicai.png",
       "sourceArt": "tools/cardgen/input/core-art/guicai.png"
+    },
+    {
+      "id": "YingZiCard",
+      "slug": "yingzi",
+      "title": "英姿",
+      "cost": 1,
+      "type": "能力牌 - 过牌",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "能力。每回合开始时抽牌。",
+      "portrait": "yingzi.png",
+      "portraitPath": "res://mods/sanguosha/card_art/yingzi.png",
+      "sourceArt": "tools/cardgen/input/core-art/yingzi.png"
+    },
+    {
+      "id": "JiZhiCard",
+      "slug": "jizhi",
+      "title": "集智",
+      "cost": 1,
+      "type": "能力牌 - 锦囊",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "抽牌。每回合首次打出技能牌后抽牌。",
+      "portrait": "jizhi.png",
+      "portraitPath": "res://mods/sanguosha/card_art/jizhi.png",
+      "sourceArt": "tools/cardgen/input/core-art/jizhi.png"
+    },
+    {
+      "id": "LuoYiCard",
+      "slug": "luoyi",
+      "title": "裸衣",
+      "cost": 1,
+      "type": "能力牌 - 杀势",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "每回合开始时强化下一张杀。",
+      "portrait": "luoyi.png",
+      "portraitPath": "res://mods/sanguosha/card_art/luoyi.png",
+      "sourceArt": "tools/cardgen/input/core-art/luoyi.png"
+    },
+    {
+      "id": "TieQiCard",
+      "slug": "tieqi",
+      "title": "铁骑",
+      "cost": 1,
+      "type": "能力牌 - 压制",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "每回合首次杀命中后施加易伤。",
+      "portrait": "tieqi.png",
+      "portraitPath": "res://mods/sanguosha/card_art/tieqi.png",
+      "sourceArt": "tools/cardgen/input/core-art/tieqi.png"
+    },
+    {
+      "id": "QingNangCard",
+      "slug": "qingnang",
+      "title": "青囊",
+      "cost": 1,
+      "type": "能力牌 - 回复",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "回复生命。每回合开始时回复生命。",
+      "portrait": "qingnang.png",
+      "portraitPath": "res://mods/sanguosha/card_art/qingnang.png",
+      "sourceArt": "tools/cardgen/input/core-art/qingnang.png"
+    },
+    {
+      "id": "XiaoJiCard",
+      "slug": "xiaoji",
+      "title": "枭姬",
+      "cost": 1,
+      "type": "能力牌 - 装备",
+      "category": "power",
+      "rarity": "Uncommon",
+      "description": "获得能量。每当你替换装备时抽牌。",
+      "portrait": "xiaoji.png",
+      "portraitPath": "res://mods/sanguosha/card_art/xiaoji.png",
+      "sourceArt": "tools/cardgen/input/core-art/xiaoji.png"
+    },
+    {
+      "id": "BathOfBloodCard",
+      "slug": "bathofblood",
+      "title": "浴血形态",
+      "cost": 2,
+      "type": "Boss能力牌 - 战士",
+      "category": "power",
+      "rarity": "Rare",
+      "description": "每回合开始时失去生命，获得能量。",
+      "portrait": "bathofblood.png",
+      "portraitPath": "res://mods/sanguosha/card_art/bathofblood.png",
+      "sourceArt": "tools/cardgen/input/core-art/bathofblood.png"
+    },
+    {
+      "id": "NightfallSchemeCard",
+      "slug": "nightfallscheme",
+      "title": "夜幕形态",
+      "cost": 2,
+      "type": "Boss能力牌 - 猎手",
+      "category": "power",
+      "rarity": "Rare",
+      "description": "每回合开始时抽牌，并对所有敌人施加中毒。",
+      "portrait": "nightfallscheme.png",
+      "portraitPath": "res://mods/sanguosha/card_art/nightfallscheme.png",
+      "sourceArt": "tools/cardgen/input/core-art/nightfallscheme.png"
+    },
+    {
+      "id": "ThunderMandateCard",
+      "slug": "thundermandate",
+      "title": "雷诏形态",
+      "cost": 2,
+      "type": "Boss能力牌 - 机关",
+      "category": "power",
+      "rarity": "Rare",
+      "description": "每回合开始时获得雷势，并对所有敌人造成伤害。",
+      "portrait": "thundermandate.png",
+      "portraitPath": "res://mods/sanguosha/card_art/thundermandate.png",
+      "sourceArt": "tools/cardgen/input/core-art/thundermandate.png"
+    },
+    {
+      "id": "SoulHealerFormCard",
+      "slug": "soulhealerform",
+      "title": "魂医形态",
+      "cost": 2,
+      "type": "Boss能力牌 - 魂医",
+      "category": "power",
+      "rarity": "Rare",
+      "description": "每回合开始时回复生命，所有敌人失去生命。",
+      "portrait": "soulhealerform.png",
+      "portraitPath": "res://mods/sanguosha/card_art/soulhealerform.png",
+      "sourceArt": "tools/cardgen/input/core-art/soulhealerform.png"
+    },
+    {
+      "id": "ImperialEdictCard",
+      "slug": "imperialedict",
+      "title": "诏令形态",
+      "cost": 2,
+      "type": "Boss能力牌 - 储君",
+      "category": "power",
+      "rarity": "Rare",
+      "description": "每回合开始时获得能量并强化下一张杀。",
+      "portrait": "imperialedict.png",
+      "portraitPath": "res://mods/sanguosha/card_art/imperialedict.png",
+      "sourceArt": "tools/cardgen/input/core-art/imperialedict.png"
     },
     {
       "id": "IroncladShaPreview",

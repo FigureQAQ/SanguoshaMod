@@ -2,7 +2,7 @@
 
 三国杀主题的 Slay the Spire 2 玩法模组。模组将“杀、闪、桃、酒”、装备槽位、角色杀附魔和三国式技能牌接入 STS2 的战斗节奏，并为不同角色准备了专属基础牌图、卡牌边框和能量样式。
 
-[最新 Release：v0.1.14-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.14-multiplayer)
+[最新 Release：v0.1.15-multiplayer](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.1.15-multiplayer)
 
 ## 游戏内截图
 
@@ -28,7 +28,7 @@ README 展示图只使用游戏内真实截图或从真实截图裁切出的卡�
 - 攻击牌、技能牌、能力牌和装备牌已接入游戏卡池。
 - 装备牌分为武器、防具、坐骑、宝物四个槽位；同槽位只保留一件，新装备会顶掉旧装备并正确移除旧装备提供的属性。
 - 五个角色拥有三国化命名；属性杀机制以初始遗物形式提供，并驱动各自的杀附魔机制。
-- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.8`。
+- 依赖 `STS2-RitsuLib`，当前项目引用版本为 `0.3.9`。
 
 ## 卡牌设计
 

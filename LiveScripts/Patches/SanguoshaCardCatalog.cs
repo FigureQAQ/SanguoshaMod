@@ -1,5 +1,7 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Runs;
 using sanguosha.Cards;
 
 namespace sanguosha.Patches;
@@ -29,11 +31,20 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<CiShaCard>(),
                 ModelDb.Card<ShouShiCard>(),
                 ModelDb.Card<DiaoDuCard>(),
+                ModelDb.Card<YangGongCard>(),
+                ModelDb.Card<XuShiCard>(),
+                ModelDb.Card<PoZhenCard>(),
+                ModelDb.Card<BuFangCard>(),
                 ModelDb.Card<FenChengCard>(),
+                ModelDb.Card<FenYingCard>(),
+                ModelDb.Card<JiXingCard>(),
+                ModelDb.Card<KuRouCard>(),
                 ModelDb.Card<RenDeCard>(),
+                ModelDb.Card<PoZhuCard>(),
                 ModelDb.Card<TuXiCard>(),
                 ModelDb.Card<QiXiCard>(),
                 ModelDb.Card<GuaGuCard>(),
+                ModelDb.Card<HongBaoCard>(),
                 ModelDb.Card<DuelCard>(),
                 ModelDb.Card<GuDingCard>(),
                 ModelDb.Card<GanJiangMoYeCard>(),
@@ -66,6 +77,17 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<YiJiCard>(),
                 ModelDb.Card<JianXiongCard>(),
                 ModelDb.Card<GuiCaiCard>(),
+                ModelDb.Card<YingZiCard>(),
+                ModelDb.Card<JiZhiCard>(),
+                ModelDb.Card<LuoYiCard>(),
+                ModelDb.Card<TieQiCard>(),
+                ModelDb.Card<QingNangCard>(),
+                ModelDb.Card<XiaoJiCard>(),
+                ModelDb.Card<BathOfBloodCard>(),
+                ModelDb.Card<NightfallSchemeCard>(),
+                ModelDb.Card<ThunderMandateCard>(),
+                ModelDb.Card<SoulHealerFormCard>(),
+                ModelDb.Card<ImperialEdictCard>(),
                 ModelDb.Card<ZhangBaCard>(),
                 ModelDb.Card<ZhangBaShaCard>(),
                 ModelDb.Card<ZhuGeCard>()
@@ -84,9 +106,33 @@ internal static class SanguoshaCardCatalog
         }
     }
 
+    public static IReadOnlyList<CardModel>? TryGetRewardCards()
+    {
+        var cards = TryGetCards();
+        return cards?
+            .Where(card => !IsSanguoshaBasicCard(card) && !IsBossRewardOnlyCard(card))
+            .OrderBy(StableCardKey, StringComparer.Ordinal)
+            .ToList();
+    }
+
+    public static IReadOnlyList<CardModel>? TryGetBossRewardCards(Player player)
+    {
+        var cards = TryGetCards();
+        if (cards is null)
+        {
+            return null;
+        }
+
+        return cards
+            .Where(card => IsBossRewardCardForCharacter(card, player))
+            .OrderBy(StableCardKey, StringComparer.Ordinal)
+            .ToList();
+    }
+
     public static IEnumerable<CardModel> ReplaceGeneratedCards(
         IEnumerable<CardModel> original,
-        Func<CardModel, bool>? originalFilter = null)
+        Player player,
+        CardCreationOptions options)
     {
         var originalList = TrySnapshot(original);
         if (originalList is null)
@@ -94,24 +140,48 @@ internal static class SanguoshaCardCatalog
             return original;
         }
 
-        if (originalList.All(IsSanguoshaCard) || originalList.All(IsNonCollectible))
+        if (originalList.All(IsNonCollectible))
         {
             return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
         }
 
-        var cards = TryGetCards();
+        if (originalList.All(IsSanguoshaCard))
+        {
+            var rewardOriginal = originalList
+                .Where(card => !IsSanguoshaBasicCard(card)
+                    && card is not ZhangBaShaCard
+                    && !IsBossRewardOnlyCard(card))
+                .ToList();
+            if (rewardOriginal.Count > 0)
+            {
+                return rewardOriginal.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+            }
+
+            var rewardCards = TryGetRewardCards();
+            if (rewardCards is { Count: > 0 })
+            {
+                var shapedRewardCards = KeepOriginalCollectibleShape(originalList, rewardCards);
+                return shapedRewardCards.Count > 0 ? shapedRewardCards : rewardCards;
+            }
+
+            return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+        }
+
+        var cards = IsBossEncounterReward(options)
+            ? TryGetBossRewardCards(player)
+            : TryGetRewardCards();
         if (cards is null || cards.Count == 0)
         {
             return originalList;
         }
 
-        var filtered = originalFilter is null
+        var filtered = options.CardPoolFilter is null
             ? cards.ToList()
-            : cards.Where(card => SafeMatches(originalFilter, card)).ToList();
+            : cards.Where(card => SafeMatches(options.CardPoolFilter, card)).ToList();
 
         if (filtered.Count == 0)
         {
-            Entry.Logger.Warn("Sanguosha card replacement ignored an incompatible original card filter and used the full Sanguosha pool.");
+            Entry.Logger.Warn("Sanguosha card replacement ignored an incompatible original card filter and used the reward Sanguosha pool.");
             filtered = cards.ToList();
         }
 
@@ -219,9 +289,59 @@ internal static class SanguoshaCardCatalog
         return card is ShaCard or ShanCard or TaoCard or JiuCard;
     }
 
+    public static bool IsBossRewardOnlyCard(CardModel card)
+    {
+        return card is BathOfBloodCard
+            or NightfallSchemeCard
+            or ThunderMandateCard
+            or SoulHealerFormCard
+            or ImperialEdictCard;
+    }
+
+    public static IReadOnlyList<CardModel> KeepRewardEligibleCards(IReadOnlyList<CardModel> cards)
+    {
+        var filtered = cards
+            .Where(card => !IsSanguoshaBasicCard(card)
+                && card is not ZhangBaShaCard
+                && !IsBossRewardOnlyCard(card))
+            .ToList();
+        if (filtered.Count > 0)
+        {
+            return filtered.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+        }
+
+        var rewardCards = TryGetRewardCards();
+        if (rewardCards is not { Count: > 0 })
+        {
+            return cards;
+        }
+
+        var shapedRewardCards = KeepOriginalCollectibleShape(cards, rewardCards);
+        return shapedRewardCards.Count > 0 ? shapedRewardCards : rewardCards;
+    }
+
     private static bool IsSanguoshaCard(CardModel card)
     {
         return card is SanguoshaCard;
+    }
+
+    private static bool IsBossEncounterReward(CardCreationOptions options)
+    {
+        return options.Source == CardCreationSource.Encounter
+            && options.RarityOdds == CardRarityOddsType.BossEncounter;
+    }
+
+    private static bool IsBossRewardCardForCharacter(CardModel card, Player player)
+    {
+        return player.Character.GetType().Name switch
+        {
+            "Ironclad" => card is BathOfBloodCard,
+            "Silent" => card is NightfallSchemeCard,
+            "Defect" => card is ThunderMandateCard,
+            "Necrobinder" => card is SoulHealerFormCard,
+            "Regent" => card is ImperialEdictCard,
+            _ => false
+        };
     }
 
     private static bool IsNonCollectible(CardModel card)

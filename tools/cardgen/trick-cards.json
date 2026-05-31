@@ -30,7 +30,7 @@
       "cost": 1,
       "type": "技能牌 - 过牌",
       "rarity": "Rare",
-      "description": "可消耗 1 张手牌。抽牌；若成功消耗，获得能量并额外抽牌。",
+      "description": "可消耗 1 张手牌；若如此做，获得能量。抽牌。",
       "art": "wuzhong.png",
       "externalFileB64": "5peg5Lit55Sf5pyJLnBuZw==",
       "prompt": "A brilliant strategist conjures supplies from empty hands, glowing scrolls and cards materializing from mist above an ancient war table."
@@ -42,7 +42,7 @@
       "cost": 1,
       "type": "技能牌 - 补给",
       "rarity": "Rare",
-      "description": "获得格挡。可消耗 1 张手牌；所有玩家抽牌，成功消耗时你获得能量，所有玩家额外抽牌。",
+      "description": "获得格挡。可消耗 1 张手牌；若如此做，你获得能量。所有玩家抽牌。",
       "art": "wugu.png",
       "externalFileB64": "5LqU6LC35Liw55m7LnBuZw==",
       "prompt": "Abundant harvest supplies arrive for an army, golden grain carts, open granaries, soldiers cheering under warm sunlight after a siege."
@@ -54,7 +54,7 @@
       "cost": 1,
       "type": "技能牌 - 控制",
       "rarity": "Uncommon",
-      "description": "判定牌堆顶。若判定牌费用为 0，抽牌；否则施加虚弱和减速。若判定牌是技能牌、能力牌或费用不低于 2，额外施加虚弱和减速。",
+      "description": "延迟判定。若判定成功，目标本回合不能施加负面效果或塞牌。",
       "art": "bingliang.png",
       "externalFileB64": "5YW157Ku5a+45patLnBuZw==",
       "prompt": "Supply lines cut in a Three Kingdoms campaign, burning grain carts on a muddy road, scouts severing ropes, enemy camp starving in the distance."
@@ -66,7 +66,7 @@
       "cost": 1,
       "type": "技能牌 - 破阵",
       "rarity": "Uncommon",
-      "description": "移除目标格挡，造成伤害并施加虚弱和易伤。移除足量格挡时获得能量并抽牌。",
+      "description": "移除目标本回合所有正面效果。若至少移除 1 个，抽牌。",
       "art": "guohe.png",
       "externalFileB64": "6L+H5rKz5ouG5qGlLnBuZw==",
       "prompt": "Destroy the bridge after crossing, an ancient wooden bridge collapsing into a river, enemy cavalry stranded, tactical betrayal under storm clouds."
@@ -78,7 +78,7 @@
       "cost": 1,
       "type": "技能牌 - 火攻",
       "rarity": "Uncommon",
-      "description": "可弃 1 张手牌。造成伤害并施加中毒；弃牌的费用和稀有度提高收益。弃杀额外伤害，弃闪获得格挡，弃能力牌施加易伤。",
+      "description": "可弃 1 张手牌。造成伤害并施加中毒；若弃牌，额外造成伤害。",
       "art": "huogong.png",
       "externalFileB64": "54Gr5pS7LnBuZw==",
       "prompt": "Fire attack stratagem, flaming arrows rain into an enemy camp at night, oil jars exploding, red smoke, tactical chaos and poison-green sparks."
@@ -90,7 +90,7 @@
       "cost": 1,
       "type": "技能牌 - 借势",
       "rarity": "Rare",
-      "description": "可消耗手牌中的杀提高伤害，并对所有敌人施加减速；没有消耗杀则抽牌。",
+      "description": "可消耗手牌中的杀提高伤害，并对所有敌人施加减速。",
       "art": "jiedao.png",
       "externalFileB64": "5YCf5YiA5p2A5Lq6LnBuZw==",
       "prompt": "Borrowed blade assassination scheme, one general hands a gleaming saber through shadowed curtains while another enemy is framed in the distance."
@@ -102,10 +102,22 @@
       "cost": 2,
       "type": "技能牌 - 控制",
       "rarity": "Rare",
-      "description": "判定牌堆顶并施加减速；若判定不是杀，额外减速、易伤、伤害并获得能量。",
+      "description": "延迟判定。若判定成功，目标本回合不能攻击。",
       "art": "lebu.png",
       "externalFileB64": "5LmQ5LiN5oCd6JyALnBuZw==",
       "prompt": "Indulgent palace trap, a warlord distracted by music, dancers and wine while urgent military scrolls burn unnoticed in the background."
+    },
+    {
+      "id": "HongBaoCard",
+      "slug": "hongbao",
+      "title": "发红包",
+      "cost": 0,
+      "type": "技能牌 - 支援",
+      "rarity": "Uncommon",
+      "description": "其他玩家抽牌、回复生命并获得好运。你获得能量。",
+      "art": "hongbao.png",
+      "externalFileB64": "5Y+R57qi5YyFLnBuZw==",
+      "prompt": "Three Kingdoms support card illustration. A commander shares small red supply gifts with allied warriors in a warm lantern-lit military camp, friendly morale, teamwork, painterly fantasy, no text."
     },
     {
       "id": "NanManCard",
@@ -126,7 +138,7 @@
       "cost": 2,
       "type": "技能牌 - 判定",
       "rarity": "Rare",
-      "description": "判定牌堆顶。造成随判定牌费用和稀有度提高的伤害；稀有或能力牌额外易伤。",
+      "description": "X 费延迟判定。若判定成功，按 X 造成目标最大生命百分比伤害。",
       "art": "shandian.png",
       "externalFileB64": "6Zeq55S1LnBuZw==",
       "prompt": "Judgment lightning spell over a battlefield, a thunderbolt strikes a marked enemy general, divination cards and storm clouds swirling overhead."
@@ -138,7 +150,7 @@
       "cost": 1,
       "type": "技能牌 - 连环",
       "rarity": "Rare",
-      "description": "技能牌。杀获得溅射，但溅射不触发杀命中后续；判定技能牌或能力时追加群体伤害和能量。",
+      "description": "施加减速。本回合你的杀对其他敌人造成溅射伤害。",
       "art": "tiesuo.png",
       "externalFileB64": "6ZOB57Si6L+e546vLnBuZw==",
       "prompt": "Iron chain formation, several enemy generals bound by glowing heavy chains across a battlefield, one strike sending shockwaves through all links."
@@ -150,7 +162,7 @@
       "cost": 1,
       "type": "技能牌 - 偷袭",
       "rarity": "Uncommon",
-      "description": "偷取目标格挡并造成伤害、抽牌。使手牌临时变为 0 费。",
+      "description": "转移目标本回合所有正面效果。若至少转移 1 个，抽牌。",
       "art": "shunshou.png",
       "externalFileB64": "6aG65omL54m1576KLnBuZw==",
       "prompt": "Clever theft in a war camp, a nimble strategist steals a guarded banner and supply token while soldiers look the wrong way."
@@ -162,7 +174,7 @@
       "cost": 2,
       "type": "技能牌 - 回复",
       "rarity": "Rare",
-      "description": "所有玩家回复生命。你获得格挡、能量并抽牌。",
+      "description": "所有玩家回复生命、获得格挡、抽牌并获得好运。你获得能量。",
       "art": "taoyuan.png",
       "externalFileB64": "5qGD5Zut57uT5LmJLnBuZw==",
       "prompt": "Peach Garden oath, three heroic warriors swear brotherhood beneath blooming peach trees, warm sunrise, sacred banners and falling petals."
@@ -174,7 +186,7 @@
       "cost": 2,
       "type": "攻击牌 - 群攻",
       "rarity": "Rare",
-      "description": "对所有敌人造成伤害。所有玩家获得力量。你获得格挡。",
+      "description": "对所有敌人造成伤害。所有玩家获得力量和好运。你获得格挡。",
       "art": "wanjian.png",
       "externalFileB64": "5LiH566t6b2Q5Y+RLnBuZw==",
       "prompt": "Ten thousand arrows fired at once, the sky darkens with volleys of arrows over an ancient battlefield, shields raised, cinematic scale."

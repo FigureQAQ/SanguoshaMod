@@ -14,6 +14,7 @@ using MegaCrit.Sts2.Core.Factories;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -58,6 +59,28 @@ internal static class DelayedLeBuModifyDamagePatch
     }
 }
 
+[HarmonyPatch(typeof(SovereignBlade), "OnPlay")]
+internal static class SovereignBladeJiuDamagePatch
+{
+    private static void Prefix(SovereignBlade __instance, out decimal __state)
+    {
+        __state = __instance.DynamicVars.Damage.BaseValue;
+        var multiplier = SanguoshaCharacterSkills.GetSovereignBladeDamageMultiplier(__instance);
+        if (multiplier <= 1m)
+        {
+            return;
+        }
+
+        __instance.DynamicVars.Damage.BaseValue = __state * multiplier;
+    }
+
+    private static void Finalizer(SovereignBlade __instance, decimal __state)
+    {
+        __instance.DynamicVars.Damage.BaseValue = __state;
+        SanguoshaCharacterSkills.ClearAttackCardDamageMultiplier(__instance);
+    }
+}
+
 [HarmonyPatch(typeof(Hook), nameof(Hook.ModifyPowerAmountGiven))]
 internal static class DelayedBingLiangPowerAmountPatch
 {
@@ -75,9 +98,9 @@ internal static class DelayedBingLiangPowerAmountPatch
 
 internal static class DelayedBingLiangStatusCardPatchHelper
 {
-    public static bool PrefixSingle(CardModel card, ref Task<CardPileAddResult> __result)
+    public static bool PrefixSingle(CardModel card, Creature? sourceCreature, ref Task<CardPileAddResult> __result)
     {
-        if (!IsBlockedStatusCard(card))
+        if (!IsBlockedStatusCard(card, sourceCreature))
         {
             return true;
         }
@@ -86,7 +109,7 @@ internal static class DelayedBingLiangStatusCardPatchHelper
         return false;
     }
 
-    public static bool PrefixMany(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    public static bool PrefixMany(ref IEnumerable<CardModel> cards, Creature? sourceCreature, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
         var cardList = cards.ToList();
         if (cardList.Count == 0)
@@ -95,7 +118,7 @@ internal static class DelayedBingLiangStatusCardPatchHelper
         }
 
         var blocked = cardList
-            .Where(card => IsBlockedStatusCard(card))
+            .Where(card => IsBlockedStatusCard(card, sourceCreature))
             .ToList();
         if (blocked.Count == 0)
         {
@@ -116,12 +139,23 @@ internal static class DelayedBingLiangStatusCardPatchHelper
         return false;
     }
 
-    public static bool IsBlockedStatusCard(CardModel card)
+    public static bool IsBlockedStatusCard(CardModel card, Creature? sourceCreature)
     {
         return card.Owner is { } owner
-            && SanguoshaCharacterSkills.ShouldBlockBingLiangStatusCards(owner)
+            && SanguoshaCharacterSkills.ShouldBlockBingLiangStatusCards(owner, sourceCreature)
             && (card.Type is CardType.Status or CardType.Curse or CardType.Quest
                 || card.Rarity is CardRarity.Status or CardRarity.Curse or CardRarity.Quest);
+    }
+
+    public static Creature? GetSourceCreature(AbstractModel? source)
+    {
+        return source switch
+        {
+            CardModel sourceCard => sourceCard.Owner?.Creature,
+            PowerModel power => power.Owner,
+            RelicModel relic => relic.Owner?.Creature,
+            _ => null
+        };
     }
 }
 
@@ -137,9 +171,10 @@ internal static class DelayedBingLiangStatusCardPatchHelper
     ])]
 internal static class DelayedBingLiangStatusCardPileTypeSinglePatch
 {
-    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel card, AbstractModel? source, ref Task<CardPileAddResult> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, sourceCreature, ref __result);
     }
 }
 
@@ -155,9 +190,10 @@ internal static class DelayedBingLiangStatusCardPileTypeSinglePatch
     ])]
 internal static class DelayedBingLiangStatusCardPileSinglePatch
 {
-    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel card, AbstractModel? source, ref Task<CardPileAddResult> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, sourceCreature, ref __result);
     }
 }
 
@@ -173,9 +209,10 @@ internal static class DelayedBingLiangStatusCardPileSinglePatch
     ])]
 internal static class DelayedBingLiangStatusCardsPileTypePatch
 {
-    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> cards, AbstractModel? source, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, sourceCreature, ref __result);
     }
 }
 
@@ -191,9 +228,10 @@ internal static class DelayedBingLiangStatusCardsPileTypePatch
     ])]
 internal static class DelayedBingLiangStatusCardsPilePatch
 {
-    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> cards, AbstractModel? source, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
+        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(source);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, sourceCreature, ref __result);
     }
 }
 
@@ -209,9 +247,9 @@ internal static class DelayedBingLiangGeneratedStatusCardSinglePatch
                 && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(CardModel));
     }
 
-    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    private static bool Prefix(CardModel card, Player? player, ref Task<CardPileAddResult> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, player?.Creature, ref __result);
     }
 }
 
@@ -227,9 +265,9 @@ internal static class DelayedBingLiangGeneratedStatusCardsPatch
                 && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(IEnumerable<CardModel>));
     }
 
-    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    private static bool Prefix(ref IEnumerable<CardModel> cards, Player? player, ref Task<IReadOnlyList<CardPileAddResult>> __result)
     {
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, player?.Creature, ref __result);
     }
 }
 
@@ -1037,7 +1075,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
 
     public static bool CanCreateSanguoshaBundles()
     {
-        var cards = SanguoshaCardCatalog.TryGetCards();
+        var cards = SanguoshaCardCatalog.TryGetRewardCards();
         if (cards is null)
         {
             return false;
@@ -1049,7 +1087,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
 
     public static List<IReadOnlyList<CardModel>> CreateSanguoshaBundles(Player player)
     {
-        var cards = SanguoshaCardCatalog.TryGetCards();
+        var cards = SanguoshaCardCatalog.TryGetRewardCards();
         if (cards is null || cards.Count == 0)
         {
             return [];
@@ -1099,7 +1137,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
         bool upgrade = false,
         bool exactRarity = false)
     {
-        var cards = SanguoshaCardCatalog.TryGetCards();
+        var cards = SanguoshaCardCatalog.TryGetRewardCards();
         if (cards is null || cards.Count == 0)
         {
             return [];

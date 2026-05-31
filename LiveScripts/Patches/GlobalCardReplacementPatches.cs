@@ -13,7 +13,7 @@ internal static class CardCreationOptionsGetPossibleCardsPatch
 {
     private static void Postfix(CardCreationOptions __instance, Player player, ref IEnumerable<CardModel> __result)
     {
-        __result = SanguoshaCardCatalog.ReplaceGeneratedCards(__result, __instance.CardPoolFilter);
+        __result = SanguoshaCardCatalog.ReplaceGeneratedCards(__result, player, __instance);
     }
 }
 
@@ -46,15 +46,7 @@ internal static class MerchantSanguoshaBasicCardFilterPatch
 
     private static void Prefix(ref IEnumerable<CardModel> options)
     {
-        var optionList = options.ToList();
-        var filtered = optionList
-            .Where(card => !SanguoshaCardCatalog.IsSanguoshaBasicCard(card))
-            .ToList();
-
-        if (filtered.Count > 0)
-        {
-            options = filtered;
-        }
+        options = SanguoshaCardCatalog.KeepRewardEligibleCards(options.ToList());
     }
 }
 

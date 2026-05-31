@@ -232,7 +232,7 @@ public sealed class JianXiongCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Draw", 1m),
-        new DynamicVar("NextShaDamage", 4m),
+        new DynamicVar("NextShaDamage", 3m),
         new EnergyVar(1)
     ];
 
@@ -252,7 +252,7 @@ public sealed class JianXiongCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars["NextShaDamage"].UpgradeValueBy(2);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
     }
 }
 
@@ -286,4 +286,143 @@ public sealed class GuiCaiCard : SanguoshaCard
     }
 }
 
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class YingZiCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Draw", 1m)
+    ];
+
+    public YingZiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateYingZi(cardPlay.Card.Owner, DynamicVars["Draw"].IntValue);
+        return Task.CompletedTask;
+    }
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.SetCustomBaseCost(0);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class JiZhiCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Draw", 1m)
+    ];
+
+    public JiZhiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateJiZhi(cardPlay.Card.Owner, DynamicVars["Draw"].IntValue);
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, 1);
+    }
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.SetCustomBaseCost(0);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class LuoYiCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("NextShaDamage", 2m)
+    ];
+
+    public LuoYiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateLuoYi(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
+        return Task.CompletedTask;
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class TieQiCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Vulnerable", 1m)
+    ];
+
+    public TieQiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateTieQi(cardPlay.Card.Owner, DynamicVars["Vulnerable"].IntValue);
+        return Task.CompletedTask;
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Vulnerable"].UpgradeValueBy(1);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class QingNangCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Heal", 2m)
+    ];
+
+    public QingNangCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateQingNang(cardPlay.Card.Owner, DynamicVars["Heal"].IntValue);
+        await SanguoshaCardFx.Heal(cardPlay, DynamicVars["Heal"].BaseValue);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["Heal"].UpgradeValueBy(1);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class XiaoJiCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("Draw", 1m),
+        new EnergyVar(1)
+    ];
+
+    public XiaoJiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    {
+    }
+
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        SanguoshaCharacterSkills.ActivateXiaoJi(cardPlay.Card.Owner, DynamicVars["Draw"].IntValue);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
+        return Task.CompletedTask;
+    }
+
+    protected override void OnUpgrade()
+    {
+        EnergyCost.SetCustomBaseCost(0);
+    }
+}
 

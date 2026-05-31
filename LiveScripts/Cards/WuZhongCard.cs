@@ -12,8 +12,7 @@ public sealed class WuZhongCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new EnergyVar(1),
-        new DynamicVar("Draw", 2m),
-        new DynamicVar("BonusDraw", 1m)
+        new DynamicVar("Draw", 2m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -31,8 +30,7 @@ public sealed class WuZhongCard : SanguoshaCard
             cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
         }
 
-        var drawCount = DynamicVars["Draw"].IntValue + (consumed.Count > 0 ? DynamicVars["BonusDraw"].IntValue : 0);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, drawCount);
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
     }
 
     protected override void OnUpgrade()
