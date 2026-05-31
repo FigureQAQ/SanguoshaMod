@@ -150,7 +150,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_CARD_QI_LIN_CARD.title"] = new("cards", "麒麟弓"),
         ["SANGUOSHA_CARD_QI_LIN_CARD.description"] = new("cards", "装备：武器。获得 {Strength:diff()} 点力量并抽 {Draw:diff()} 张牌。杀命中已有负面效果的敌人时额外造成 {BonusDamage:diff()} 点伤害；每回合首次如此命中时施加 {Vulnerable:diff()} 层易伤。"),
         ["SANGUOSHA_CARD_QING_GANG_CARD.title"] = new("cards", "青釭剑"),
-        ["SANGUOSHA_CARD_QING_GANG_CARD.description"] = new("cards", "装备：武器。获得 {Energy:diff()} 点能量。你的杀无视目标一半格挡，并在目标有格挡时额外造成伤害。"),
+        ["SANGUOSHA_CARD_QING_GANG_CARD.description"] = new("cards", "装备：武器。获得 {Energy:diff()} 点能量。你的杀先移除目标一半格挡；若目标原本有格挡，额外造成 {BonusDamage:diff()} 点伤害。"),
         ["SANGUOSHA_CARD_SHAN_DIAN_CARD.title"] = new("cards", "闪电"),
         ["SANGUOSHA_CARD_SHAN_DIAN_CARD.description"] = new("cards", "X 费。延迟判定：下个敌方回合开始时，若随机数为偶数，造成目标最大生命 X*{DamagePercent:diff()}% 的伤害，向上取整。升级后按 X+1 计算。"),
         ["SANGUOSHA_CARD_TIE_SUO_CARD.title"] = new("cards", "铁索连环"),
@@ -201,7 +201,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_POWER_ZHANG_BA_DISPLAY_POWER.title"] = new("powers", "丈八蛇矛"),
         ["SANGUOSHA_POWER_ZHANG_BA_DISPLAY_POWER.description"] = new("powers", "装备：武器。只要你有至少 2 张其他手牌，会补 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。失去时获得能量并补蛇矛杀。"),
         ["SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.title"] = new("powers", "青釭剑"),
-        ["SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.description"] = new("powers", "装备：武器。你的杀无视目标一半格挡，并在目标有格挡时额外造成伤害。"),
+        ["SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.description"] = new("powers", "装备：武器。你的杀先移除目标一半格挡；若目标原本有格挡，额外造成 2/3 点伤害。"),
         ["SANGUOSHA_POWER_GUAN_SHI_DISPLAY_POWER.title"] = new("powers", "贯石斧"),
         ["SANGUOSHA_POWER_GUAN_SHI_DISPLAY_POWER.description"] = new("powers", "装备：武器。你的杀命中有格挡的敌人时额外造成伤害。失去时强化下一张杀。"),
         ["SANGUOSHA_POWER_HAN_BING_DISPLAY_POWER.title"] = new("powers", "寒冰剑"),
@@ -260,8 +260,8 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER.description"] = new("powers", "战斗开始获得 1 点雷势，回合开始再获得 1 点。杀附带雷杀：命中后获得 1 点雷势，并对目标和其他敌人造成雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害；每回合最多释放 1 次。"),
         ["SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.title"] = new("powers", "武魂：灾厄杀"),
         ["SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description"] = new("powers", "战斗开始回复 3 点生命并获得 3 点魂值；回合开始获得 1 点魂值并回复 1 点生命。杀附带灾厄杀：命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗 4 点，触发治疗、抽牌或追加伤害。"),
-        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title"] = new("powers", "武魂：号令杀"),
-        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description"] = new("powers", "战斗开始获得 1 点号令；回合开始获得 1 点号令，最多 8 点。杀命中后追加等同号令的伤害。每回合首次打出技能牌时获得 1 点能量。"),
+        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title"] = new("powers", "武魂：君王之剑"),
+        ["SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description"] = new("powers", "杀附魔：君王之剑。杀命中后按杀的数值锻造原版君王之剑，并使用原版悬浮剑 UI。"),
 
         ["IRONCLAD.title"] = new("characters", "赤壁猛将"),
         ["IRONCLAD.titleObject"] = new("characters", "赤壁猛将"),
@@ -277,7 +277,7 @@ internal static class SanguoshaLocalization
         ["NECROBINDER.description"] = new("characters", "武魂：灾厄杀。杀施加灾厄并积累魂值；闪会令所有敌人失去生命，魂值用于治疗、抽牌和追加伤害。"),
         ["REGENT.title"] = new("characters", "汉室仁主"),
         ["REGENT.titleObject"] = new("characters", "汉室仁主"),
-        ["REGENT.description"] = new("characters", "武魂：号令杀。号令随回合成长；杀命中后追加等同号令的伤害，每回合首次打出技能牌获得能量。"),
+        ["REGENT.description"] = new("characters", "武魂：君王之剑。杀命中后锻造原版君王之剑，并使用悬浮剑 UI。"),
 
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title"] = new("relics", "武魂：火杀"),
         ["SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description"] = new("relics", "战斗开始：获得 1 点力量。杀附魔：火杀，命中后追加 2 点伤害；生命不高于一半时，每回合首次火杀改为追加 4 点伤害并施加 1 层易伤。"),
@@ -291,8 +291,8 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title"] = new("relics", "武魂：青囊急救"),
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description"] = new("relics", "战斗开始：回复 3 点生命并获得 3 点魂值。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗魂值，回复生命、抽牌或追加伤害。"),
         ["SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor"] = new("relics", "刀兵之后，总有人要把命从鬼门关边上拉回来。"),
-        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title"] = new("relics", "武魂：号令杀"),
-        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "战斗开始：获得 1 点号令。回合开始：获得 1 点号令，最多 8 点。杀附魔：号令杀，命中后追加等同号令的伤害。每回合首次打出技能牌时获得 1 点能量。"),
+        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title"] = new("relics", "武魂：君王之剑"),
+        ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description"] = new("relics", "杀附魔：君王之剑。杀命中后按杀的数值锻造原版君王之剑，并使用原版悬浮剑 UI。"),
         ["SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor"] = new("relics", "仁德不是软弱，是让每一次出牌都有人响应。")
     };
 

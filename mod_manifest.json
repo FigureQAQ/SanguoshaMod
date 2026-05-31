@@ -4,7 +4,7 @@
   "name": "Sanguosha Mod",
   "author": "Codex",
   "description": "A Three Kingdoms themed Slay the Spire 2 gameplay mod with redesigned shared cards and character mechanics.",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "min_game_version": "0.106.0",
   "has_pck": false,
   "has_dll": true,

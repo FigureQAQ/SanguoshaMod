@@ -1026,7 +1026,8 @@ public sealed class QiLinCard : SanguoshaCard
 public sealed class QingGangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1)
+        new EnergyVar(1),
+        new DynamicVar("BonusDamage", 2m)
     ];
     public QingGangCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
@@ -1041,6 +1042,7 @@ public sealed class QingGangCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         EnergyCost.SetCustomBaseCost(0);
+        DynamicVars["BonusDamage"].UpgradeValueBy(1);
     }
 }
 

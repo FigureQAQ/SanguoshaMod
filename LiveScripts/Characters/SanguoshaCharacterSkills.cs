@@ -604,7 +604,7 @@ internal static class SanguoshaCharacterSkills
             SilentSkillDisplayPower => state.Ingenuity,
             DefectSkillDisplayPower => state.Thunder,
             NecrobinderSkillDisplayPower => state.Soul,
-            RegentSkillDisplayPower => state.Command,
+            RegentSkillDisplayPower => null,
             LongDanDisplayPower => Available(state.LongDanFreeUsedThisTurn),
             WuShuangDisplayPower => UsesRemaining(state.WuShuangRepeatsUsedThisTurn, state.WuShuangRepeatsPerTurn),
             LianYingDisplayPower => UsesRemaining(state.LianYingTriggersUsedThisTurn, state.LianYingTriggersPerTurn),
@@ -925,10 +925,7 @@ internal static class SanguoshaCharacterSkills
                 }
                 break;
             case ShaInfusion.Stored:
-                if (state.Command > 0)
-                {
-                    await DamageTarget(player, target, state.Command, play.Card);
-                }
+                await ForgeCmd.Forge(shaAmount, player, play.Card);
                 break;
             case ShaInfusion.Calamity:
                 state.Soul = Math.Min(10, state.Soul + 1);
@@ -1256,7 +1253,6 @@ internal static class SanguoshaCharacterSkills
                 break;
             case SanguoshaSkill.Regent:
                 state.ShaInfusion = ShaInfusion.Stored;
-                state.Command = Math.Max(state.Command, 1);
                 RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
@@ -1288,7 +1284,6 @@ internal static class SanguoshaCharacterSkills
                 await HealIfWounded(player, 1);
                 break;
             case SanguoshaSkill.Regent:
-                state.Command = Math.Min(8, Math.Max(1, state.Command + 1));
                 RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
@@ -1599,13 +1594,6 @@ internal static class SanguoshaCharacterSkills
 
     private static Task RunRegentSkill(Player player, CharacterSkillState state, CardPlay cardPlay)
     {
-        var card = cardPlay.Card;
-        if (card.Type == CardType.Skill && !state.EnergyGrantedThisTurn)
-        {
-            state.EnergyGrantedThisTurn = true;
-            player.PlayerCombatState!.GainEnergy(1);
-        }
-
         return Task.CompletedTask;
     }
 
