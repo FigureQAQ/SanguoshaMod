@@ -1,17 +1,17 @@
 {
-  "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title": "武魂：火杀",
+  "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.title": "火杀",
   "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.description": "战斗开始：获得 1 点力量。杀附魔：火杀，命中后追加 2 点火焰伤害。",
   "SANGUOSHA_RELIC_IRONCLAD_SKILL_RELIC.flavor": "血火铸甲，赤壁开锋。",
-  "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.title": "武魂：毒杀",
+  "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.title": "毒杀",
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.description": "战斗开始：抽 1 张牌。杀附魔：毒杀，命中后施加 3 层中毒。每回合首次打出技能牌时抽 1 张牌。",
   "SANGUOSHA_RELIC_SILENT_SKILL_RELIC.flavor": "胜负不在手牌里，在别人以为你没有手牌时。",
-  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.title": "武魂：雷杀",
+  "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.title": "雷杀",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.description": "杀附魔：雷杀，命中后获得 1 点雷势并追加 2 点雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害。",
   "SANGUOSHA_RELIC_DEFECT_SKILL_RELIC.flavor": "风起之前，星位已经变了。",
-  "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title": "武魂：青囊急救",
+  "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title": "灾厄杀",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description": "战斗开始：回复 2 点生命；回合开始回复 1 点生命。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄。打出闪时所有敌人失去 3 点生命。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor": "刀兵之后，总有人要把命从鬼门关边上拉回来。",
-  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "武魂：君王之剑",
+  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "君王之剑",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "每回合生成 1 张消耗王剑杀。王剑杀需要 1 点辉星打出，消耗牌堆越多伤害越高。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor": "仁德不是软弱，是让每一次出牌都有人响应。"
 }

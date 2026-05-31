@@ -687,6 +687,23 @@ internal static class SanguoshaCharacterSkills
         }
     }
 
+    private static void RemoveSkillDisplayPowers(Player player)
+    {
+        foreach (var power in player.Creature.Powers.Where(IsSkillDisplayPower).ToList())
+        {
+            _ = PowerCmd.Remove(power);
+        }
+    }
+
+    private static bool IsSkillDisplayPower(PowerModel power)
+    {
+        return power is IroncladSkillDisplayPower
+            or SilentSkillDisplayPower
+            or DefectSkillDisplayPower
+            or NecrobinderSkillDisplayPower
+            or RegentSkillDisplayPower;
+    }
+
     private static void RefreshDisplayPower<TPower>(Player player)
         where TPower : ModPowerTemplate
     {
@@ -1042,6 +1059,7 @@ internal static class SanguoshaCharacterSkills
             foreach (var player in combat.Players)
             {
                 var state = ResetCombatState(player);
+                RemoveSkillDisplayPowers(player);
                 RunOpeningSkill(player, state);
             }
         }
@@ -1092,6 +1110,7 @@ internal static class SanguoshaCharacterSkills
             foreach (var player in evt.CombatState.Players.Where(player => player.Creature.IsAlive))
             {
                 var state = GetState(player);
+                RemoveSkillDisplayPowers(player);
                 state.TurnCardsPlayed = 0;
                 state.TurnAttacksPlayed = 0;
                 state.TurnShaPlayed = 0;
@@ -1361,25 +1380,20 @@ internal static class SanguoshaCharacterSkills
             case SanguoshaSkill.Ironclad:
                 state.ShaInfusion = ShaInfusion.Fire;
                 _ = ApplyPower<StrengthPower>(player, player.Creature, 1, null);
-                RefreshDisplayPower<IroncladSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Silent:
                 state.ShaInfusion = ShaInfusion.Poison;
                 _ = Draw(player, 1);
-                RefreshDisplayPower<SilentSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Defect:
                 state.ShaInfusion = ShaInfusion.Thunder;
-                RefreshDisplayPower<DefectSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Necrobinder:
                 state.ShaInfusion = ShaInfusion.Calamity;
                 _ = HealIfWounded(player, 2);
-                RefreshDisplayPower<NecrobinderSkillDisplayPower>(player);
                 break;
             case SanguoshaSkill.Regent:
                 state.ShaInfusion = ShaInfusion.Stored;
-                RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
     }
@@ -1400,7 +1414,6 @@ internal static class SanguoshaCharacterSkills
                 break;
             case SanguoshaSkill.Regent:
                 await EnsureRegentWangJianSha(player, state);
-                RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
     }
