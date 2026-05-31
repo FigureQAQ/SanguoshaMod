@@ -13,5 +13,5 @@
   "NECROBINDER.description": "武魂：灾厄杀。杀施加灾厄并积累魂值；闪会令所有敌人失去生命，魂值用于治疗、抽牌和追加伤害。",
   "REGENT.title": "汉室仁主",
   "REGENT.titleObject": "汉室仁主",
-  "REGENT.description": "武魂：储能杀。杀积累铸剑生成王剑杀；星辉满 3 发动诏令，提供能量、抽牌、号令和临时免费。"
+  "REGENT.description": "武魂：号令杀。号令随回合成长；杀命中后追加等同号令的伤害，每回合首次打出技能牌获得能量。"
 }

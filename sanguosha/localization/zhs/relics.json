@@ -11,7 +11,7 @@
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.title": "武魂：青囊急救",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.description": "战斗开始：回复 3 点生命并获得 3 点魂值。杀附魔：灾厄杀，命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗魂值，回复生命、抽牌或追加伤害。",
   "SANGUOSHA_RELIC_NECROBINDER_SKILL_RELIC.flavor": "刀兵之后，总有人要把命从鬼门关边上拉回来。",
-  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "武魂：储能杀",
-  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "战斗开始：获得 1 点号令和 1 点星辉。杀附魔：储能杀，命中后获得铸剑；铸剑达到 3 时生成 1 张 0 费王剑杀。星辉达到 3 时每回合最多发动 1 次诏令：获得能量、抽牌、提升号令、推进铸剑，并使 1 张杀或技能牌本回合免费。",
+  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.title": "武魂：号令杀",
+  "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.description": "战斗开始：获得 1 点号令。回合开始：获得 1 点号令，最多 8 点。杀附魔：号令杀，命中后追加等同号令的伤害。每回合首次打出技能牌时获得 1 点能量。",
   "SANGUOSHA_RELIC_REGENT_SKILL_RELIC.flavor": "仁德不是软弱，是让每一次出牌都有人响应。"
 }

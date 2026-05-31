@@ -63,6 +63,6 @@
   "SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER.description": "战斗开始获得 1 点雷势，回合开始再获得 1 点。杀附带雷杀：命中后获得 1 点雷势，并对目标和其他敌人造成雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害；每回合最多释放 1 次。",
   "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.title": "武魂：灾厄杀",
   "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description": "战斗开始回复 3 点生命并获得 3 点魂值；回合开始获得 1 点魂值并回复 1 点生命。杀附带灾厄杀：命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗 4 点，触发治疗、抽牌或追加伤害。",
-  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title": "武魂：储能杀",
-  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "战斗开始获得 1 点号令和 1 点星辉；回合开始获得 1 点星辉。杀附带储能杀：命中后获得 1 点铸剑；铸剑达到 3 时消耗 3 点并生成 1 张 0 费王剑杀。星辉达到 3 时每回合最多发动 1 次诏令。"
+  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title": "武魂：号令杀",
+  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "战斗开始获得 1 点号令；回合开始获得 1 点号令，最多 8 点。杀命中后追加等同号令的伤害。每回合首次打出技能牌时获得 1 点能量。"
 }

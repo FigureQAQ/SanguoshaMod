@@ -104,5 +104,5 @@
   "SANGUOSHA_CARD_QI_XI_CARD.title": "奇袭",
   "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title": "王剑杀",
-  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "由铸剑生成。视为杀造成 {Damage:diff()} 点伤害，并额外造成等同于号令的伤害；不会触发储能杀的铸剑效果。"
+  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "旧版生成牌。视为杀造成 {Damage:diff()} 点伤害，并额外造成等同于号令的伤害。"
 }
