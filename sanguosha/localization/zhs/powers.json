@@ -4,7 +4,7 @@
   "SANGUOSHA_POWER_ZHANG_BA_DISPLAY_POWER.title": "丈八蛇矛",
   "SANGUOSHA_POWER_ZHANG_BA_DISPLAY_POWER.description": "装备：武器。只要你有至少 2 张其他手牌，会补 1 张 0 费蛇矛杀，可将任意两张牌当杀打出。失去时获得能量并补蛇矛杀。",
   "SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.title": "青釭剑",
-  "SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.description": "装备：武器。你的杀无视目标格挡；升级后，若目标原本有格挡，造成 150% 伤害。",
+  "SANGUOSHA_POWER_QING_GANG_DISPLAY_POWER.description": "装备：武器。你的杀无视格挡；升级的青釭剑会使原本有格挡的目标承受 150% 杀伤害。",
   "SANGUOSHA_POWER_GUAN_SHI_DISPLAY_POWER.title": "贯石斧",
   "SANGUOSHA_POWER_GUAN_SHI_DISPLAY_POWER.description": "装备：武器。每回合首次杀额外造成伤害。失去时强化下一张杀。",
   "SANGUOSHA_POWER_HAN_BING_DISPLAY_POWER.title": "寒冰剑",
@@ -56,13 +56,13 @@
   "SANGUOSHA_POWER_LONG_DAN_DISPLAY_POWER.title": "龙胆",
   "SANGUOSHA_POWER_LONG_DAN_DISPLAY_POWER.description": "能力牌。每回合第一张杀或闪本回合费用变为 0。",
   "SANGUOSHA_POWER_IRONCLAD_SKILL_DISPLAY_POWER.title": "武魂：火杀",
-  "SANGUOSHA_POWER_IRONCLAD_SKILL_DISPLAY_POWER.description": "杀附带火杀：命中后追加 2 点伤害；生命不高于 50% 时，每回合首次火杀改为追加 4 点伤害并施加 1 层易伤。回合开始若生命不高于 60%，获得 1 点力量。",
+  "SANGUOSHA_POWER_IRONCLAD_SKILL_DISPLAY_POWER.description": "战斗开始获得 1 点力量。杀命中后追加 2 点火焰伤害。",
   "SANGUOSHA_POWER_SILENT_SKILL_DISPLAY_POWER.title": "武魂：毒杀",
-  "SANGUOSHA_POWER_SILENT_SKILL_DISPLAY_POWER.description": "战斗开始抽 1 张牌并获得 2 点机巧。回合开始获得 2 点机巧，最多 5 点；手牌不超过 4 张时抽 1 张牌。杀附带毒杀：命中后施加中毒；每回合首次命中已有中毒的敌人时获得 1 点能量。",
+  "SANGUOSHA_POWER_SILENT_SKILL_DISPLAY_POWER.description": "战斗开始抽 1 张牌。杀命中后施加 3 层中毒；每回合首次打出技能牌时抽 1 张牌。",
   "SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER.title": "武魂：雷杀",
-  "SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER.description": "战斗开始获得 1 点雷势，回合开始再获得 1 点。杀附带雷杀：命中后获得 1 点雷势，并对目标和其他敌人造成雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害；每回合最多释放 1 次。",
+  "SANGUOSHA_POWER_DEFECT_SKILL_DISPLAY_POWER.description": "杀命中后获得 1 点雷势并追加 2 点雷击。雷势达到 4 时消耗 4 点，对所有敌人造成 8 点伤害。",
   "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.title": "武魂：灾厄杀",
-  "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description": "战斗开始回复 3 点生命并获得 3 点魂值；回合开始获得 1 点魂值并回复 1 点生命。杀附带灾厄杀：命中后施加杀数值一半的灾厄并获得魂值。打出闪时所有敌人失去 3 点生命。魂值达到 4 点时消耗 4 点，触发治疗、抽牌或追加伤害。",
+  "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description": "战斗开始回复 2 点生命，回合开始回复 1 点生命。杀命中后施加杀数值一半的灾厄；打出闪时所有敌人失去 3 点生命。",
   "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title": "武魂：君王之剑",
-  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "杀附魔：君王之剑。杀命中后按杀的数值锻造原版君王之剑，并使用原版悬浮剑 UI。"
+  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "杀附魔：君王之剑。杀命中后获得等同杀数值的剑势；剑势达到 12 时生成 1 张 0 费王剑杀。"
 }

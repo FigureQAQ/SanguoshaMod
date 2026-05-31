@@ -60,7 +60,7 @@
   "SANGUOSHA_CARD_QI_LIN_CARD.title": "麒麟弓",
   "SANGUOSHA_CARD_QI_LIN_CARD.description": "装备：武器。获得 {Strength:diff()} 点力量并抽 {Draw:diff()} 张牌。杀命中已有负面效果的敌人时额外造成 {BonusDamage:diff()} 点伤害；每回合首次如此命中时施加 {Vulnerable:diff()} 层易伤。",
   "SANGUOSHA_CARD_QING_GANG_CARD.title": "青釭剑",
-  "SANGUOSHA_CARD_QING_GANG_CARD.description": "装备：武器。获得 {Energy:diff()} 点能量。你的杀无视目标格挡。升级后，若目标原本有格挡，造成 150% 伤害。",
+  "SANGUOSHA_CARD_QING_GANG_CARD.description": "装备：武器。获得 {Energy:diff()} 点能量。你的杀无视格挡；若目标原本有格挡，伤害倍率为 {BlockedMultiplier:diff()}%。",
   "SANGUOSHA_CARD_SHAN_DIAN_CARD.title": "闪电",
   "SANGUOSHA_CARD_SHAN_DIAN_CARD.description": "X 费。延迟判定：下个敌方回合开始时，若随机数为偶数，造成目标最大生命 X*{DamagePercent:diff()}% 的伤害，向上取整。升级后按 X+1 计算。",
   "SANGUOSHA_CARD_TIE_SUO_CARD.title": "铁索连环",
@@ -104,5 +104,5 @@
   "SANGUOSHA_CARD_QI_XI_CARD.title": "奇袭",
   "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title": "王剑杀",
-  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "旧版生成牌。视为杀造成 {Damage:diff()} 点伤害，并额外造成等同于号令的伤害。"
+  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "储君生成牌。视为杀造成 {Damage:diff()} 点伤害。"
 }

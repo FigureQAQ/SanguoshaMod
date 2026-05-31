@@ -1028,7 +1028,8 @@ public sealed class QiLinCard : SanguoshaCard
 public sealed class QingGangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1)
+        new EnergyVar(1),
+        new DynamicVar("BlockedMultiplier", 100m)
     ];
     public QingGangCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
@@ -1043,6 +1044,7 @@ public sealed class QingGangCard : SanguoshaCard
     protected override void OnUpgrade()
     {
         EnergyCost.SetCustomBaseCost(0);
+        DynamicVars["BlockedMultiplier"].UpgradeValueBy(50);
     }
 }
 
@@ -1250,6 +1252,6 @@ public sealed class WuXieCard : SanguoshaCard
     }
 }
 
-// ========== 兵粮寸断: 虚弱 + 减速 + 伤害（断粮控制） ==========
+// ========== 延迟判定牌 ==========
 
 

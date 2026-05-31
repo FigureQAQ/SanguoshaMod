@@ -197,6 +197,42 @@ internal static class DelayedBingLiangStatusCardsPilePatch
     }
 }
 
+[HarmonyPatch]
+internal static class DelayedBingLiangGeneratedStatusCardSinglePatch
+{
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        return AccessTools.GetDeclaredMethods(typeof(CardPileCmd))
+            .Where(method =>
+                method.Name == nameof(CardPileCmd.AddGeneratedCardToCombat)
+                && method.ReturnType == typeof(Task<CardPileAddResult>)
+                && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(CardModel));
+    }
+
+    private static bool Prefix(CardModel card, ref Task<CardPileAddResult> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixSingle(card, ref __result);
+    }
+}
+
+[HarmonyPatch]
+internal static class DelayedBingLiangGeneratedStatusCardsPatch
+{
+    private static IEnumerable<MethodBase> TargetMethods()
+    {
+        return AccessTools.GetDeclaredMethods(typeof(CardPileCmd))
+            .Where(method =>
+                method.Name == nameof(CardPileCmd.AddGeneratedCardsToCombat)
+                && method.ReturnType == typeof(Task<IReadOnlyList<CardPileAddResult>>)
+                && method.GetParameters().FirstOrDefault()?.ParameterType == typeof(IEnumerable<CardModel>));
+    }
+
+    private static bool Prefix(ref IEnumerable<CardModel> cards, ref Task<IReadOnlyList<CardPileAddResult>> __result)
+    {
+        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref cards, ref __result);
+    }
+}
+
 [HarmonyPatch(typeof(Hook), nameof(Hook.BeforeDamageReceived))]
 internal static class BaGuaBeforeDamageReceivedPatch
 {

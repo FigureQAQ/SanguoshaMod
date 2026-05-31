@@ -26,8 +26,7 @@ public sealed class WangJianShaCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var commandDamage = SanguoshaCharacterSkills.GetRegentCommand(cardPlay.Card.Owner);
-        await SanguoshaCardFx.Attack(choiceContext, cardPlay, DynamicVars.Damage.BaseValue + commandDamage);
+        await SanguoshaCardFx.Attack(choiceContext, cardPlay, DynamicVars.Damage.BaseValue);
     }
 
     protected override void OnUpgrade()
