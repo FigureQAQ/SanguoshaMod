@@ -29,6 +29,7 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<CiShaCard>(),
                 ModelDb.Card<ShouShiCard>(),
                 ModelDb.Card<DiaoDuCard>(),
+                ModelDb.Card<FenChengCard>(),
                 ModelDb.Card<RenDeCard>(),
                 ModelDb.Card<TuXiCard>(),
                 ModelDb.Card<QiXiCard>(),

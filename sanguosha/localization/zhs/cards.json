@@ -7,6 +7,10 @@
   "SANGUOSHA_CARD_TAO_CARD.description": "回复 {Heal:diff()} 点生命并获得 {Block:diff()} 点格挡。若生命值不高于一半，额外回复 {LowHpHeal:diff()} 点生命。",
   "SANGUOSHA_CARD_JIU_CARD.title": "酒",
   "SANGUOSHA_CARD_JIU_CARD.description": "你的下一张攻击牌造成的伤害翻倍；该效果不会叠加。",
+  "SANGUOSHA_CARD_SHOU_SHI_CARD.title": "守势",
+  "SANGUOSHA_CARD_SHOU_SHI_CARD.description": "获得 {Block:diff()} 点格挡。若本回合没有打出过攻击牌，本牌本场战斗中格挡值增加 {BlockGrowth:diff()}。",
+  "SANGUOSHA_CARD_FEN_CHENG_CARD.title": "焚城",
+  "SANGUOSHA_CARD_FEN_CHENG_CARD.description": "X 费。消耗所有其他手牌。每消耗 1 张牌，对所有敌人造成 X*{DamagePerX:diff()} 点伤害。",
   "SANGUOSHA_CARD_DIAO_DU_CARD.title": "调度",
   "SANGUOSHA_CARD_DIAO_DU_CARD.description": "抽 {Draw:diff()} 张牌，然后弃 {Discard:diff()} 张牌。",
   "SANGUOSHA_CARD_DUEL_CARD.title": "决斗",
@@ -104,5 +108,5 @@
   "SANGUOSHA_CARD_QI_XI_CARD.title": "奇袭",
   "SANGUOSHA_CARD_QI_XI_CARD.description": "消耗 1 张技能牌。移除目标所有格挡，施加 {Vulnerable:diff()} 层易伤并抽 {Draw:diff()} 张牌。",
   "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.title": "王剑杀",
-  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "储君生成牌。视为杀造成 {Damage:diff()} 点伤害。"
+  "SANGUOSHA_CARD_WANG_JIAN_SHA_CARD.description": "消耗 1 点辉星打出。视为杀造成 {Damage:diff()} 点伤害；消耗牌堆每有 1 张牌，额外造成 {ExhaustBonus:diff()} 点伤害。"
 }

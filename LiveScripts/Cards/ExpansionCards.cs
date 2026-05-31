@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -44,7 +45,7 @@ public sealed class ShouShiCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(5, ValueProp.Move),
-        new DynamicVar("Draw", 1m)
+        new DynamicVar("BlockGrowth", 5m)
     ];
 
     public ShouShiCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
@@ -54,15 +55,57 @@ public sealed class ShouShiCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        if (!SanguoshaCharacterSkills.HasPlayedShaThisTurn(cardPlay.Card.Owner))
+        if (!SanguoshaCharacterSkills.HasPlayedAttackThisTurn(cardPlay.Card.Owner))
         {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+            DynamicVars.Block.BaseValue += DynamicVars["BlockGrowth"].BaseValue;
         }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(2);
+    }
+}
+
+[RegisterCard(typeof(ColorlessCardPool))]
+public sealed class FenChengCard : SanguoshaCard
+{
+    protected override IEnumerable<DynamicVar> CanonicalVars => [
+        new DynamicVar("DamagePerX", 2m)
+    ];
+
+    protected override bool HasEnergyCostX => true;
+
+    public FenChengCard() : base(-1, CardType.Skill, CardRarity.Rare, TargetType.AllEnemies)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        var x = Math.Max(0, cardPlay.Card.ResolveEnergyXValue());
+        var damage = x * DynamicVars["DamagePerX"].BaseValue;
+        if (damage <= 0)
+        {
+            return;
+        }
+
+        var hand = cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards
+            .Where(card => card != cardPlay.Card)
+            .ToList();
+        foreach (var card in hand)
+        {
+            await CardCmd.Exhaust(choiceContext, card, false, false);
+        }
+
+        foreach (var _ in hand)
+        {
+            await SanguoshaCardFx.AttackAll(choiceContext, cardPlay, damage);
+        }
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars["DamagePerX"].UpgradeValueBy(1);
     }
 }
 

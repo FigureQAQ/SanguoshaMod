@@ -29,6 +29,7 @@ public abstract class SanguoshaCard(
         ["DiLuCard"] = "dilu",
         ["DiaoDuCard"] = "diaodu",
         ["DuelCard"] = "duel",
+        ["FenChengCard"] = "fencheng",
         ["GuiCaiCard"] = "guicai",
         ["GuaGuCard"] = "guagu",
         ["GanJiangMoYeCard"] = "ganjiangmoye",

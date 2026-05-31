@@ -1,17 +1,17 @@
 {
   "IRONCLAD.title": "赤壁猛将",
   "IRONCLAD.titleObject": "赤壁猛将",
-  "IRONCLAD.description": "武魂：火杀。战斗开始获得力量，杀命中追加火焰伤害。",
+  "IRONCLAD.description": "初始遗物：武魂：火杀。战斗开始获得力量，杀命中追加火焰伤害。",
   "SILENT.title": "锦囊夜行",
   "SILENT.titleObject": "锦囊夜行",
-  "SILENT.description": "武魂：毒杀。战斗开始抽牌，杀命中施加中毒；每回合首次技能牌抽牌。",
+  "SILENT.description": "初始遗物：武魂：毒杀。战斗开始抽牌，杀命中施加中毒；每回合首次技能牌抽牌。",
   "DEFECT.title": "机关卧龙",
   "DEFECT.titleObject": "机关卧龙",
-  "DEFECT.description": "武魂：雷杀。杀命中积累雷势并追加雷击；雷势满 4 后释放群体伤害。",
+  "DEFECT.description": "初始遗物：武魂：雷杀。杀命中积累雷势并追加雷击；雷势满 4 后释放群体伤害。",
   "NECROBINDER.title": "青囊魂医",
   "NECROBINDER.titleObject": "青囊魂医",
-  "NECROBINDER.description": "武魂：灾厄杀。杀命中施加灾厄；闪会令所有敌人失去生命。",
+  "NECROBINDER.description": "初始遗物：武魂：灾厄杀。杀命中施加灾厄；闪会令所有敌人失去生命。",
   "REGENT.title": "汉室仁主",
   "REGENT.titleObject": "汉室仁主",
-  "REGENT.description": "武魂：君王之剑。杀命中后获得剑势，剑势足够时生成王剑杀。"
+  "REGENT.description": "初始遗物：武魂：君王之剑。每回合生成王剑杀，消耗辉星打出；消耗牌堆越多伤害越高。"
 }

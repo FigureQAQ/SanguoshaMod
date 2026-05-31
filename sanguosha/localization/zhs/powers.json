@@ -64,5 +64,5 @@
   "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.title": "武魂：灾厄杀",
   "SANGUOSHA_POWER_NECROBINDER_SKILL_DISPLAY_POWER.description": "战斗开始回复 2 点生命，回合开始回复 1 点生命。杀命中后施加杀数值一半的灾厄；打出闪时所有敌人失去 3 点生命。",
   "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.title": "武魂：君王之剑",
-  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "杀附魔：君王之剑。杀命中后获得等同杀数值的剑势；剑势达到 12 时生成 1 张 0 费王剑杀。"
+  "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER.description": "每回合生成 1 张消耗王剑杀。王剑杀需要 1 点辉星打出，消耗牌堆越多伤害越高。"
 }

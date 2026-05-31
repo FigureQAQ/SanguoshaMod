@@ -13,7 +13,8 @@ namespace sanguosha.Cards;
 public sealed class WangJianShaCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(8, ValueProp.Move)
+        new DamageVar(8, ValueProp.Move),
+        new DynamicVar("ExhaustBonus", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [
@@ -26,7 +27,14 @@ public sealed class WangJianShaCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await SanguoshaCardFx.Attack(choiceContext, cardPlay, DynamicVars.Damage.BaseValue);
+        if (!SanguoshaCharacterSkills.TrySpendWangJianShaStar(cardPlay.Card.Owner))
+        {
+            return;
+        }
+
+        var exhaustCount = SanguoshaCharacterSkills.GetExhaustPileCount(cardPlay.Card.Owner);
+        var damage = DynamicVars.Damage.BaseValue + exhaustCount * DynamicVars["ExhaustBonus"].BaseValue;
+        await SanguoshaCardFx.Attack(choiceContext, cardPlay, damage);
     }
 
     protected override void OnUpgrade()

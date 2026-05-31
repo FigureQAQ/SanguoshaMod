@@ -1,15 +1,19 @@
+using System.Collections;
+using System.Reflection;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Cards;
 using sanguosha.Patches;
+using sanguosha.Relics;
 using STS2RitsuLib.Combat.Ui.ExtraCornerAmountLabels;
 using STS2RitsuLib.Scaffolding.Content;
 using STS2RitsuLib;
@@ -289,14 +293,50 @@ internal static class SanguoshaCharacterSkills
         return card is ShaCard or ZhangBaShaCard or WangJianShaCard;
     }
 
-    public static int GetRegentCommand(Player player)
-    {
-        return Math.Max(0, GetState(player).Command);
-    }
-
     public static bool HasPlayedShaThisTurn(Player player)
     {
         return GetState(player).TurnShaPlayed > 0;
+    }
+
+    public static bool HasPlayedAttackThisTurn(Player player)
+    {
+        return GetState(player).TurnAttacksPlayed > 0;
+    }
+
+    public static bool CanPlayWangJianSha(CardModel card)
+    {
+        return card.Owner?.PlayerCombatState is { Stars: >= 1 };
+    }
+
+    public static bool TrySpendWangJianShaStar(Player player)
+    {
+        var playerState = player.PlayerCombatState;
+        if (playerState is null || playerState.Stars < 1)
+        {
+            return false;
+        }
+
+        playerState.LoseStars(1);
+        return true;
+    }
+
+    public static int GetExhaustPileCount(Player player)
+    {
+        var combat = player.PlayerCombatState;
+        if (combat is null)
+        {
+            return 0;
+        }
+
+        foreach (var memberName in new[] { "ExhaustPile", "Exhaust", "ExhaustedPile", "ExhaustedCards" })
+        {
+            if (TryGetPileCount(combat, memberName) is { } count)
+            {
+                return count;
+            }
+        }
+
+        return 0;
     }
 
     public static async Task EnsureZhangBaSha(Player player)
@@ -605,7 +645,7 @@ internal static class SanguoshaCharacterSkills
             SilentSkillDisplayPower => Available(state.PoisonTrickBonusGrantedThisTurn),
             DefectSkillDisplayPower => state.Thunder,
             NecrobinderSkillDisplayPower => null,
-            RegentSkillDisplayPower => state.StoredShaCharge,
+            RegentSkillDisplayPower => player.PlayerCombatState?.Stars ?? 0,
             LongDanDisplayPower => Available(state.LongDanFreeUsedThisTurn),
             WuShuangDisplayPower => UsesRemaining(state.WuShuangRepeatsUsedThisTurn, state.WuShuangRepeatsPerTurn),
             LianYingDisplayPower => UsesRemaining(state.LianYingTriggersUsedThisTurn, state.LianYingTriggersPerTurn),
@@ -912,7 +952,6 @@ internal static class SanguoshaCharacterSkills
                 }
                 break;
             case ShaInfusion.Stored:
-                state.StoredShaCharge = Math.Min(99, state.StoredShaCharge + Math.Max(1, (int)Math.Ceiling(shaAmount)));
                 break;
             case ShaInfusion.Calamity:
                 var doomAmount = Math.Max(1, (int)Math.Ceiling(shaAmount / 2m));
@@ -1054,6 +1093,7 @@ internal static class SanguoshaCharacterSkills
             {
                 var state = GetState(player);
                 state.TurnCardsPlayed = 0;
+                state.TurnAttacksPlayed = 0;
                 state.TurnShaPlayed = 0;
                 state.TurnTricksPlayed = 0;
                 state.WuShuangRepeatsUsedThisTurn = 0;
@@ -1066,8 +1106,7 @@ internal static class SanguoshaCharacterSkills
                 state.PoisonTrickBonusGrantedThisTurn = false;
                 state.NextPoisonShaBonus = 0;
                 state.ThunderDischargedThisTurn = false;
-                state.StoredShaDrawGrantedThisTurn = false;
-                state.RegentDecreeUsedThisTurn = false;
+                state.RegentWangJianGeneratedThisTurn = false;
                 state.HealedThisTurn = false;
                 state.QiLinVulnerableUsedThisTurn = false;
                 state.BaGuaEnergyGrantedThisTurn = false;
@@ -1120,6 +1159,11 @@ internal static class SanguoshaCharacterSkills
 
             var state = GetState(player);
             state.TurnCardsPlayed++;
+            if (card.Type == CardType.Attack)
+            {
+                state.TurnAttacksPlayed++;
+            }
+
             if (IsShaLike(card))
             {
                 state.TurnShaPlayed++;
@@ -1177,15 +1221,124 @@ internal static class SanguoshaCharacterSkills
 
     private static SanguoshaSkill ResolveSkill(Player player)
     {
-        return player.Character.GetType().Name switch
+        if (HasSkillRelic<IroncladSkillRelic>(player))
         {
-            "Ironclad" => SanguoshaSkill.Ironclad,
-            "Silent" => SanguoshaSkill.Silent,
-            "Defect" => SanguoshaSkill.Defect,
-            "Necrobinder" => SanguoshaSkill.Necrobinder,
-            "Regent" => SanguoshaSkill.Regent,
-            _ => SanguoshaSkill.None
-        };
+            return SanguoshaSkill.Ironclad;
+        }
+
+        if (HasSkillRelic<SilentSkillRelic>(player))
+        {
+            return SanguoshaSkill.Silent;
+        }
+
+        if (HasSkillRelic<DefectSkillRelic>(player))
+        {
+            return SanguoshaSkill.Defect;
+        }
+
+        if (HasSkillRelic<NecrobinderSkillRelic>(player))
+        {
+            return SanguoshaSkill.Necrobinder;
+        }
+
+        if (HasSkillRelic<RegentSkillRelic>(player))
+        {
+            return SanguoshaSkill.Regent;
+        }
+
+        return SanguoshaSkill.None;
+    }
+
+    private static bool HasSkillRelic<T>(Player player) where T : RelicModel
+    {
+        return ContainsRelic<T>(player, 0, []);
+    }
+
+    private static bool ContainsRelic<T>(object? value, int depth, HashSet<object> visited) where T : RelicModel
+    {
+        if (value is null || value is string || depth > 4)
+        {
+            return false;
+        }
+
+        if (value is T)
+        {
+            return true;
+        }
+
+        var type = value.GetType();
+        if (!type.IsValueType && !visited.Add(value))
+        {
+            return false;
+        }
+
+        if (value is IEnumerable enumerable)
+        {
+            foreach (var item in enumerable)
+            {
+                if (ContainsRelic<T>(item, depth + 1, visited))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if (depth >= 3)
+        {
+            return false;
+        }
+
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        foreach (var property in type.GetProperties(flags))
+        {
+            if (property.GetIndexParameters().Length > 0 || !LooksLikeRelicCarrier(property.Name, property.PropertyType))
+            {
+                continue;
+            }
+
+            try
+            {
+                if (ContainsRelic<T>(property.GetValue(value), depth + 1, visited))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                // Some STS2 properties can be unavailable depending on run state.
+            }
+        }
+
+        foreach (var field in type.GetFields(flags))
+        {
+            if (!LooksLikeRelicCarrier(field.Name, field.FieldType))
+            {
+                continue;
+            }
+
+            try
+            {
+                if (ContainsRelic<T>(field.GetValue(value), depth + 1, visited))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                // Some STS2 fields can be unavailable depending on run state.
+            }
+        }
+
+        return false;
+    }
+
+    private static bool LooksLikeRelicCarrier(string memberName, Type memberType)
+    {
+        return memberName.Contains("Relic", StringComparison.OrdinalIgnoreCase)
+            || memberType.Name.Contains("Relic", StringComparison.OrdinalIgnoreCase)
+            || memberType.FullName?.Contains("Relic", StringComparison.OrdinalIgnoreCase) == true;
     }
 
     private static string GetDisplayName(Player player)
@@ -1246,7 +1399,7 @@ internal static class SanguoshaCharacterSkills
                 await HealIfWounded(player, 1);
                 break;
             case SanguoshaSkill.Regent:
-                await ForgeWangJianIfReady(player, state);
+                await EnsureRegentWangJianSha(player, state);
                 RefreshDisplayPower<RegentSkillDisplayPower>(player);
                 break;
         }
@@ -1464,30 +1617,7 @@ internal static class SanguoshaCharacterSkills
 
     private static async Task RunRegentSkill(Player player, CharacterSkillState state, CardPlay cardPlay)
     {
-        await ForgeWangJianIfReady(player, state);
-    }
-
-    private static async Task ResolveRegentStars(Player player, CharacterSkillState state)
-    {
-        var playerState = player.PlayerCombatState!;
-        if (playerState.Stars < 3)
-        {
-            return;
-        }
-
-        if (state.RegentDecreeUsedThisTurn)
-        {
-            return;
-        }
-
-        state.RegentDecreeUsedThisTurn = true;
-        playerState.LoseStars(3);
-        playerState.GainEnergy(1);
-        await Draw(player, 1);
-        state.Command = Math.Min(8, state.Command + 1);
-        state.StoredShaCharge++;
-        await ForgeWangJianIfReady(player, state);
-        MakeHandCardsFree(player, 1, card => IsShaLike(card) || card.Type == CardType.Skill);
+        await EnsureRegentWangJianSha(player, state);
     }
 
     private static async Task ApplyTurnFloor(Player player, CharacterSkillState state)
@@ -1550,6 +1680,27 @@ internal static class SanguoshaCharacterSkills
     private static bool IsDebuffed(Creature creature)
     {
         return creature.Powers.Any(power => power.Type == PowerType.Debuff);
+    }
+
+    private static int? TryGetPileCount(object owner, string memberName)
+    {
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        try
+        {
+            var member = owner.GetType().GetProperty(memberName, flags)?.GetValue(owner)
+                ?? owner.GetType().GetField(memberName, flags)?.GetValue(owner);
+            return member switch
+            {
+                CardPile pile => pile.Cards.Count,
+                IReadOnlyCollection<CardModel> cards => cards.Count,
+                IEnumerable<CardModel> cards => cards.Count(),
+                _ => null
+            };
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static async Task<int> ClearOneDebuff(Creature creature)
@@ -1686,15 +1837,15 @@ internal static class SanguoshaCharacterSkills
         return 0;
     }
 
-    private static async Task ForgeWangJianIfReady(Player player, CharacterSkillState state)
+    private static async Task EnsureRegentWangJianSha(Player player, CharacterSkillState state)
     {
-        const int swordChargeCost = 12;
-        if (state.StoredShaCharge < swordChargeCost)
+        if (state.RegentWangJianGeneratedThisTurn
+            || player.PlayerCombatState is null
+            || player.PlayerCombatState.Hand.Cards.Any(card => card is WangJianShaCard))
         {
             return;
         }
 
-        state.StoredShaCharge -= swordChargeCost;
         var result = await CardPileCmd.AddGeneratedCardToCombat(
             ModelDb.Card<WangJianShaCard>(),
             PileType.Hand,
@@ -1702,6 +1853,7 @@ internal static class SanguoshaCharacterSkills
             CardPilePosition.Top);
         if (result.success && result.cardAdded is not null)
         {
+            state.RegentWangJianGeneratedThisTurn = true;
             result.cardAdded.EnergyCost.SetThisTurn(0, true);
             result.cardAdded.ExhaustOnNextPlay = true;
         }
@@ -1937,16 +2089,15 @@ internal static class SanguoshaCharacterSkills
     {
         public SanguoshaSkill Skill { get; } = skill;
         public int TurnCardsPlayed { get; set; }
+        public int TurnAttacksPlayed { get; set; }
         public int TurnShaPlayed { get; set; }
         public int TurnTricksPlayed { get; set; }
         public int Strategy { get; set; }
         public int Thunder { get; set; }
         public int Soul { get; set; }
-        public int Command { get; set; }
         public int Ingenuity { get; set; }
         public int IngenuityCap { get; set; } = 5;
         public ShaInfusion ShaInfusion { get; set; }
-        public int StoredShaCharge { get; set; }
         public bool LowHpEmergencyUsed { get; set; }
         public bool EnergyGrantedThisTurn { get; set; }
         public int JiuNextShaBonus { get; set; }
@@ -1958,8 +2109,7 @@ internal static class SanguoshaCharacterSkills
         public bool PoisonTrickBonusGrantedThisTurn { get; set; }
         public int NextPoisonShaBonus { get; set; }
         public bool ThunderDischargedThisTurn { get; set; }
-        public bool StoredShaDrawGrantedThisTurn { get; set; }
-        public bool RegentDecreeUsedThisTurn { get; set; }
+        public bool RegentWangJianGeneratedThisTurn { get; set; }
         public bool HealedThisTurn { get; set; }
         public bool QiLinVulnerableUsedThisTurn { get; set; }
         public bool ZhuGeActive { get; set; }
