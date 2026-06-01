@@ -44,9 +44,9 @@ internal static class MerchantSanguoshaBasicCardFilterPatch
         ];
     }
 
-    private static void Prefix(ref IEnumerable<CardModel> options)
+    private static void Prefix(Player player, ref IEnumerable<CardModel> options)
     {
-        options = SanguoshaCardCatalog.KeepRewardEligibleCards(options.ToList());
+        options = SanguoshaCardCatalog.KeepRewardEligibleCards(player, options.ToList());
     }
 }
 

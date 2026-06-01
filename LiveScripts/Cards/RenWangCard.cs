@@ -1,9 +1,7 @@
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Characters;
 using STS2RitsuLib.Interop.AutoRegistration;
 
@@ -13,24 +11,25 @@ namespace sanguosha.Cards;
 public sealed class RenWangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(8, ValueProp.Move),
+        new EnergyVar(1),
         new DynamicVar("Guard", 6m),
         new DynamicVar("Draw", 0m)
     ];
 
-    public RenWangCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public RenWangCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         SanguoshaCharacterSkills.ActivateRenWang(cardPlay.Card.Owner, IsUpgraded);
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
+        return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.SetCustomBaseCost(0);
+        EnergyCost.SetCustomBaseCost(1);
         DynamicVars["Guard"].UpgradeValueBy(4);
         DynamicVars["Draw"].UpgradeValueBy(1);
     }

@@ -1091,7 +1091,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
 
     public static List<IReadOnlyList<CardModel>> CreateSanguoshaBundles(Player player)
     {
-        var cards = SanguoshaCardCatalog.TryGetRewardCards();
+        var cards = SanguoshaCardCatalog.TryGetRewardCards(player);
         if (cards is null || cards.Count == 0)
         {
             return [];
@@ -1141,7 +1141,7 @@ internal static class SanguoshaRuntimeCardEventHelpers
         bool upgrade = false,
         bool exactRarity = false)
     {
-        var cards = SanguoshaCardCatalog.TryGetRewardCards();
+        var cards = SanguoshaCardCatalog.TryGetRewardCards(player);
         if (cards is null || cards.Count == 0)
         {
             return [];
@@ -1256,13 +1256,25 @@ internal static class SanguoshaRuntimeCardEventHelpers
             return;
         }
 
+        var actualMaxCards = Math.Min(maxCards, options.Count);
+        var actualMinCards = Math.Min(minCards, actualMaxCards);
+        if (actualMaxCards <= 0)
+        {
+            if (finishEvent is { } emptyFinished)
+            {
+                FinishEvent(emptyFinished.Event, emptyFinished.DescriptionKey);
+            }
+
+            return;
+        }
+
         var chosenCards = (await CardSelectCmd.FromSimpleGridForRewards(
             new BlockingPlayerChoiceContext(),
             options,
             player,
-            new CardSelectorPrefs(L10NLookup(finishEvent?.Event, selectionPrompt), minCards, maxCards)
+            new CardSelectorPrefs(L10NLookup(finishEvent?.Event, selectionPrompt), actualMinCards, actualMaxCards)
             {
-                Cancelable = minCards == 0
+                Cancelable = actualMinCards == 0
             })).ToList();
         foreach (var card in chosenCards)
         {

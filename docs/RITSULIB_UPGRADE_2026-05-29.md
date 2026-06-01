@@ -11,6 +11,8 @@
 - 发布包内置的 `mods\STS2-RitsuLib` 同步替换为 v0.3.8 `variant-pack`。
 - 2026-05-31 继续将项目 NuGet 引用升级到 `STS2.RitsuLib` `0.3.9`。
 - 发布包内置的 `mods\STS2-RitsuLib` 已确认 manifest 版本为 `0.3.9`，最低游戏版本要求同步到 `0.106.1`。
+- 2026-06-01 将项目 NuGet 引用升级到 `STS2.RitsuLib` `0.4.1`。
+- v0.4.1 release 标记为 latest，说明中包含对游戏 `0.103.2` / `0.103.3` patch target 的修复，并调整了启动日志格式。
 
 ## 兼容检查
 
@@ -20,6 +22,7 @@
 - v0.3.6 release note 包含 `ModInterop` 类型解析、`AssemblyInterop`、临时 Power 处理、`CardTransform` 异步监听等更新；当前代码不需要立刻改 API，但临时 Power 和互操作修复有助于运行时稳定。
 - v0.3.8 release note 包含滚动容器重复报错修复、`ModelID` 查重逻辑优化、RitsuLib 启动阶段耗时审计和死代码清理；当前模组代码不需要改 API。
 - v0.3.9 已通过当前 Release 构建验证；本轮无需调整调用方式。
+- v0.4.1 已通过 `dotnet restore` 和 Release 构建验证；当前模组代码不需要改 API。
 
 ## 关联收益
 
@@ -27,4 +30,4 @@
 - 当前模组暂未接入新增的 `CardTransform` 监听和扩展右键交互接口，可作为后续 UI/牌库工具优化点。
 - v0.3.6 后续可用于更稳地接入卡牌变形/替换监听，适合处理事件给牌、升级牌和联机牌池同步相关问题。
 - v0.3.8 应降低启动注册查询开销，并让后续定位 RitsuLib 启动阶段问题更方便。
-- v0.3.9 作为本次发布包的内置依赖版本，联机玩家应保持与 `sanguosha` 模组同包安装。
+- v0.4.1 作为当前项目引用依赖版本，联机玩家应保持与 `sanguosha` 模组同包安装。

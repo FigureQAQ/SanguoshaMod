@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
 using sanguosha.Characters;
@@ -67,7 +68,7 @@ public sealed class KongChengCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Intangible", 1m),
-        new BlockVar(3, ValueProp.Move)
+        new EnergyVar(1)
     ];
     public KongChengCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
@@ -77,13 +78,12 @@ public sealed class KongChengCard : SanguoshaCard
     {
         var player = cardPlay.Card.Owner;
         SanguoshaCharacterSkills.ActivateKongCheng(player, DynamicVars["Intangible"].IntValue);
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
     {
         EnergyCost.SetCustomBaseCost(0);
-        DynamicVars.Block.UpgradeValueBy(2);
     }
 }
 
@@ -91,28 +91,38 @@ public sealed class KongChengCard : SanguoshaCard
 public sealed class LongDanCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(4, ValueProp.Move),
-        new DynamicVar("Draw", 1m)
+        new BlockVar(5, ValueProp.Move),
+        new DynamicVar("Choices", 2m),
+        new DynamicVar("NextShaDamage", 2m)
     ];
-    public LongDanCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
+    ];
+    public LongDanCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
-        SanguoshaCharacterSkills.ActivateLongDan(cardPlay.Card.Owner);
-
-        if (IsUpgraded)
+        await SanguoshaCardFx.DiscoverToHand(
+            choiceContext,
+            cardPlay,
+            [ModelDb.Card<ShaCard>(), ModelDb.Card<ShanCard>()],
+            makeFree: true,
+            exhaustOnPlay: true);
+        if (SanguoshaCharacterSkills.HasPlayedShaThisTurn(cardPlay.Card.Owner))
         {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+            SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
         }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(1);
         EnergyCost.SetCustomBaseCost(0);
+        DynamicVars.Block.UpgradeValueBy(2);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
     }
 }
 
@@ -121,7 +131,7 @@ public sealed class ZhiHengCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("MaxCards", 2m),
-        new DynamicVar("DrawBonus", 1m)
+        new EnergyVar(1)
     ];
 
     public ZhiHengCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
@@ -134,7 +144,11 @@ public sealed class ZhiHengCard : SanguoshaCard
             choiceContext,
             cardPlay,
             DynamicVars["MaxCards"].IntValue);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, exchanged.Count + DynamicVars["DrawBonus"].IntValue);
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, exchanged.Count);
+        if (exchanged.Count > 0)
+        {
+            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
+        }
         SanguoshaCharacterSkills.ActivateZhiHeng(cardPlay.Card.Owner, IsUpgraded);
     }
 
@@ -175,7 +189,8 @@ public sealed class LianYingCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Draw", 1m),
-        new DynamicVar("Triggers", 1m)
+        new DynamicVar("Triggers", 1m),
+        new EnergyVar(1)
     ];
 
     public LianYingCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -188,7 +203,7 @@ public sealed class LianYingCard : SanguoshaCard
             cardPlay.Card.Owner,
             DynamicVars["Draw"].IntValue,
             DynamicVars["Triggers"].IntValue);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, 1);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
@@ -203,7 +218,8 @@ public sealed class YiJiCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("Draw", 1m),
         new DynamicVar("LowHandDraw", 1m),
-        new DynamicVar("FreeCards", 1m)
+        new DynamicVar("FreeCards", 1m),
+        new EnergyVar(1)
     ];
 
     public YiJiCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -217,7 +233,7 @@ public sealed class YiJiCard : SanguoshaCard
             DynamicVars["Draw"].IntValue,
             DynamicVars["LowHandDraw"].IntValue,
             DynamicVars["FreeCards"].IntValue);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, 1);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
@@ -262,7 +278,8 @@ public sealed class GuiCaiCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new BlockVar(3, ValueProp.Move),
         new DynamicVar("Draw", 1m),
-        new DynamicVar("Weak", 1m)
+        new DynamicVar("Weak", 1m),
+        new EnergyVar(1)
     ];
 
     public GuiCaiCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -276,12 +293,11 @@ public sealed class GuiCaiCard : SanguoshaCard
             DynamicVars.Block.IntValue,
             DynamicVars["Draw"].IntValue,
             DynamicVars["Weak"].IntValue);
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(1);
         DynamicVars["Weak"].UpgradeValueBy(1);
     }
 }
@@ -290,7 +306,8 @@ public sealed class GuiCaiCard : SanguoshaCard
 public sealed class YingZiCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Draw", 1m)
+        new DynamicVar("Draw", 1m),
+        new EnergyVar(1)
     ];
 
     public YingZiCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
@@ -323,7 +340,7 @@ public sealed class JiZhiCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         SanguoshaCharacterSkills.ActivateJiZhi(cardPlay.Card.Owner, DynamicVars["Draw"].IntValue);
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, 1);
+        SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
     }
 
     protected override void OnUpgrade()

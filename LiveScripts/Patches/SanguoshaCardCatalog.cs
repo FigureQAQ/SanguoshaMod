@@ -45,6 +45,7 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<QiXiCard>(),
                 ModelDb.Card<GuaGuCard>(),
                 ModelDb.Card<HongBaoCard>(),
+                ModelDb.Card<HongBaoGiftCard>(),
                 ModelDb.Card<DuelCard>(),
                 ModelDb.Card<GuDingCard>(),
                 ModelDb.Card<GanJiangMoYeCard>(),
@@ -88,6 +89,11 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<ThunderMandateCard>(),
                 ModelDb.Card<SoulHealerFormCard>(),
                 ModelDb.Card<ImperialEdictCard>(),
+                ModelDb.Card<CrimsonRaidCard>(),
+                ModelDb.Card<VenomAmbushCard>(),
+                ModelDb.Card<ThunderRelayCard>(),
+                ModelDb.Card<SoulRansomCard>(),
+                ModelDb.Card<EdictReserveCard>(),
                 ModelDb.Card<ZhangBaCard>(),
                 ModelDb.Card<ZhangBaShaCard>(),
                 ModelDb.Card<ZhuGeCard>()
@@ -95,7 +101,7 @@ internal static class SanguoshaCardCatalog
 
             return includeGeneratedOnly
                 ? cards.OrderBy(StableCardKey, StringComparer.Ordinal).ToList()
-                : cards.Where(card => card is not ZhangBaShaCard)
+                : cards.Where(card => !IsGeneratedOnlyCard(card))
                     .OrderBy(StableCardKey, StringComparer.Ordinal)
                     .ToList();
         }
@@ -106,11 +112,11 @@ internal static class SanguoshaCardCatalog
         }
     }
 
-    public static IReadOnlyList<CardModel>? TryGetRewardCards()
+    public static IReadOnlyList<CardModel>? TryGetRewardCards(Player? player = null)
     {
         var cards = TryGetCards();
         return cards?
-            .Where(card => !IsSanguoshaBasicCard(card) && !IsBossRewardOnlyCard(card))
+            .Where(card => IsRewardEligible(card, player))
             .OrderBy(StableCardKey, StringComparer.Ordinal)
             .ToList();
     }
@@ -123,10 +129,54 @@ internal static class SanguoshaCardCatalog
             return null;
         }
 
-        return cards
+        var bossCards = cards
             .Where(card => IsBossRewardCardForCharacter(card, player))
             .OrderBy(StableCardKey, StringComparer.Ordinal)
             .ToList();
+        if (bossCards.Count == 0)
+        {
+            return bossCards;
+        }
+
+        var rareRewardCards = cards
+            .Where(card => IsRewardEligible(card, player))
+            .Where(card => card.Rarity == CardRarity.Rare)
+            .OrderBy(StableCardKey, StringComparer.Ordinal)
+            .ToList();
+        var targetCount = Math.Max(3, bossCards.Count);
+        foreach (var card in rareRewardCards)
+        {
+            if (bossCards.Count >= targetCount)
+            {
+                break;
+            }
+
+            bossCards.Add(card);
+        }
+
+        if (bossCards.Count >= targetCount)
+        {
+            return bossCards;
+        }
+
+        var regularRewardCards = cards
+            .Where(card => IsRewardEligible(card, player))
+            .OrderBy(StableCardKey, StringComparer.Ordinal)
+            .ToList();
+        foreach (var card in regularRewardCards)
+        {
+            if (bossCards.Count >= targetCount)
+            {
+                break;
+            }
+
+            if (!bossCards.Contains(card))
+            {
+                bossCards.Add(card);
+            }
+        }
+
+        return bossCards;
     }
 
     public static IEnumerable<CardModel> ReplaceGeneratedCards(
@@ -145,19 +195,26 @@ internal static class SanguoshaCardCatalog
             return originalList.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
         }
 
+        if (IsBossEncounterReward(options))
+        {
+            var bossCards = TryGetBossRewardCards(player);
+            if (bossCards is { Count: > 0 })
+            {
+                return bossCards.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
+            }
+        }
+
         if (originalList.All(IsSanguoshaCard))
         {
             var rewardOriginal = originalList
-                .Where(card => !IsSanguoshaBasicCard(card)
-                    && card is not ZhangBaShaCard
-                    && !IsBossRewardOnlyCard(card))
+                .Where(card => IsRewardEligible(card, player))
                 .ToList();
             if (rewardOriginal.Count > 0)
             {
                 return rewardOriginal.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
             }
 
-            var rewardCards = TryGetRewardCards();
+            var rewardCards = TryGetRewardCards(player);
             if (rewardCards is { Count: > 0 })
             {
                 var shapedRewardCards = KeepOriginalCollectibleShape(originalList, rewardCards);
@@ -169,7 +226,7 @@ internal static class SanguoshaCardCatalog
 
         var cards = IsBossEncounterReward(options)
             ? TryGetBossRewardCards(player)
-            : TryGetRewardCards();
+            : TryGetRewardCards(player);
         if (cards is null || cards.Count == 0)
         {
             return originalList;
@@ -298,19 +355,17 @@ internal static class SanguoshaCardCatalog
             or ImperialEdictCard;
     }
 
-    public static IReadOnlyList<CardModel> KeepRewardEligibleCards(IReadOnlyList<CardModel> cards)
+    public static IReadOnlyList<CardModel> KeepRewardEligibleCards(Player player, IReadOnlyList<CardModel> cards)
     {
         var filtered = cards
-            .Where(card => !IsSanguoshaBasicCard(card)
-                && card is not ZhangBaShaCard
-                && !IsBossRewardOnlyCard(card))
+            .Where(card => IsRewardEligible(card, player))
             .ToList();
         if (filtered.Count > 0)
         {
             return filtered.OrderBy(StableCardKey, StringComparer.Ordinal).ToList();
         }
 
-        var rewardCards = TryGetRewardCards();
+        var rewardCards = TryGetRewardCards(player);
         if (rewardCards is not { Count: > 0 })
         {
             return cards;
@@ -325,10 +380,92 @@ internal static class SanguoshaCardCatalog
         return card is SanguoshaCard;
     }
 
+    private static bool IsGeneratedOnlyCard(CardModel card)
+    {
+        return card is ZhangBaShaCard or HongBaoGiftCard;
+    }
+
+    private static bool IsRewardEligible(CardModel card, Player? player)
+    {
+        if (IsSanguoshaBasicCard(card)
+            || IsGeneratedOnlyCard(card)
+            || IsBossRewardOnlyCard(card))
+        {
+            return false;
+        }
+
+        if (player is not null)
+        {
+            if (IsCharacterSpecificCard(card) && !IsCharacterSpecificCardForPlayer(card, player))
+            {
+                return false;
+            }
+
+            if (IsMultiplayerOnlyCard(card) && !IsMultiplayerRun(player))
+            {
+                return false;
+            }
+
+            if (IsEquipmentCard(card) && OwnsSameEquipment(player, card))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsMultiplayerOnlyCard(CardModel card)
+    {
+        return card is HongBaoCard or TaoYuanCard or WuGuCard;
+    }
+
+    private static bool IsMultiplayerRun(Player player)
+    {
+        return player.RunState.Players.Count(runPlayer => runPlayer.PlayerCombatState is not null || runPlayer.Deck is not null) > 1;
+    }
+
+    private static bool IsEquipmentCard(CardModel card)
+    {
+        return card is ZhuGeCard or ZhangBaCard or QingGangCard or GuanShiCard or HanBingCard
+            or QiLinCard or GuDingCard or GanJiangMoYeCard
+            or BaiYinCard or RenWangCard or BaGuaCard or TengJiaCard
+            or ChiTuCard or DaWanCard or DiLuCard or JueYingCard
+            or YuXiCard or MuNiuCard or TaiPingCard or MengDeXinShuCard;
+    }
+
+    private static bool OwnsSameEquipment(Player player, CardModel card)
+    {
+        var cardType = card.GetType();
+        return player.Deck.Cards.Any(deckCard => deckCard.GetType() == cardType);
+    }
+
+    private static bool IsCharacterSpecificCard(CardModel card)
+    {
+        return card is CrimsonRaidCard
+            or VenomAmbushCard
+            or ThunderRelayCard
+            or SoulRansomCard
+            or EdictReserveCard;
+    }
+
+    private static bool IsCharacterSpecificCardForPlayer(CardModel card, Player player)
+    {
+        return player.Character.GetType().Name switch
+        {
+            "Ironclad" => card is CrimsonRaidCard,
+            "Silent" => card is VenomAmbushCard,
+            "Defect" => card is ThunderRelayCard,
+            "Necrobinder" => card is SoulRansomCard,
+            "Regent" => card is EdictReserveCard,
+            _ => false
+        };
+    }
+
     private static bool IsBossEncounterReward(CardCreationOptions options)
     {
-        return options.Source == CardCreationSource.Encounter
-            && options.RarityOdds == CardRarityOddsType.BossEncounter;
+        return options.RarityOdds == CardRarityOddsType.BossEncounter
+            || options.Source.ToString().Contains("Boss", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsBossRewardCardForCharacter(CardModel card, Player player)

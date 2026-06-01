@@ -98,7 +98,7 @@ internal static class SanguoshaCharacterSkills
                 state.GuanShiActive = false; state.GuanShiBonusDamage = 0; state.GuanShiUsedThisTurn = false;
                 state.HanBingActive = false; state.HanBingWeak = 0;
                 state.QiLinActive = false; state.QiLinBonusDamage = 0; state.QiLinVulnerable = 0;
-                state.GuDingActive = false;
+                state.GuDingActive = false; state.GuDingUpgraded = false;
                 state.GanJiangMoYeActive = false; state.GanJiangMoYeBonusDamage = 0; state.GanJiangMoYeTriggersPerTurn = 0; state.GanJiangMoYeTriggersUsedThisTurn = 0;
                 break;
             case EquipSlot.Armor:
@@ -202,6 +202,8 @@ internal static class SanguoshaCharacterSkills
         if (state.XiaoJiActive && oldCardId is not null)
         {
             await Draw(player, Math.Max(1, state.XiaoJiDraw));
+            player.PlayerCombatState!.GainEnergy(1);
+            EmpowerNextSha(player, wasUpgraded ? 3 : 2);
         }
     }
 
@@ -505,6 +507,7 @@ internal static class SanguoshaCharacterSkills
         var state = GetState(player);
         ReplaceEquipment(player, state, EquipSlot.Weapon, "GuDingCard", upgraded);
         state.GuDingActive = true;
+        state.GuDingUpgraded = upgraded;
         RefreshDisplayPower<GuDingDisplayPower>(player);
     }
 
@@ -590,20 +593,6 @@ internal static class SanguoshaCharacterSkills
     public static bool IsKongChengAttackLocked(Player player)
     {
         return GetState(player).KongChengAttackLockedThisTurn;
-    }
-
-    public static void ActivateLongDan(Player player)
-    {
-        var state = GetState(player);
-        var wasActive = state.LongDanActive;
-        state.LongDanActive = true;
-        if (!wasActive)
-        {
-            state.LongDanFreeUsedThisTurn = false;
-        }
-
-        RefreshLongDanFreeCard(player, state);
-        RefreshDisplayPower<LongDanDisplayPower>(player);
     }
 
     public static void ActivateBathOfBlood(Player player, int hpLoss, int energy)
@@ -732,7 +721,6 @@ internal static class SanguoshaCharacterSkills
             DefectSkillDisplayPower => state.ThunderstormCharges > 0 ? 4 : state.Thunder,
             NecrobinderSkillDisplayPower => null,
             RegentSkillDisplayPower => player.PlayerCombatState?.Stars ?? 0,
-            LongDanDisplayPower => Available(state.LongDanFreeUsedThisTurn),
             WuShuangDisplayPower => UsesRemaining(state.WuShuangRepeatsUsedThisTurn, state.WuShuangRepeatsPerTurn),
             LianYingDisplayPower => UsesRemaining(state.LianYingTriggersUsedThisTurn, state.LianYingTriggersPerTurn),
             YiJiDisplayPower => Available(state.YiJiTriggeredThisTurn),
@@ -928,6 +916,7 @@ internal static class SanguoshaCharacterSkills
     public static async Task OnCardExhaustedFromHand(Player player, CardModel exhaustedCard, CardModel? source)
     {
         var state = GetState(player);
+        state.TurnHandCardsExhausted++;
         if (!state.FenYingActive || !player.Creature.IsAlive)
         {
             return;
@@ -1037,6 +1026,11 @@ internal static class SanguoshaCharacterSkills
         if (state.DaWanActive)
         {
             bonus += state.DaWanBonusDamage;
+        }
+
+        if (state.GuDingActive && state.GuDingUpgraded)
+        {
+            bonus += 2;
         }
 
         return bonus;
@@ -1293,6 +1287,7 @@ internal static class SanguoshaCharacterSkills
                 state.TurnAttacksPlayed = 0;
                 state.TurnShaPlayed = 0;
                 state.TurnTricksPlayed = 0;
+                state.TurnHandCardsExhausted = 0;
                 state.WuShuangRepeatsUsedThisTurn = 0;
                 state.GanJiangMoYeTriggersUsedThisTurn = 0;
                 state.ZhiHengTrickDrawUsedThisTurn = false;
@@ -1317,7 +1312,6 @@ internal static class SanguoshaCharacterSkills
                 state.KongChengAttackLockedThisTurn = false;
                 state.LianYingTriggersUsedThisTurn = 0;
                 state.ZhangBaGeneratedThisTurn = false;
-                state.LongDanFreeUsedThisTurn = false;
                 state.YiJiTriggeredThisTurn = false;
                 state.JianXiongTriggeredThisTurn = false;
                 state.JiZhiUsedThisTurn = false;
@@ -1329,13 +1323,11 @@ internal static class SanguoshaCharacterSkills
                 await ResolveGoodLuck(player, state);
                 await ApplyKongChengTurnStart(player, state);
                 ApplyZhuGeTurnStart(player, state);
-                RefreshLongDanFreeCard(player, state);
                 await ApplyEquipmentTurnStart(player, state);
                 await ApplyGeneralPowerTurnStart(player, state, evt.CombatState);
                 await EnsureZhangBaSha(player);
                 await ApplyTurnFloor(player, state);
                 await RunTurnStartSkill(player, state, evt.CombatState);
-                RefreshLongDanFreeCard(player, state);
                 InvalidateDisplayCounters(player);
             }
 
@@ -1377,17 +1369,9 @@ internal static class SanguoshaCharacterSkills
                 state.TurnTricksPlayed++;
             }
 
-            if (state.LongDanActive
-                && !state.LongDanFreeUsedThisTurn
-                && IsLongDanFreeEligible(card))
-            {
-                state.LongDanFreeUsedThisTurn = true;
-            }
-
             await ApplyLowHpEmergency(player, state, evt.CombatState, card);
             await RunCardPlayedSkill(player, state, evt.CombatState, cardPlay);
             await ApplyLianYingIfEmpty(player, state, card);
-            RefreshLongDanFreeCard(player, state);
             InvalidateDisplayCounters(player);
 
             state.LastCardType = card.Type;
@@ -1800,27 +1784,6 @@ internal static class SanguoshaCharacterSkills
         }
     }
 
-    private static void RefreshLongDanFreeCard(Player player, CharacterSkillState state)
-    {
-        if (!state.LongDanActive
-            || state.LongDanFreeUsedThisTurn
-            || player.PlayerCombatState is null)
-        {
-            return;
-        }
-
-        var card = player.PlayerCombatState.Hand.Cards
-            .Where(IsLongDanFreeEligible)
-            .OrderByDescending(card => card.EnergyCost.GetResolved())
-            .FirstOrDefault();
-        card?.EnergyCost.SetThisTurn(0, true);
-    }
-
-    private static bool IsLongDanFreeEligible(CardModel card)
-    {
-        return IsShaLike(card) || card is ShanCard;
-    }
-
     private static async Task ApplyEquipmentTurnStart(Player player, CharacterSkillState state)
     {
         if (state.BaiYinActive && state.BaiYinTurnHeal > 0)
@@ -2075,8 +2038,8 @@ internal static class SanguoshaCharacterSkills
                 continue;
             }
 
-            var roll = judgment.Source.PlayerRng.Rewards.NextInt(100);
-            if (roll % 2 != 0)
+            var revealed = await JudgeTopCard(judgment.Source, judgment.SourceCard);
+            if (revealed is null || !IsDelayedJudgmentSuccess(judgment.Kind, revealed))
             {
                 continue;
             }
@@ -2108,6 +2071,35 @@ internal static class SanguoshaCharacterSkills
         PendingDelayedJudgments.Clear();
         ActiveLeBuAttackLocks.Clear();
         ActiveBingLiangDebuffLocks.Clear();
+    }
+
+    private static async Task<CardModel?> JudgeTopCard(Player player, CardModel? source)
+    {
+        if (player.PlayerCombatState is null)
+        {
+            return null;
+        }
+
+        await CardPileCmd.ShuffleIfNecessary(NewContext(), player);
+        var revealed = player.PlayerCombatState.DrawPile.Cards.FirstOrDefault();
+        if (revealed is null)
+        {
+            return null;
+        }
+
+        await CardPileCmd.Add([revealed], PileType.Discard, CardPilePosition.Top, source, false);
+        return revealed;
+    }
+
+    private static bool IsDelayedJudgmentSuccess(DelayedJudgmentKind kind, CardModel revealed)
+    {
+        return kind switch
+        {
+            DelayedJudgmentKind.BingLiang => revealed.Type is CardType.Skill or CardType.Power,
+            DelayedJudgmentKind.LeBu => revealed is not ShaCard and not ZhangBaShaCard,
+            DelayedJudgmentKind.ShanDian => revealed.Type is CardType.Attack or CardType.Power,
+            _ => false
+        };
     }
 
     private static uint CreatureKey(Creature creature)
@@ -2402,6 +2394,7 @@ internal static class SanguoshaCharacterSkills
         public int TurnAttacksPlayed { get; set; }
         public int TurnShaPlayed { get; set; }
         public int TurnTricksPlayed { get; set; }
+        public int TurnHandCardsExhausted { get; set; }
         public int Strategy { get; set; }
         public int Thunder { get; set; }
         public int ThunderstormCharges { get; set; }
@@ -2511,8 +2504,6 @@ internal static class SanguoshaCharacterSkills
         public int KongChengIntangible { get; set; }
         public bool KongChengPendingNextTurn { get; set; }
         public bool KongChengAttackLockedThisTurn { get; set; }
-        public bool LongDanActive { get; set; }
-        public bool LongDanFreeUsedThisTurn { get; set; }
         public bool GuanShiActive { get; set; }
         public int GuanShiBonusDamage { get; set; }
         public bool GuanShiUsedThisTurn { get; set; }
@@ -2528,6 +2519,7 @@ internal static class SanguoshaCharacterSkills
         public bool QingGangActive { get; set; }
         public decimal QingGangBlockedTargetMultiplier { get; set; } = 1m;
         public bool GuDingActive { get; set; }
+        public bool GuDingUpgraded { get; set; }
         public bool GanJiangMoYeActive { get; set; }
         public int GanJiangMoYeBonusDamage { get; set; }
         public int GanJiangMoYeTriggersPerTurn { get; set; }

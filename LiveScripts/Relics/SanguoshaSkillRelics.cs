@@ -9,6 +9,7 @@ namespace sanguosha.Relics;
 public abstract class SanguoshaSkillRelic(string iconBaseName) : ModRelicTemplate
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
+    public override bool IsAllowedInShops => false;
 
     public override RelicAssetProfile AssetProfile => new(
         IconPath: ImageHelper.GetImagePath($"atlases/relic_atlas.sprites/{iconBaseName}.tres"),

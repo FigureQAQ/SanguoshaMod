@@ -16,7 +16,7 @@ public sealed class BaGuaCard : SanguoshaCard
         new BlockVar(4, ValueProp.Move)
     ];
 
-    public BaGuaCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public BaGuaCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 
@@ -28,7 +28,7 @@ public sealed class BaGuaCard : SanguoshaCard
 
     protected override void OnUpgrade()
     {
-        EnergyCost.SetCustomBaseCost(0);
+        EnergyCost.SetCustomBaseCost(1);
         DynamicVars.Block.UpgradeValueBy(1);
     }
 }

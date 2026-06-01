@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="STS2.RitsuLib" Version="0.3.9" />
+    <PackageReference Include="STS2.RitsuLib" Version="0.4.1" />
   </ItemGroup>
 
   <ItemGroup>
