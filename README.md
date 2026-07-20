@@ -4,6 +4,17 @@
 
 当前开发版本：`0.2.0`，最低支持 STS2 `0.109.0`。
 
+[![Release](https://img.shields.io/github/v/release/FigureQAQ/SanguoshaMod?display_name=tag)](https://github.com/FigureQAQ/SanguoshaMod/releases/latest)
+[![STS2](https://img.shields.io/badge/STS2-0.109.0-blue)](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.2.0)
+[![RitsuLib](https://img.shields.io/badge/RitsuLib-0.4.60-purple)](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.2.0)
+
+## 最新发布
+
+- 最新稳定版：[`v0.2.0`](https://github.com/FigureQAQ/SanguoshaMod/releases/tag/v0.2.0)
+- 联机整合包：[`SanguoshaMod-0.2.0-multiplayer.zip`](https://github.com/FigureQAQ/SanguoshaMod/releases/download/v0.2.0/SanguoshaMod-0.2.0-multiplayer.zip)
+- 发布检查：[`docs/VERSION_0.2.0_RELEASE_CHECK_2026-07-20.md`](docs/VERSION_0.2.0_RELEASE_CHECK_2026-07-20.md)
+- 压缩包 SHA-256：`0C51D339F854865DF512A2B6768CBEB1A143BC32BB804F9E6DA7FAF52832E175`
+
 ## 游戏内截图
 
 README 展示图只使用游戏内真实截图或从真实截图裁切出的卡牌，不再使用离线工具生成的完整卡面预览。
