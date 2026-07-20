@@ -44,7 +44,7 @@ internal static class SanguoshaCardFx
         finalAmount *= cardMultiplier;
 
         await DamageCmd.Attack(finalAmount)
-            .FromCard(play.Card)
+            .FromCard(play.Card, play)
             .Targeting(target)
             .Execute(context);
         if (isSha)
@@ -87,7 +87,7 @@ internal static class SanguoshaCardFx
             finalAmount *= cardMultiplier;
 
             await DamageCmd.Attack(finalAmount)
-                .FromCard(play.Card)
+                .FromCard(play.Card, play)
                 .Targeting(target)
                 .Execute(context);
             if (isSha)
@@ -117,7 +117,7 @@ internal static class SanguoshaCardFx
     {
         return amount <= 0 || !target.IsAlive
             ? Task.CompletedTask
-            : CreatureCmd.Damage(context, target, amount, ValueProp.Move, play.Card.Owner.Creature, play.Card);
+            : CreatureCmd.Damage(context, target, amount, ValueProp.Move, play.Card.Owner.Creature, play.Card, play);
     }
 
     public static Task Block(CardPlay play, decimal amount)
@@ -388,6 +388,18 @@ internal static class SanguoshaCardFx
         return buffs.Count;
     }
 
+    public static async Task<bool> ClearOneBuff(Creature creature)
+    {
+        var buff = creature.Powers.FirstOrDefault(power => power.Type == PowerType.Buff);
+        if (buff is null)
+        {
+            return false;
+        }
+
+        await PowerCmd.Remove(buff);
+        return true;
+    }
+
     public static async Task<int> StealBuffsThisTurn(PlayerChoiceContext context, CardPlay play, Creature target)
     {
         var player = play.Card.Owner;
@@ -418,6 +430,7 @@ internal static class SanguoshaCardFx
         if (amount > 0 && missing > 0)
         {
             await CreatureCmd.Heal(creature, Math.Min(amount, missing), true);
+            SanguoshaCharacterSkills.MarkHealed(player);
         }
     }
 
@@ -564,7 +577,7 @@ public sealed class ChiTuCard : SanguoshaCard
         new DynamicVar("FreeSha", 1m)
     ];
 
-    public ChiTuCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public ChiTuCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -660,7 +673,7 @@ public sealed class MuNiuCard : SanguoshaCard
         new EnergyVar(1)
     ];
 
-    public MuNiuCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public MuNiuCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -788,7 +801,7 @@ public sealed class TengJiaCard : SanguoshaCard
         new BlockVar(10, ValueProp.Move)
     ];
 
-    public TengJiaCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public TengJiaCard() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -837,7 +850,7 @@ public sealed class MengDeXinShuCard : SanguoshaCard
         new DynamicVar("FreeCards", 1m)
     ];
 
-    public MengDeXinShuCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public MengDeXinShuCard() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -859,7 +872,7 @@ public sealed class MengDeXinShuCard : SanguoshaCard
 public sealed class GuoHeCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1)
+        new DynamicVar("Draw", 1m)
     ];
 
     public GuoHeCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
@@ -867,17 +880,15 @@ public sealed class GuoHeCard : SanguoshaCard
     }
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var target = cardPlay.Target!;
-        var removed = await SanguoshaCardFx.ClearBuffs(target);
-        if (removed > 0)
+        var removed = await SanguoshaCardFx.ClearOneBuff(cardPlay.Target!);
+        if (removed && IsUpgraded)
         {
-            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
+            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
         }
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.SetCustomBaseCost(0);
     }
 }
 
@@ -914,7 +925,7 @@ public sealed class HuoGongCard : SanguoshaCard
         new DynamicVar("BonusDamage", 3m)
     ];
 
-    public HuoGongCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public HuoGongCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -1011,10 +1022,8 @@ public sealed class LeBuCard : SanguoshaCard
 public sealed class NanManCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(10, ValueProp.Move),
-        new DynamicVar("Weak", 1m),
-        new DynamicVar("Heal", 3m),
-        new DynamicVar("TeamDexterity", 1m)
+        new DamageVar(12, ValueProp.Move),
+        new DynamicVar("Weak", 1m)
     ];
     public NanManCard() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
@@ -1022,25 +1031,17 @@ public sealed class NanManCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var targets = SanguoshaCardFx.AliveEnemies(cardPlay);
-        foreach (var target in targets)
+        foreach (var target in SanguoshaCardFx.AliveEnemies(cardPlay))
         {
             await SanguoshaCardFx.Weak(choiceContext, cardPlay, target, DynamicVars["Weak"].BaseValue);
         }
 
         await SanguoshaCardFx.AttackAll(choiceContext, cardPlay, DynamicVars.Damage.BaseValue);
-        var killedAny = targets.Any(enemy => !enemy.IsAlive);
-        await SanguoshaCardFx.Heal(cardPlay, killedAny ? DynamicVars["Heal"].BaseValue : 1);
-        foreach (var player in SanguoshaCardFx.AliveCombatPlayers(cardPlay))
-        {
-            await SanguoshaCardFx.Dexterity(choiceContext, player, DynamicVars["TeamDexterity"].BaseValue, cardPlay.Card);
-        }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3);
-        DynamicVars["Weak"].UpgradeValueBy(1);
+        DynamicVars.Damage.UpgradeValueBy(4);
     }
 }
 
@@ -1053,7 +1054,7 @@ public sealed class QiLinCard : SanguoshaCard
         new DynamicVar("BonusDamage", 3m),
         new DynamicVar("Vulnerable", 1m)
     ];
-    public QiLinCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public QiLinCard() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
@@ -1228,9 +1229,8 @@ public sealed class TaoYuanCard : SanguoshaCard
 public sealed class WanJianCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DamageVar(8, ValueProp.Move),
-        new DynamicVar("Strength", 1m),
-        new BlockVar(3, ValueProp.Move)
+        new DamageVar(10, ValueProp.Move),
+        new BlockVar(5, ValueProp.Move)
     ];
     public WanJianCard() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
@@ -1239,19 +1239,13 @@ public sealed class WanJianCard : SanguoshaCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await SanguoshaCardFx.AttackAll(choiceContext, cardPlay, DynamicVars.Damage.BaseValue);
-        foreach (var player in SanguoshaCardFx.AliveCombatPlayers(cardPlay))
-        {
-            await SanguoshaCardFx.Strength(choiceContext, player, DynamicVars["Strength"].BaseValue, cardPlay.Card);
-            SanguoshaCharacterSkills.AddGoodLuck(player, 1);
-        }
-
         await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3);
-        DynamicVars.Block.UpgradeValueBy(1);
+        DynamicVars.Damage.UpgradeValueBy(4);
+        DynamicVars.Block.UpgradeValueBy(3);
     }
 }
 

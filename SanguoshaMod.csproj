@@ -13,7 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="STS2.RitsuLib" Version="0.4.1" />
+    <PackageReference Include="STS2.RitsuLib" Version="0.4.60" />
+    <EmbeddedResource Include="sanguosha\localization\zhs\*.json">
+      <LogicalName>sanguosha.localization.zhs.%(Filename).json</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@ public sealed class RenWangCard : SanguoshaCard
         new DynamicVar("Draw", 0m)
     ];
 
-    public RenWangCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public RenWangCard() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

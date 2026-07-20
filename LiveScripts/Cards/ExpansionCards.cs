@@ -129,33 +129,26 @@ public sealed class FenChengCard : SanguoshaCard
 public sealed class DiaoDuCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Draw", 1m),
-        new DynamicVar("Exhaust", 1m),
-        new EnergyVar(1)
+        new DynamicVar("Draw", 2m),
+        new DynamicVar("Exhaust", 1m)
     ];
 
-    public DiaoDuCard() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public DiaoDuCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var amount = DynamicVars["Draw"].IntValue;
-        await SanguoshaCardFx.Draw(choiceContext, cardPlay, amount);
-        var consumed = await SanguoshaCardFx.ExhaustFromHand(
+        await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
+        await SanguoshaCardFx.ExhaustFromHand(
             choiceContext,
             cardPlay,
             Math.Min(DynamicVars["Exhaust"].IntValue, cardPlay.Card.Owner.PlayerCombatState!.Hand.Cards.Count));
-        if (consumed.Count > 0)
-        {
-            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
-        }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Draw"].UpgradeValueBy(1);
-        DynamicVars.Energy.UpgradeValueBy(1);
     }
 }
 
@@ -191,34 +184,22 @@ public sealed class YangGongCard : SanguoshaCard
 public sealed class XuShiCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("NextShaDamage", 3m),
-        new DynamicVar("Draw", 1m),
-        new EnergyVar(1)
+        new DynamicVar("NextShaDamage", 4m)
     ];
 
     public XuShiCard() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    protected override Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var player = cardPlay.Card.Owner;
-        var hasSha = player.PlayerCombatState!.Hand.Cards
-            .Any(card => card != cardPlay.Card && SanguoshaCharacterSkills.IsShaLike(card));
-        SanguoshaCharacterSkills.EmpowerNextSha(player, DynamicVars["NextShaDamage"].IntValue);
-        if (SanguoshaCharacterSkills.HasPlayedShaThisTurn(player))
-        {
-            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
-        }
-        else if (!hasSha)
-        {
-            await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
-        }
+        SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
+        return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
+        DynamicVars["NextShaDamage"].UpgradeValueBy(2);
     }
 }
 
@@ -226,9 +207,7 @@ public sealed class XuShiCard : SanguoshaCard
 public sealed class PoZhenCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Vulnerable", 1m),
-        new EnergyVar(1),
-        new DynamicVar("NextShaDamage", 3m)
+        new DynamicVar("Vulnerable", 1m)
     ];
 
     public PoZhenCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
@@ -239,27 +218,19 @@ public sealed class PoZhenCard : SanguoshaCard
     {
         var target = cardPlay.Target!;
         var brokeBlock = target.Block > 0;
-        var hadVulnerable = target.HasPower<VulnerablePower>();
         if (brokeBlock)
         {
             target.LoseBlockInternal(target.Block);
-        }
-
-        await SanguoshaCardFx.Vulnerable(choiceContext, cardPlay, target, DynamicVars["Vulnerable"].BaseValue);
-        if (brokeBlock)
-        {
-            SanguoshaCardFx.GainEnergy(cardPlay, DynamicVars.Energy.IntValue);
-        }
-        if (brokeBlock || hadVulnerable)
-        {
-            SanguoshaCharacterSkills.EmpowerNextSha(cardPlay.Card.Owner, DynamicVars["NextShaDamage"].IntValue);
+            await SanguoshaCardFx.Vulnerable(
+                choiceContext,
+                cardPlay,
+                target,
+                DynamicVars["Vulnerable"].BaseValue);
         }
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Vulnerable"].UpgradeValueBy(1);
-        DynamicVars["NextShaDamage"].UpgradeValueBy(1);
         EnergyCost.SetCustomBaseCost(0);
     }
 }
@@ -268,8 +239,8 @@ public sealed class PoZhenCard : SanguoshaCard
 public sealed class BuFangCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new BlockVar(7, ValueProp.Move),
-        new DynamicVar("CostReduce", 1m)
+        new BlockVar(8, ValueProp.Move),
+        new DynamicVar("BonusBlock", 4m)
     ];
 
     public BuFangCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
@@ -278,20 +249,19 @@ public sealed class BuFangCard : SanguoshaCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await SanguoshaCardFx.Block(cardPlay, DynamicVars.Block.BaseValue);
+        var block = DynamicVars.Block.BaseValue;
         if (!SanguoshaCharacterSkills.HasPlayedAttackThisTurn(cardPlay.Card.Owner))
         {
-            SanguoshaCardFx.ReduceHandCardCosts(
-                cardPlay,
-                1,
-                DynamicVars["CostReduce"].IntValue,
-                card => SanguoshaCharacterSkills.IsShaLike(card) || card.Type == CardType.Skill);
+            block += DynamicVars["BonusBlock"].BaseValue;
         }
+
+        await SanguoshaCardFx.Block(cardPlay, block);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(3);
+        DynamicVars["BonusBlock"].UpgradeValueBy(1);
     }
 }
 
@@ -341,7 +311,7 @@ public sealed class TuXiCard : SanguoshaCard
         new DynamicVar("Vulnerable", 1m)
     ];
 
-    public TuXiCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public TuXiCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
 
@@ -372,7 +342,7 @@ public sealed class QiXiCard : SanguoshaCard
         new EnergyVar(1)
     ];
 
-    public QiXiCard() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public QiXiCard() : base(0, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
     {
     }
 
@@ -418,7 +388,7 @@ public sealed class GuaGuCard : SanguoshaCard
         CardKeyword.Exhaust
     ];
 
-    public GuaGuCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public GuaGuCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
     }
 
@@ -451,6 +421,10 @@ public sealed class KuRouCard : SanguoshaCard
     protected override IEnumerable<DynamicVar> CanonicalVars => [
         new DynamicVar("HpLoss", 3m),
         new EnergyVar(2)
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [
+        CardKeyword.Exhaust
     ];
 
     public KuRouCard() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self)

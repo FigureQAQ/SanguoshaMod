@@ -62,8 +62,8 @@ internal static class CharacterStartingDeckPatch
             .Where(method => method is not null)!;
     }
 
-    private static void Postfix(ref IEnumerable<CardModel> __result)
+    private static void Postfix(CharacterModel __instance, ref IEnumerable<CardModel> __result)
     {
-        __result = SanguoshaCardCatalog.ReplaceStartingDeck(__result);
+        __result = SanguoshaCardCatalog.ReplaceStartingDeck(__result, __instance.GetType().Name);
     }
 }

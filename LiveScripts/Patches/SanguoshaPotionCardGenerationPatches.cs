@@ -19,6 +19,10 @@ internal static class SanguoshaPotionCardGeneration
         out List<CardModel> cards)
     {
         cards = [];
+        if (potion.Owner is not { } owner || owner.RunState is null)
+        {
+            return false;
+        }
 
         var catalog = SanguoshaCardCatalog.TryGetCards();
         if (catalog is null || catalog.Count == 0)
@@ -35,7 +39,7 @@ internal static class SanguoshaPotionCardGeneration
                 potion.Owner,
                 options,
                 count,
-                potion.Owner.RunState.Rng.CombatCardGeneration)
+                owner.RunState.Rng.CombatCardGeneration)
             .ToList();
 
         if (cards.Count == 0)

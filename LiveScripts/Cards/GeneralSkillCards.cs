@@ -70,7 +70,7 @@ public sealed class KongChengCard : SanguoshaCard
         new DynamicVar("Intangible", 1m),
         new EnergyVar(1)
     ];
-    public KongChengCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public KongChengCard() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 

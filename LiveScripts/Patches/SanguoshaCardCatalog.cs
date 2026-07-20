@@ -94,6 +94,41 @@ internal static class SanguoshaCardCatalog
                 ModelDb.Card<ThunderRelayCard>(),
                 ModelDb.Card<SoulRansomCard>(),
                 ModelDb.Card<EdictReserveCard>(),
+                ModelDb.Card<ChiFengCard>(),
+                ModelDb.Card<XueShouCard>(),
+                ModelDb.Card<DuRenCard>(),
+                ModelDb.Card<QianXingCard>(),
+                ModelDb.Card<LeiYinStarterCard>(),
+                ModelDb.Card<JiJiaCard>(),
+                ModelDb.Card<YaoRenCard>(),
+                ModelDb.Card<HuHunCard>(),
+                ModelDb.Card<HaoLingCard>(),
+                ModelDb.Card<ShouHanCard>(),
+                ModelDb.Card<QiangXiCard>(),
+                ModelDb.Card<LieGongCard>(),
+                ModelDb.Card<TianYiCard>(),
+                ModelDb.Card<CaoChuanCard>(),
+                ModelDb.Card<YiYiDaiLaoCard>(),
+                ModelDb.Card<ZhiJiZhiBiCard>(),
+                ModelDb.Card<QuHuCard>(),
+                ModelDb.Card<HuoShaoLianYingCard>(),
+                ModelDb.Card<ShuiYanQiJunCard>(),
+                ModelDb.Card<FangTianCard>(),
+                ModelDb.Card<PaoXiaoCard>(),
+                ModelDb.Card<WuShengCard>(),
+                ModelDb.Card<GangLieCard>(),
+                ModelDb.Card<LiJianCard>(),
+                ModelDb.Card<QiCeCard>(),
+                ModelDb.Card<BiYueCard>(),
+                ModelDb.Card<LeiJiCard>(),
+                ModelDb.Card<KanPoCard>(),
+                ModelDb.Card<KuangFengCard>(),
+                ModelDb.Card<JiJiuCard>(),
+                ModelDb.Card<HuoMoCard>(),
+                ModelDb.Card<DuanChangCard>(),
+                ModelDb.Card<JiJiangCard>(),
+                ModelDb.Card<QianChongCard>(),
+                ModelDb.Card<SongWeiCard>(),
                 ModelDb.Card<ZhangBaCard>(),
                 ModelDb.Card<ZhangBaShaCard>(),
                 ModelDb.Card<ZhuGeCard>()
@@ -276,7 +311,7 @@ internal static class SanguoshaCardCatalog
             : cards;
     }
 
-    public static IEnumerable<CardModel> ReplaceStartingDeck(IEnumerable<CardModel> original)
+    public static IEnumerable<CardModel> ReplaceStartingDeck(IEnumerable<CardModel> original, string? characterName)
     {
         var originalList = TrySnapshot(original);
         if (originalList is null)
@@ -297,12 +332,47 @@ internal static class SanguoshaCardCatalog
 
         var replacedAttackWithTao = false;
         var replacedSkillWithJiu = false;
-        return originalList.Select(card =>
+        var replaced = originalList.Select(card =>
             ReplaceStartingCard(
                 card,
                 cards,
                 ref replacedAttackWithTao,
                 ref replacedSkillWithJiu)).ToList();
+        ReplaceCharacterStarter(replaced, cards, characterName);
+        return replaced;
+    }
+
+    private static void ReplaceCharacterStarter(
+        List<CardModel> deck,
+        IReadOnlyList<CardModel> cards,
+        string? characterName)
+    {
+        (CardModel? Attack, CardModel? Skill) starterPair = characterName switch
+        {
+            "Ironclad" => (cards.OfType<ChiFengCard>().FirstOrDefault(), cards.OfType<XueShouCard>().FirstOrDefault()),
+            "Silent" => (cards.OfType<DuRenCard>().FirstOrDefault(), cards.OfType<QianXingCard>().FirstOrDefault()),
+            "Defect" => (cards.OfType<LeiYinStarterCard>().FirstOrDefault(), cards.OfType<JiJiaCard>().FirstOrDefault()),
+            "Necrobinder" => (cards.OfType<YaoRenCard>().FirstOrDefault(), cards.OfType<HuHunCard>().FirstOrDefault()),
+            "Regent" => (cards.OfType<HaoLingCard>().FirstOrDefault(), cards.OfType<ShouHanCard>().FirstOrDefault()),
+            _ => (null, null)
+        };
+        if (starterPair.Attack is not null)
+        {
+            var attackIndex = deck.FindIndex(card => card is ShaCard);
+            if (attackIndex >= 0)
+            {
+                deck[attackIndex] = starterPair.Attack;
+            }
+        }
+
+        if (starterPair.Skill is not null)
+        {
+            var skillIndex = deck.FindIndex(card => card is ShanCard);
+            if (skillIndex >= 0)
+            {
+                deck[skillIndex] = starterPair.Skill;
+            }
+        }
     }
 
     private static CardModel ReplaceStartingCard(
@@ -388,6 +458,7 @@ internal static class SanguoshaCardCatalog
     private static bool IsRewardEligible(CardModel card, Player? player)
     {
         if (IsSanguoshaBasicCard(card)
+            || IsStarterOnlyCard(card)
             || IsGeneratedOnlyCard(card)
             || IsBossRewardOnlyCard(card))
         {
@@ -427,7 +498,7 @@ internal static class SanguoshaCardCatalog
 
     private static bool IsEquipmentCard(CardModel card)
     {
-        return card is ZhuGeCard or ZhangBaCard or QingGangCard or GuanShiCard or HanBingCard
+        return card is ZhuGeCard or ZhangBaCard or QingGangCard or GuanShiCard or HanBingCard or FangTianCard
             or QiLinCard or GuDingCard or GanJiangMoYeCard
             or BaiYinCard or RenWangCard or BaGuaCard or TengJiaCard
             or ChiTuCard or DaWanCard or DiLuCard or JueYingCard
@@ -446,20 +517,34 @@ internal static class SanguoshaCardCatalog
             or VenomAmbushCard
             or ThunderRelayCard
             or SoulRansomCard
-            or EdictReserveCard;
+            or EdictReserveCard
+            or PaoXiaoCard or WuShengCard or GangLieCard
+            or LiJianCard or QiCeCard or BiYueCard
+            or LeiJiCard or KanPoCard or KuangFengCard
+            or JiJiuCard or HuoMoCard or DuanChangCard
+            or JiJiangCard or QianChongCard or SongWeiCard;
     }
 
     private static bool IsCharacterSpecificCardForPlayer(CardModel card, Player player)
     {
         return player.Character.GetType().Name switch
         {
-            "Ironclad" => card is CrimsonRaidCard,
-            "Silent" => card is VenomAmbushCard,
-            "Defect" => card is ThunderRelayCard,
-            "Necrobinder" => card is SoulRansomCard,
-            "Regent" => card is EdictReserveCard,
+            "Ironclad" => card is CrimsonRaidCard or PaoXiaoCard or WuShengCard or GangLieCard,
+            "Silent" => card is VenomAmbushCard or LiJianCard or QiCeCard or BiYueCard,
+            "Defect" => card is ThunderRelayCard or LeiJiCard or KanPoCard or KuangFengCard,
+            "Necrobinder" => card is SoulRansomCard or JiJiuCard or HuoMoCard or DuanChangCard,
+            "Regent" => card is EdictReserveCard or JiJiangCard or QianChongCard or SongWeiCard,
             _ => false
         };
+    }
+
+    private static bool IsStarterOnlyCard(CardModel card)
+    {
+        return card is ChiFengCard or XueShouCard
+            or DuRenCard or QianXingCard
+            or LeiYinStarterCard or JiJiaCard
+            or YaoRenCard or HuHunCard
+            or HaoLingCard or ShouHanCard;
     }
 
     private static bool IsBossEncounterReward(CardCreationOptions options)

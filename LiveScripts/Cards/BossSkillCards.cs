@@ -41,7 +41,6 @@ public sealed class BathOfBloodCard : SanguoshaCard
 public sealed class NightfallSchemeCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Draw", 1m),
         new DynamicVar("Poison", 3m)
     ];
 
@@ -53,14 +52,12 @@ public sealed class NightfallSchemeCard : SanguoshaCard
     {
         SanguoshaCharacterSkills.ActivateNightfallScheme(
             cardPlay.Card.Owner,
-            DynamicVars["Draw"].IntValue,
             DynamicVars["Poison"].IntValue);
         return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Draw"].UpgradeValueBy(1);
         DynamicVars["Poison"].UpgradeValueBy(1);
     }
 }
@@ -69,8 +66,7 @@ public sealed class NightfallSchemeCard : SanguoshaCard
 public sealed class ThunderMandateCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Thunder", 2m),
-        new DynamicVar("Damage", 4m)
+        new DynamicVar("Thunder", 2m)
     ];
 
     public ThunderMandateCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -81,15 +77,13 @@ public sealed class ThunderMandateCard : SanguoshaCard
     {
         SanguoshaCharacterSkills.ActivateThunderMandate(
             cardPlay.Card.Owner,
-            DynamicVars["Thunder"].IntValue,
-            DynamicVars["Damage"].IntValue);
+            DynamicVars["Thunder"].IntValue);
         return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Thunder"].UpgradeValueBy(1);
-        DynamicVars["Damage"].UpgradeValueBy(2);
     }
 }
 
@@ -97,8 +91,7 @@ public sealed class ThunderMandateCard : SanguoshaCard
 public sealed class SoulHealerFormCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new DynamicVar("Heal", 2m),
-        new DynamicVar("HpLoss", 3m)
+        new DynamicVar("Heal", 2m)
     ];
 
     public SoulHealerFormCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -109,15 +102,13 @@ public sealed class SoulHealerFormCard : SanguoshaCard
     {
         SanguoshaCharacterSkills.ActivateSoulHealerForm(
             cardPlay.Card.Owner,
-            DynamicVars["Heal"].IntValue,
-            DynamicVars["HpLoss"].IntValue);
+            DynamicVars["Heal"].IntValue);
         return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars["Heal"].UpgradeValueBy(1);
-        DynamicVars["HpLoss"].UpgradeValueBy(1);
     }
 }
 
@@ -125,8 +116,7 @@ public sealed class SoulHealerFormCard : SanguoshaCard
 public sealed class ImperialEdictCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1),
-        new DynamicVar("NextShaDamage", 4m)
+        new DynamicVar("Stars", 2m)
     ];
 
     public ImperialEdictCard() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
@@ -137,13 +127,12 @@ public sealed class ImperialEdictCard : SanguoshaCard
     {
         SanguoshaCharacterSkills.ActivateImperialEdict(
             cardPlay.Card.Owner,
-            DynamicVars.Energy.IntValue,
-            DynamicVars["NextShaDamage"].IntValue);
+            DynamicVars["Stars"].IntValue);
         return Task.CompletedTask;
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Energy.UpgradeValueBy(1);
+        DynamicVars["Stars"].UpgradeValueBy(1);
     }
 }

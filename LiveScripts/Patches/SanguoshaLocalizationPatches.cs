@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text.Json;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Localization;
 
@@ -7,6 +9,15 @@ namespace sanguosha.Patches;
 internal static class SanguoshaLocalization
 {
     private sealed record Entry(string Table, string Text);
+
+    private sealed class LastWriteWinsDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+        where TKey : notnull
+    {
+        public new void Add(TKey key, TValue value)
+        {
+            this[key] = value;
+        }
+    }
 
     private static readonly IReadOnlyDictionary<string, string> PowerKeyAliases = new Dictionary<string, string>
     {
@@ -53,7 +64,7 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_REGENT_SKILL_DISPLAY_POWER"] = "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER"
     };
 
-    private static readonly IReadOnlyDictionary<string, Entry> Text = new Dictionary<string, Entry>
+    private static readonly IReadOnlyDictionary<string, Entry> Text = new LastWriteWinsDictionary<string, Entry>
     {
         ["CARD_TYPE.SKILL"] = new("gameplay_ui", "技能牌"),
         ["TYPE_SKILL_TIP"] = new("card_library", "技能牌"),
@@ -445,6 +456,8 @@ internal static class SanguoshaLocalization
         ["SANGUOSHA_POWER_PO_ZHU_DISPLAY_POWER.description"] = new("powers", "每当你施加易伤，每层易伤获得力量。")
     };
 
+    private static readonly IReadOnlyDictionary<string, Entry> EmbeddedLocalizedText = LoadEmbeddedLocalizedText();
+
     public static bool TryGet(string key, out string value)
     {
         if (!TryGetEntry(key, out var entry))
@@ -476,6 +489,11 @@ internal static class SanguoshaLocalization
 
     private static bool TryGetEntry(string key, out Entry entry)
     {
+        if (EmbeddedLocalizedText.TryGetValue(key, out entry!))
+        {
+            return true;
+        }
+
         if (CorrectedTextOverrides.TryGetValue(key, out entry!))
         {
             return true;
@@ -499,6 +517,11 @@ internal static class SanguoshaLocalization
             }
 
             var normalizedKey = alias.Value + key[alias.Key.Length..];
+            if (EmbeddedLocalizedText.TryGetValue(normalizedKey, out entry!))
+            {
+                return true;
+            }
+
             if (Text.TryGetValue(normalizedKey, out entry!))
             {
                 return true;
@@ -507,6 +530,39 @@ internal static class SanguoshaLocalization
 
         entry = null!;
         return false;
+    }
+
+    private static IReadOnlyDictionary<string, Entry> LoadEmbeddedLocalizedText()
+    {
+        const string prefix = "sanguosha.localization.zhs.";
+        const string suffix = ".json";
+        var entries = new Dictionary<string, Entry>(StringComparer.Ordinal);
+        var assembly = Assembly.GetExecutingAssembly();
+
+        foreach (var resourceName in assembly.GetManifestResourceNames()
+                     .Where(name => name.StartsWith(prefix, StringComparison.Ordinal)
+                         && name.EndsWith(suffix, StringComparison.Ordinal)))
+        {
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream is null)
+            {
+                continue;
+            }
+
+            var values = JsonSerializer.Deserialize<Dictionary<string, string>>(stream);
+            if (values is null)
+            {
+                continue;
+            }
+
+            var table = resourceName[prefix.Length..^suffix.Length];
+            foreach (var pair in values)
+            {
+                entries[pair.Key] = new Entry(table, pair.Value);
+            }
+        }
+
+        return entries;
     }
 }
 

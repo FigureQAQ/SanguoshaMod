@@ -42,7 +42,7 @@ internal static class SanguoshaCharacterSkills
     {
         return cardId switch
         {
-            "ZhuGeCard" or "ZhangBaCard" or "QingGangCard" or "GuanShiCard" or "HanBingCard" or "QiLinCard" or "GuDingCard" or "GanJiangMoYeCard" => EquipSlot.Weapon,
+            "ZhuGeCard" or "ZhangBaCard" or "QingGangCard" or "GuanShiCard" or "HanBingCard" or "QiLinCard" or "GuDingCard" or "GanJiangMoYeCard" or "FangTianCard" => EquipSlot.Weapon,
             "BaiYinCard" or "RenWangCard" or "BaGuaCard" or "TengJiaCard" => EquipSlot.Armor,
             "ChiTuCard" or "DaWanCard" or "DiLuCard" or "JueYingCard" => EquipSlot.Mount,
             "YuXiCard" or "MuNiuCard" or "TaiPingCard" or "MengDeXinShuCard" => EquipSlot.Treasure,
@@ -100,6 +100,7 @@ internal static class SanguoshaCharacterSkills
                 state.QiLinActive = false; state.QiLinBonusDamage = 0; state.QiLinVulnerable = 0;
                 state.GuDingActive = false; state.GuDingUpgraded = false;
                 state.GanJiangMoYeActive = false; state.GanJiangMoYeBonusDamage = 0; state.GanJiangMoYeTriggersPerTurn = 0; state.GanJiangMoYeTriggersUsedThisTurn = 0;
+                state.FangTianActive = false; state.FangTianUsedThisTurn = false;
                 break;
             case EquipSlot.Armor:
                 state.BaiYinActive = false; state.BaiYinTurnHeal = 0; state.BaiYinDamageCap = 0;
@@ -604,40 +605,128 @@ internal static class SanguoshaCharacterSkills
         RefreshDisplayPower<BathOfBloodDisplayPower>(player);
     }
 
-    public static void ActivateNightfallScheme(Player player, int draw, int poison)
+    public static void ActivateNightfallScheme(Player player, int poison)
     {
         var state = GetState(player);
         state.NightfallSchemeActive = true;
-        state.NightfallSchemeDraw = Math.Max(state.NightfallSchemeDraw, draw);
         state.NightfallSchemePoison = Math.Max(state.NightfallSchemePoison, poison);
         RefreshDisplayPower<NightfallSchemeDisplayPower>(player);
     }
 
-    public static void ActivateThunderMandate(Player player, int thunder, int damage)
+    public static void ActivateThunderMandate(Player player, int thunder)
     {
         var state = GetState(player);
         state.ThunderMandateActive = true;
         state.ThunderMandateThunder = Math.Max(state.ThunderMandateThunder, thunder);
-        state.ThunderMandateDamage = Math.Max(state.ThunderMandateDamage, damage);
         RefreshDisplayPower<ThunderMandateDisplayPower>(player);
     }
 
-    public static void ActivateSoulHealerForm(Player player, int heal, int enemyHpLoss)
+    public static void ActivateSoulHealerForm(Player player, int heal)
     {
         var state = GetState(player);
         state.SoulHealerFormActive = true;
         state.SoulHealerFormHeal = Math.Max(state.SoulHealerFormHeal, heal);
-        state.SoulHealerFormEnemyHpLoss = Math.Max(state.SoulHealerFormEnemyHpLoss, enemyHpLoss);
         RefreshDisplayPower<SoulHealerFormDisplayPower>(player);
     }
 
-    public static void ActivateImperialEdict(Player player, int energy, int nextShaDamage)
+    public static void ActivateImperialEdict(Player player, int stars)
     {
         var state = GetState(player);
         state.ImperialEdictActive = true;
-        state.ImperialEdictEnergy = Math.Max(state.ImperialEdictEnergy, energy);
-        state.ImperialEdictNextShaDamage = Math.Max(state.ImperialEdictNextShaDamage, nextShaDamage);
+        state.ImperialEdictStars = Math.Max(state.ImperialEdictStars, stars);
         RefreshDisplayPower<ImperialEdictDisplayPower>(player);
+    }
+
+    public static void ActivateFangTian(Player player)
+    {
+        var state = GetState(player);
+        ReplaceEquipment(player, state, EquipSlot.Weapon, "FangTianCard", false);
+        state.FangTianActive = true;
+        state.FangTianUsedThisTurn = false;
+        RefreshDisplayPower<FangTianDisplayPower>(player);
+    }
+
+    public static void ActivateGangLie(Player player, int energy)
+    {
+        var state = GetState(player);
+        state.GangLieActive = true;
+        state.GangLieEnergy = Math.Max(state.GangLieEnergy, energy);
+        RefreshDisplayPower<GangLieDisplayPower>(player);
+    }
+
+    public static void ActivateBiYue(Player player, int draw)
+    {
+        var state = GetState(player);
+        state.BiYueActive = true;
+        state.BiYueDraw = Math.Max(state.BiYueDraw, draw);
+        RefreshDisplayPower<BiYueDisplayPower>(player);
+    }
+
+    public static void ActivateKuangFeng(Player player, int nextShaDamage)
+    {
+        var state = GetState(player);
+        state.KuangFengActive = true;
+        state.KuangFengNextShaDamage = Math.Max(state.KuangFengNextShaDamage, nextShaDamage);
+        RefreshDisplayPower<KuangFengDisplayPower>(player);
+    }
+
+    public static void ActivateDuanChang(Player player, int vulnerable, int block)
+    {
+        var state = GetState(player);
+        state.DuanChangActive = true;
+        state.DuanChangVulnerable = Math.Max(state.DuanChangVulnerable, vulnerable);
+        state.DuanChangBlock = Math.Max(state.DuanChangBlock, block);
+        RefreshDisplayPower<DuanChangDisplayPower>(player);
+    }
+
+    public static void ActivateSongWei(Player player, int triggersPerTurn, int stars)
+    {
+        var state = GetState(player);
+        state.SongWeiActive = true;
+        state.SongWeiTriggersPerTurn = Math.Max(state.SongWeiTriggersPerTurn, triggersPerTurn);
+        state.SongWeiStars = Math.Max(state.SongWeiStars, stars);
+        RefreshDisplayPower<SongWeiDisplayPower>(player);
+    }
+
+    public static bool LostHpThisTurn(Player player) => GetState(player).LostHpThisTurn;
+
+    public static bool HealedThisTurn(Player player) => GetState(player).HealedThisTurn;
+
+    public static bool HasThunder(Player player) => GetState(player).Thunder > 0;
+
+    public static int ConsumeThunder(Player player, int amount)
+    {
+        var state = GetState(player);
+        var consumed = Math.Min(Math.Max(0, amount), state.Thunder);
+        if (consumed <= 0)
+        {
+            return 0;
+        }
+
+        state.Thunder -= consumed;
+        if (state.KuangFengActive && !state.KuangFengUsedThisTurn)
+        {
+            state.KuangFengUsedThisTurn = true;
+            EmpowerNextSha(player, Math.Max(1, state.KuangFengNextShaDamage));
+        }
+
+        InvalidateDisplayCounters(player);
+        return consumed;
+    }
+
+    public static CardType? LastCardType(Player player) => GetState(player).LastCardType;
+
+    public static void ScheduleNextTurnDraw(Player player, int amount)
+    {
+        if (amount > 0)
+        {
+            GetState(player).NextTurnBonusDraw += amount;
+        }
+    }
+
+    public static void MarkHealed(Player player)
+    {
+        GetState(player).HealedThisTurn = true;
     }
 
     public static void RegisterTemporaryStolenBuff(Player player, ModelId powerId, int amount)
@@ -737,7 +826,13 @@ internal static class SanguoshaCharacterSkills
             NightfallSchemeDisplayPower => state.NightfallSchemePoison,
             ThunderMandateDisplayPower => state.ThunderMandateThunder,
             SoulHealerFormDisplayPower => state.SoulHealerFormHeal,
-            ImperialEdictDisplayPower => state.ImperialEdictEnergy,
+            ImperialEdictDisplayPower => state.ImperialEdictStars,
+            FangTianDisplayPower => Available(state.FangTianUsedThisTurn),
+            GangLieDisplayPower => Available(state.GangLieUsedThisTurn),
+            BiYueDisplayPower => state.BiYueDraw,
+            KuangFengDisplayPower => Available(state.KuangFengUsedThisTurn),
+            DuanChangDisplayPower => Available(state.DuanChangUsedThisTurn),
+            SongWeiDisplayPower => UsesRemaining(state.SongWeiTriggersUsedThisTurn, state.SongWeiTriggersPerTurn),
             GoodLuckDisplayPower => state.GoodLuck,
             ZhiHengDisplayPower => Available(state.ZhiHengTrickDrawUsedThisTurn),
             MengDeXinShuDisplayPower => Available(state.MengDeXinShuUsedThisTurn),
@@ -811,6 +906,9 @@ internal static class SanguoshaCharacterSkills
         {
             case "ZhuGeCard":
                 RemoveDisplayPower<ZhuGeDisplayPower>(player);
+                break;
+            case "FangTianCard":
+                RemoveDisplayPower<FangTianDisplayPower>(player);
                 break;
             case "ZhangBaCard":
                 RemoveDisplayPower<ZhangBaDisplayPower>(player);
@@ -909,8 +1007,47 @@ internal static class SanguoshaCharacterSkills
             return;
         }
 
+        MarkLostHp(player);
         DamageTakenLastEnemyTurn[player.NetId] =
             DamageTakenLastEnemyTurn.GetValueOrDefault(player.NetId) + amount;
+    }
+
+    public static void MarkLostHp(Player player)
+    {
+        var state = GetState(player);
+        state.LostHpThisTurn = true;
+        if (state.GangLieActive && !state.GangLieUsedThisTurn)
+        {
+            state.GangLieUsedThisTurn = true;
+            player.PlayerCombatState?.GainEnergy(Math.Max(1, state.GangLieEnergy));
+        }
+    }
+
+    public static async Task OnNonAttackEnemyHpLoss(Player player, Creature target, CardModel? source)
+    {
+        var state = GetState(player);
+        if (!state.DuanChangActive
+            || state.DuanChangUsedThisTurn
+            || !player.Creature.IsAlive
+            || !target.IsAlive)
+        {
+            return;
+        }
+
+        state.DuanChangUsedThisTurn = true;
+        if (state.DuanChangVulnerable > 0)
+        {
+            await ApplyPower<VulnerablePower>(
+                player,
+                target,
+                state.DuanChangVulnerable,
+                source);
+        }
+
+        if (state.DuanChangBlock > 0)
+        {
+            await GainBlock(player, state.DuanChangBlock, null);
+        }
     }
 
     public static async Task OnCardExhaustedFromHand(Player player, CardModel exhaustedCard, CardModel? source)
@@ -1095,6 +1232,19 @@ internal static class SanguoshaCharacterSkills
             await ApplyPower<VulnerablePower>(play.Card.Owner, target, Math.Max(1, state.TieQiVulnerable), play.Card);
         }
 
+        if (state.FangTianActive
+            && IsShaLike(play.Card)
+            && !state.FangTianUsedThisTurn
+            && play.Card.Owner.PlayerCombatState is { } playerCombatState
+            && playerCombatState.Hand.Cards.All(card => card == play.Card || card.Type != CardType.Attack))
+        {
+            state.FangTianUsedThisTurn = true;
+            foreach (var enemy in play.Card.CombatState!.HittableEnemies.Where(enemy => enemy.IsAlive && enemy != target))
+            {
+                await DamageTarget(play.Card.Owner, enemy, Math.Ceiling(shaAmount * 0.5m), play.Card);
+            }
+        }
+
         InvalidateDisplayCounters(play.Card.Owner);
     }
 
@@ -1190,6 +1340,7 @@ internal static class SanguoshaCharacterSkills
 
         Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<CombatStartingEvent>(OnCombatStarting));
         Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<SideTurnStartedEvent>(OnSideTurnStarted));
+        Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<SideTurnEndedEvent>(OnSideTurnEnded));
         Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<CardPlayedEvent>(OnCardPlayed));
         Subscriptions.Add(RitsuLibFramework.SubscribeLifecycle<CombatEndedEvent>(_ =>
         {
@@ -1300,6 +1451,12 @@ internal static class SanguoshaCharacterSkills
                 state.ThunderDischargedThisTurn = false;
                 state.ThunderstormFreshlyArmed = false;
                 state.HealedThisTurn = false;
+                state.LostHpThisTurn = false;
+                state.GangLieUsedThisTurn = false;
+                state.KuangFengUsedThisTurn = false;
+                state.DuanChangUsedThisTurn = false;
+                state.SongWeiTriggersUsedThisTurn = 0;
+                state.FangTianUsedThisTurn = false;
                 state.QiLinVulnerableUsedThisTurn = false;
                 state.BaGuaEnergyGrantedThisTurn = false;
                 state.ChiTuEnergyGrantedThisTurn = false;
@@ -1325,6 +1482,12 @@ internal static class SanguoshaCharacterSkills
                 ApplyZhuGeTurnStart(player, state);
                 await ApplyEquipmentTurnStart(player, state);
                 await ApplyGeneralPowerTurnStart(player, state, evt.CombatState);
+                if (state.NextTurnBonusDraw > 0)
+                {
+                    var bonusDraw = state.NextTurnBonusDraw;
+                    state.NextTurnBonusDraw = 0;
+                    await Draw(player, bonusDraw);
+                }
                 await EnsureZhangBaSha(player);
                 await ApplyTurnFloor(player, state);
                 await RunTurnStartSkill(player, state, evt.CombatState);
@@ -1336,6 +1499,23 @@ internal static class SanguoshaCharacterSkills
         catch (Exception ex)
         {
             Entry.Logger.Warn($"Sanguosha turn-start skill failed: {ex}");
+        }
+    }
+
+    private static void OnSideTurnEnded(SideTurnEndedEvent evt)
+    {
+        if (evt.Side != CombatSide.Player)
+        {
+            return;
+        }
+
+        foreach (var player in evt.CombatState.Players.Where(player => player.Creature.IsAlive))
+        {
+            var state = GetState(player);
+            if (state.BiYueActive && player.PlayerCombatState!.Hand.Cards.Count == 0)
+            {
+                state.NextTurnBonusDraw += Math.Max(1, state.BiYueDraw);
+            }
         }
     }
 
@@ -1372,6 +1552,15 @@ internal static class SanguoshaCharacterSkills
             await ApplyLowHpEmergency(player, state, evt.CombatState, card);
             await RunCardPlayedSkill(player, state, evt.CombatState, cardPlay);
             await ApplyLianYingIfEmpty(player, state, card);
+            if (state.SongWeiActive
+                && card is not SongWeiCard
+                && state.LastCardType is { } lastCardType
+                && lastCardType != card.Type
+                && state.SongWeiTriggersUsedThisTurn < state.SongWeiTriggersPerTurn)
+            {
+                state.SongWeiTriggersUsedThisTurn++;
+                await PlayerCmd.GainStars(Math.Max(1, state.SongWeiStars), player);
+            }
             InvalidateDisplayCounters(player);
 
             state.LastCardType = card.Type;
@@ -1849,7 +2038,6 @@ internal static class SanguoshaCharacterSkills
 
         if (state.NightfallSchemeActive)
         {
-            await Draw(player, Math.Max(1, state.NightfallSchemeDraw));
             foreach (var enemy in combat.HittableEnemies.Where(enemy => enemy.IsAlive))
             {
                 await ApplyPower<PoisonPower>(player, enemy, Math.Max(1, state.NightfallSchemePoison), null);
@@ -1859,19 +2047,16 @@ internal static class SanguoshaCharacterSkills
         if (state.ThunderMandateActive)
         {
             state.Thunder += Math.Max(1, state.ThunderMandateThunder);
-            await DamageAll(combat, player, Math.Max(1, state.ThunderMandateDamage), null);
         }
 
         if (state.SoulHealerFormActive)
         {
             await HealIfWounded(player, Math.Max(1, state.SoulHealerFormHeal));
-            await LoseHpAllEnemies(combat, player, Math.Max(1, state.SoulHealerFormEnemyHpLoss), null);
         }
 
         if (state.ImperialEdictActive)
         {
-            player.PlayerCombatState!.GainEnergy(Math.Max(1, state.ImperialEdictEnergy));
-            EmpowerNextSha(player, Math.Max(1, state.ImperialEdictNextShaDamage));
+            await PlayerCmd.GainStars(Math.Max(1, state.ImperialEdictStars), player);
         }
     }
 
@@ -2060,7 +2245,8 @@ internal static class SanguoshaCharacterSkills
                         damage,
                         ValueProp.Move,
                         judgment.Source.Creature,
-                        judgment.SourceCard);
+                        judgment.SourceCard,
+                        null);
                     break;
             }
         }
@@ -2357,34 +2543,56 @@ internal static class SanguoshaCharacterSkills
         MakeHandCardsFree(player, 1, card => IsShaLike(card) || card.Type == CardType.Skill);
     }
 
-    private static Task DamageTarget(Player player, Creature target, decimal amount, CardModel? source)
+    private static async Task DamageTarget(Player player, Creature target, decimal amount, CardModel? source)
     {
-        return amount <= 0 || !target.IsAlive
-            ? Task.CompletedTask
-            : CreatureCmd.Damage(NewContext(), target, amount, ValueProp.Move, player.Creature, source!);
+        if (amount <= 0 || !target.IsAlive)
+        {
+            return;
+        }
+
+        await CreatureCmd.Damage(NewContext(), target, amount, ValueProp.Move, player.Creature, source!, null);
+        await OnNonAttackEnemyHpLoss(player, target, source);
     }
 
     public static Task LoseHp(Player player, decimal amount, CardModel? source)
     {
-        return amount <= 0 || !player.Creature.IsAlive
-            ? Task.CompletedTask
-            : CreatureCmd.Damage(NewContext(), player.Creature, amount, ValueProp.Unblockable, player.Creature, source!);
+        if (amount <= 0 || !player.Creature.IsAlive)
+        {
+            return Task.CompletedTask;
+        }
+
+        MarkLostHp(player);
+        return CreatureCmd.Damage(NewContext(), player.Creature, amount, ValueProp.Unblockable, player.Creature, source!, null);
     }
 
-    private static Task LoseHpAllEnemies(ICombatState combat, Player player, decimal amount, CardModel? source)
+    private static async Task LoseHpAllEnemies(ICombatState combat, Player player, decimal amount, CardModel? source)
     {
         var targets = combat.HittableEnemies.Where(enemy => enemy.IsAlive).ToList();
-        return targets.Count == 0 || amount <= 0
-            ? Task.CompletedTask
-            : CreatureCmd.Damage(NewContext(), targets, amount, ValueProp.Unblockable, player.Creature, source!);
+        if (targets.Count == 0 || amount <= 0)
+        {
+            return;
+        }
+
+        await CreatureCmd.Damage(NewContext(), targets, amount, ValueProp.Unblockable, player.Creature, source!, null);
+        foreach (var target in targets.Where(target => target.IsAlive))
+        {
+            await OnNonAttackEnemyHpLoss(player, target, source);
+        }
     }
 
-    private static Task DamageAll(ICombatState combat, Player player, decimal amount, CardModel? source)
+    private static async Task DamageAll(ICombatState combat, Player player, decimal amount, CardModel? source)
     {
         var targets = combat.HittableEnemies.Where(enemy => enemy.IsAlive).ToList();
-        return targets.Count == 0 || amount <= 0
-            ? Task.CompletedTask
-            : CreatureCmd.Damage(NewContext(), targets, amount, ValueProp.Move, player.Creature, source!);
+        if (targets.Count == 0 || amount <= 0)
+        {
+            return;
+        }
+
+        await CreatureCmd.Damage(NewContext(), targets, amount, ValueProp.Move, player.Creature, source!, null);
+        foreach (var target in targets.Where(target => target.IsAlive))
+        {
+            await OnNonAttackEnemyHpLoss(player, target, source);
+        }
     }
 
     private sealed class CharacterSkillState(SanguoshaSkill skill)
@@ -2467,17 +2675,13 @@ internal static class SanguoshaCharacterSkills
         public int BathOfBloodHpLoss { get; set; }
         public int BathOfBloodEnergy { get; set; }
         public bool NightfallSchemeActive { get; set; }
-        public int NightfallSchemeDraw { get; set; }
         public int NightfallSchemePoison { get; set; }
         public bool ThunderMandateActive { get; set; }
         public int ThunderMandateThunder { get; set; }
-        public int ThunderMandateDamage { get; set; }
         public bool SoulHealerFormActive { get; set; }
         public int SoulHealerFormHeal { get; set; }
-        public int SoulHealerFormEnemyHpLoss { get; set; }
         public bool ImperialEdictActive { get; set; }
-        public int ImperialEdictEnergy { get; set; }
-        public int ImperialEdictNextShaDamage { get; set; }
+        public int ImperialEdictStars { get; set; }
         public int GoodLuck { get; set; }
         public bool BaGuaActive { get; set; }
         public bool BaGuaUpgraded { get; set; }
@@ -2534,6 +2738,26 @@ internal static class SanguoshaCharacterSkills
         public bool MengDeXinShuActive { get; set; }
         public int MengDeXinShuFreeCards { get; set; }
         public bool MengDeXinShuUsedThisTurn { get; set; }
+        public bool LostHpThisTurn { get; set; }
+        public int NextTurnBonusDraw { get; set; }
+        public bool FangTianActive { get; set; }
+        public bool FangTianUsedThisTurn { get; set; }
+        public bool GangLieActive { get; set; }
+        public int GangLieEnergy { get; set; }
+        public bool GangLieUsedThisTurn { get; set; }
+        public bool BiYueActive { get; set; }
+        public int BiYueDraw { get; set; }
+        public bool KuangFengActive { get; set; }
+        public int KuangFengNextShaDamage { get; set; }
+        public bool KuangFengUsedThisTurn { get; set; }
+        public bool DuanChangActive { get; set; }
+        public int DuanChangVulnerable { get; set; }
+        public int DuanChangBlock { get; set; }
+        public bool DuanChangUsedThisTurn { get; set; }
+        public bool SongWeiActive { get; set; }
+        public int SongWeiTriggersPerTurn { get; set; }
+        public int SongWeiTriggersUsedThisTurn { get; set; }
+        public int SongWeiStars { get; set; }
         public CardType? LastCardType { get; set; }
         public Dictionary<EquipSlot, string> ActiveEquip = new();
         public Dictionary<EquipSlot, bool> ActiveEquipUpgraded = new();

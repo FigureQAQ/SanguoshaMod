@@ -543,3 +543,51 @@ internal sealed class RegentSkillDisplayPower : SanguoshaEquipmentDisplayPower
     protected override string LocKey => "SANGUOSHA_POWER_REGENT_SKILL_DISPLAY_POWER";
 
 }
+
+[RegisterPower]
+internal sealed class FangTianDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "fangtian";
+
+    protected override string LocKey => "SANGUOSHA_POWER_FANG_TIAN_DISPLAY_POWER";
+}
+
+[RegisterPower]
+internal sealed class GangLieDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "ganglie";
+
+    protected override string LocKey => "SANGUOSHA_POWER_GANG_LIE_DISPLAY_POWER";
+}
+
+[RegisterPower]
+internal sealed class BiYueDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "biyue";
+
+    protected override string LocKey => "SANGUOSHA_POWER_BI_YUE_DISPLAY_POWER";
+}
+
+[RegisterPower]
+internal sealed class KuangFengDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "kuangfeng";
+
+    protected override string LocKey => "SANGUOSHA_POWER_KUANG_FENG_DISPLAY_POWER";
+}
+
+[RegisterPower]
+internal sealed class DuanChangDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "duanchang";
+
+    protected override string LocKey => "SANGUOSHA_POWER_DUAN_CHANG_DISPLAY_POWER";
+}
+
+[RegisterPower]
+internal sealed class SongWeiDisplayPower : SanguoshaEquipmentDisplayPower
+{
+    protected override string IconBaseName => "songwei";
+
+    protected override string LocKey => "SANGUOSHA_POWER_SONG_WEI_DISPLAY_POWER";
+}

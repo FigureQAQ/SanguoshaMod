@@ -11,31 +11,20 @@ namespace sanguosha.Cards;
 public sealed class WuZhongCard : SanguoshaCard
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [
-        new EnergyVar(1),
         new DynamicVar("Draw", 2m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [
-        CardKeyword.Exhaust
-    ];
     public WuZhongCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var consumed = await SanguoshaCardFx.ExhaustFromHand(choiceContext, cardPlay, 1);
-        if (consumed.Count > 0)
-        {
-            cardPlay.Card.Owner.PlayerCombatState!.GainEnergy(DynamicVars.Energy.IntValue);
-        }
-
         await SanguoshaCardFx.Draw(choiceContext, cardPlay, DynamicVars["Draw"].IntValue);
     }
 
     protected override void OnUpgrade()
     {
-        RemoveKeyword(CardKeyword.Exhaust);
         DynamicVars["Draw"].UpgradeValueBy(1);
     }
 }

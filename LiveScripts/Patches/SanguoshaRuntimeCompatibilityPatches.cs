@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Models.Events;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -216,25 +217,6 @@ internal static class DelayedBingLiangStatusCardsPileTypePatch
     }
 }
 
-[HarmonyPatch(
-    typeof(CardPileCmd),
-    nameof(CardPileCmd.Add),
-    [
-        typeof(IEnumerable<CardModel>),
-        typeof(CardPile),
-        typeof(CardPilePosition),
-        typeof(AbstractModel),
-        typeof(bool)
-    ])]
-internal static class DelayedBingLiangStatusCardsPilePatch
-{
-    private static bool Prefix(ref IEnumerable<CardModel> __0, AbstractModel? __3, ref Task<IReadOnlyList<CardPileAddResult>> __result)
-    {
-        var sourceCreature = DelayedBingLiangStatusCardPatchHelper.GetSourceCreature(__3);
-        return DelayedBingLiangStatusCardPatchHelper.PrefixMany(ref __0, sourceCreature, ref __result);
-    }
-}
-
 [HarmonyPatch]
 internal static class DelayedBingLiangGeneratedStatusCardSinglePatch
 {
@@ -418,9 +400,16 @@ internal static class FastenPowerSanguoshaShanFlashPatch
 [HarmonyPatch(typeof(Claws), nameof(Claws.AfterObtained))]
 internal static class ClawsSanguoshaShaPatch
 {
+    private static readonly MethodInfo? CreateMaulMethod = AccessTools.Method(typeof(Claws), "CreateMaulFromOriginal");
+
     private static bool Prefix(Claws __instance, ref Task __result)
     {
-        var shaCards = __instance.Owner!.Deck.Cards
+        if (__instance.Owner is not { } owner || CreateMaulMethod is null)
+        {
+            return true;
+        }
+
+        var shaCards = owner.Deck.Cards
             .Where(SanguoshaRuntimeCardEventHelpers.IsShaLike)
             .ToList();
         if (shaCards.Count == 0)
@@ -428,24 +417,22 @@ internal static class ClawsSanguoshaShaPatch
             return true;
         }
 
-        __result = TransformShaCards(__instance, shaCards);
+        __result = TransformShaCards(__instance, owner, shaCards);
         return false;
     }
 
-    private static Task TransformShaCards(Claws relic, IReadOnlyList<CardModel> shaCards)
+    private static Task TransformShaCards(Claws relic, Player owner, IReadOnlyList<CardModel> shaCards)
     {
         var transformations = shaCards
             .Select(card => new CardTransformation(card, CreateMaulFromOriginal(relic, card)))
             .ToList();
 
-        return CardCmd.Transform(transformations, relic.Owner!.PlayerRng.Rewards, CardPreviewStyle.HorizontalLayout);
+        return CardCmd.Transform(transformations, owner.PlayerRng.Rewards, CardPreviewStyle.HorizontalLayout);
     }
 
     private static CardModel CreateMaulFromOriginal(Claws relic, CardModel original)
     {
-        return (CardModel)AccessTools
-            .Method(typeof(Claws), "CreateMaulFromOriginal")!
-            .Invoke(relic, [original, false])!;
+        return (CardModel)CreateMaulMethod!.Invoke(relic, [original, false])!;
     }
 }
 
@@ -465,14 +452,24 @@ internal static class SpiralingWhirlpoolSanguoshaObservePatch
 {
     private static bool Prefix(SpiralingWhirlpool __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = EnchantShaOrShan(__instance);
         return false;
     }
 
     private static async Task EnchantShaOrShan(SpiralingWhirlpool eventModel)
     {
+        if (eventModel.Owner is not { } owner)
+        {
+            return;
+        }
+
         var selectedCards = await CardSelectCmd.FromDeckForEnchantment(
-            eventModel.Owner!,
+            owner,
             ModelDb.Enchantment<Spiral>(),
             1,
             card => card is not null && SanguoshaRuntimeCardEventHelpers.IsShaOrShanLike(card),
@@ -506,12 +503,17 @@ internal static class AmalgamatorSanguoshaOptionsPatch
 {
     private static void Postfix(Amalgamator __instance, ref IReadOnlyList<EventOption> __result)
     {
-        if (__instance.Owner!.Deck.Cards.Count(SanguoshaRuntimeCardEventHelpers.IsShaLike) < 2)
+        if (__instance.Owner is not { } owner)
+        {
+            return;
+        }
+
+        if (owner.Deck.Cards.Count(SanguoshaRuntimeCardEventHelpers.IsShaLike) < 2)
         {
             __result = __result.Skip(1).ToList();
         }
 
-        if (__instance.Owner!.Deck.Cards.Count(SanguoshaRuntimeCardEventHelpers.IsShanLike) < 2)
+        if (owner.Deck.Cards.Count(SanguoshaRuntimeCardEventHelpers.IsShanLike) < 2)
         {
             __result = __result.Take(1).ToList();
         }
@@ -523,6 +525,11 @@ internal static class AmalgamatorSanguoshaShaPatch
 {
     private static bool Prefix(Amalgamator __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.CombineBasicCards<ShaCard>(
             __instance,
             SanguoshaRuntimeCardEventHelpers.IsShaLike,
@@ -536,6 +543,11 @@ internal static class AmalgamatorSanguoshaShanPatch
 {
     private static bool Prefix(Amalgamator __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.CombineBasicCards<ShanCard>(
             __instance,
             SanguoshaRuntimeCardEventHelpers.IsShanLike,
@@ -551,6 +563,11 @@ internal static class MassiveScrollSanguoshaCardPatch
 
     private static bool Prefix(MassiveScroll __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = AddSanguoshaCard(__instance);
         return false;
     }
@@ -566,8 +583,13 @@ internal static class ArcaneScrollSanguoshaCardPatch
 {
     private static bool Prefix(ArcaneScroll __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.AddOneCardToDeck(
-            __instance.Owner!,
+            owner,
             card => card.Rarity == CardRarity.Rare && card is not ZhangBaShaCard,
             upgrade: true,
             exactRarity: true);
@@ -580,6 +602,11 @@ internal static class NeowsTalismanSanguoshaBasicPatch
 {
     private static bool Prefix(NeowsTalisman __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = UpgradeShaAndShan(__instance);
         return false;
     }
@@ -604,31 +631,21 @@ internal static class NeowsTalismanSanguoshaBasicPatch
     }
 }
 
-[HarmonyPatch(typeof(GhostSeed), nameof(GhostSeed.CanAffect))]
-internal static class GhostSeedSanguoshaBasicPatch
-{
-    private static bool Prefix(CardModel card, ref bool __result)
-    {
-        if (!SanguoshaRuntimeCardEventHelpers.IsShaOrShanLike(card))
-        {
-            return true;
-        }
-
-        __result = true;
-        return false;
-    }
-}
-
 [HarmonyPatch(typeof(LeafyPoultice), nameof(LeafyPoultice.AfterObtained))]
 internal static class LeafyPoulticeSanguoshaBasicPatch
 {
     private static bool Prefix(LeafyPoultice __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         var cards = new[]
             {
-                __instance.Owner!.Deck.Cards.FirstOrDefault(card =>
+                owner.Deck.Cards.FirstOrDefault(card =>
                     SanguoshaRuntimeCardEventHelpers.IsShaLike(card) && card.IsTransformable),
-                __instance.Owner!.Deck.Cards.FirstOrDefault(card =>
+                owner.Deck.Cards.FirstOrDefault(card =>
                     SanguoshaRuntimeCardEventHelpers.IsShanLike(card) && card.IsTransformable)
             }
             .Where(card => card is not null)
@@ -639,19 +656,22 @@ internal static class LeafyPoulticeSanguoshaBasicPatch
             return true;
         }
 
-        __result = TransformAndLoseMaxHp(__instance, cards);
+        __result = TransformAndLoseMaxHp(__instance, owner, cards);
         return false;
     }
 
-    private static async Task TransformAndLoseMaxHp(LeafyPoultice relic, IReadOnlyList<CardModel> cards)
+    private static async Task TransformAndLoseMaxHp(
+        LeafyPoultice relic,
+        Player owner,
+        IReadOnlyList<CardModel> cards)
     {
         await SanguoshaRuntimeCardEventHelpers.TransformToSanguoshaCards(
-            relic.Owner!,
+            owner,
             cards,
             CardPreviewStyle.HorizontalLayout);
         await CreatureCmd.LoseMaxHp(
             new BlockingPlayerChoiceContext(),
-            relic.Owner!.Creature,
+            owner.Creature,
             relic.DynamicVars["MaxHp"].BaseValue,
             false);
     }
@@ -662,7 +682,12 @@ internal static class NutritiousSoupSanguoshaShaPatch
 {
     private static bool Prefix(NutritiousSoup __instance, ref Task __result)
     {
-        var shaCards = __instance.Owner!.Deck.Cards
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
+        var shaCards = owner.Deck.Cards
             .Where(SanguoshaRuntimeCardEventHelpers.IsShaLike)
             .ToList();
         if (shaCards.Count == 0)
@@ -691,7 +716,12 @@ internal static class PandorasBoxSanguoshaBasicPatch
 {
     private static bool Prefix(PandorasBox __instance, ref Task __result)
     {
-        var cards = __instance.Owner!.Deck.Cards
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
+        var cards = owner.Deck.Cards
             .Where(card => SanguoshaRuntimeCardEventHelpers.IsShaOrShanLike(card) && card.IsTransformable)
             .ToList();
         if (cards.Count == 0)
@@ -700,7 +730,7 @@ internal static class PandorasBoxSanguoshaBasicPatch
         }
 
         __result = SanguoshaRuntimeCardEventHelpers.TransformToSanguoshaCards(
-            __instance.Owner!,
+            owner,
             cards,
             CardPreviewStyle.HorizontalLayout);
         return false;
@@ -730,7 +760,12 @@ internal static class LeadPaperweightSanguoshaCardPatch
 {
     private static bool Prefix(LeadPaperweight __instance, ref Task __result)
     {
-        __result = SanguoshaRuntimeCardEventHelpers.ChooseOneCardAndAddToDeck(__instance.Owner, 2);
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
+        __result = SanguoshaRuntimeCardEventHelpers.ChooseOneCardAndAddToDeck(owner, 2);
         return false;
     }
 }
@@ -745,7 +780,12 @@ internal static class CircletSanguoshaClonePatch
             return true;
         }
 
-        __result = EnchantOneCard(__instance.Owner);
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
+        __result = EnchantOneCard(owner);
         return false;
     }
 
@@ -807,6 +847,11 @@ internal static class CloneRestSiteOptionSelectionPatch
     private static bool Prefix(CloneRestSiteOption __instance, ref Task<bool> __result)
     {
         var owner = Traverse.Create(__instance).Property("Owner").GetValue<Player>();
+        if (owner is null)
+        {
+            return true;
+        }
+
         __result = SanguoshaCloneRestSiteHelpers.CloneCards(owner);
         return false;
     }
@@ -872,6 +917,11 @@ internal static class ScrollBoxesSanguoshaBundlePatch
 {
     private static bool Prefix(ScrollBoxes __instance, ref Task __result)
     {
+        if (__instance.Owner is null)
+        {
+            return true;
+        }
+
         __result = ChooseSanguoshaBundle(__instance);
         return false;
     }
@@ -902,7 +952,7 @@ internal static class NinjaScrollSanguoshaShaPatch
         ref Task __result)
     {
         if (player != __instance.Owner
-            || __instance.Owner.PlayerCombatState is not { TurnNumber: <= 1 })
+            || __instance.Owner is not { PlayerCombatState: { TurnNumber: <= 1 } })
         {
             return true;
         }
@@ -932,13 +982,18 @@ internal static class SeaGlassSanguoshaCardPatch
 {
     private static bool Prefix(SeaGlass __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.ChooseCardsAndAddToDeck(
-            __instance.Owner!,
+            owner,
             new List<List<CardCreationResult>>
             {
-                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(__instance.Owner, 1, card => card.Rarity == CardRarity.Common),
-                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(__instance.Owner, 1, card => card.Rarity == CardRarity.Uncommon),
-                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(__instance.Owner, 1, card => card.Rarity == CardRarity.Rare)
+                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(owner, 1, card => card.Rarity == CardRarity.Common),
+                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(owner, 1, card => card.Rarity == CardRarity.Uncommon),
+                SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(owner, 1, card => card.Rarity == CardRarity.Rare)
             }.SelectMany(options => options).ToList(),
             0,
             3,
@@ -952,9 +1007,14 @@ internal static class BrainLeechSanguoshaCardPatch
 {
     private static bool Prefix(BrainLeech __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         var optionCount = Math.Max(1, __instance.DynamicVars["FromCardChoiceCount"].IntValue);
         __result = SanguoshaRuntimeCardEventHelpers.ChooseOneCardAndAddToDeck(
-            __instance.Owner!,
+            owner,
             optionCount,
             finishEvent: (__instance, "BRAIN_LEECH.pages.SHARE_KNOWLEDGE.description"),
             selectionPrompt: "BRAIN_LEECH.pages.SHARE_KNOWLEDGE.selectionScreenPrompt");
@@ -967,8 +1027,13 @@ internal static class InfestedAutomatonStudySanguoshaCardPatch
 {
     private static bool Prefix(InfestedAutomaton __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.AddOneCardToDeck(
-            __instance.Owner!,
+            owner,
             finishEvent: (__instance, "INFESTED_AUTOMATON.pages.STUDY.description"));
         return false;
     }
@@ -979,8 +1044,13 @@ internal static class InfestedAutomatonTouchCoreSanguoshaCardPatch
 {
     private static bool Prefix(InfestedAutomaton __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         __result = SanguoshaRuntimeCardEventHelpers.AddOneCardToDeck(
-            __instance.Owner!,
+            owner,
             upgrade: true,
             finishEvent: (__instance, "INFESTED_AUTOMATON.pages.TOUCH_CORE.description"));
         return false;
@@ -992,13 +1062,18 @@ internal static class RoomFullOfCheeseGorgeSanguoshaCardPatch
 {
     private static bool Prefix(RoomFullOfCheese __instance, ref Task __result)
     {
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
         var rewardOptions = SanguoshaRuntimeCardEventHelpers.CreateRewardOptions(
-            __instance.Owner!,
+            owner,
             8,
             card => card.Rarity == CardRarity.Common,
             exactRarity: true);
         __result = SanguoshaRuntimeCardEventHelpers.ChooseCardsAndAddToDeck(
-            __instance.Owner!,
+            owner,
             rewardOptions,
             2,
             2,
@@ -1014,7 +1089,12 @@ internal static class EndlessConveyorFriedEelSanguoshaCardPatch
 {
     private static bool Prefix(EndlessConveyor __instance, ref Task __result)
     {
-        __result = SanguoshaRuntimeCardEventHelpers.AddOneCardToDeck(__instance.Owner!);
+        if (__instance.Owner is not { } owner)
+        {
+            return true;
+        }
+
+        __result = SanguoshaRuntimeCardEventHelpers.AddOneCardToDeck(owner);
         return false;
     }
 }
@@ -1059,8 +1139,13 @@ internal static class SanguoshaRuntimeCardEventHelpers
         string finishedDescriptionKey)
         where TCard : SanguoshaCard
     {
+        if (eventModel.Owner is not { } owner)
+        {
+            return;
+        }
+
         var selectedCards = (await CardSelectCmd.FromDeckForRemoval(
-            eventModel.Owner!,
+            owner,
             new CardSelectorPrefs(CardSelectorPrefs.RemoveSelectionPrompt, 2),
             card => filter(card) && card.IsRemovable)).ToList();
         if (selectedCards.Count == 0)
@@ -1070,7 +1155,6 @@ internal static class SanguoshaRuntimeCardEventHelpers
         }
 
         await CardPileCmd.RemoveFromDeck(selectedCards, false);
-        var owner = eventModel.Owner!;
         var newCard = owner.RunState.CreateCard<TCard>(owner);
         var result = await CardPileCmd.Add(newCard, PileType.Deck, CardPilePosition.Bottom, null, false);
         CardCmd.PreviewCardPileAdd(result, 1.2f, CardPreviewStyle.HorizontalLayout);
@@ -1154,16 +1238,18 @@ internal static class SanguoshaRuntimeCardEventHelpers
         }
 
         var creationOptions = new CardCreationOptions(
-            candidates,
+            [ModelDb.CardPool<ColorlessCardPool>()],
             CardCreationSource.Other,
-            exactRarity ? CardRarityOddsType.Uniform : CardRarityOddsType.RegularEncounter);
+            exactRarity ? CardRarityOddsType.Uniform : CardRarityOddsType.RegularEncounter,
+            candidates.Contains);
         var results = CardFactory.CreateForReward(player, count, creationOptions).ToList();
         if (results.Count == 0 && exactRarity)
         {
             creationOptions = new CardCreationOptions(
-                candidates,
+                [ModelDb.CardPool<ColorlessCardPool>()],
                 CardCreationSource.Other,
-                CardRarityOddsType.RegularEncounter);
+                CardRarityOddsType.RegularEncounter,
+                candidates.Contains);
             results = CardFactory.CreateForReward(player, count, creationOptions).ToList();
         }
 
