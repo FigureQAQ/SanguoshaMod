@@ -12,6 +12,18 @@ namespace sanguosha.Patches;
 
 internal static class SanguoshaPotionCardGeneration
 {
+    public static bool CanCreateCombatCards(PotionModel potion, CardType? type)
+    {
+        if (potion.Owner is not { } owner)
+        {
+            return false;
+        }
+
+        var rewardCards = SanguoshaCardCatalog.TryGetRewardCards(owner);
+        return rewardCards is { Count: > 0 }
+            && (type is null || rewardCards.Any(card => card.Type == type.Value));
+    }
+
     public static bool TryCreateCombatCards(
         PotionModel potion,
         CardType? type,
@@ -24,19 +36,19 @@ internal static class SanguoshaPotionCardGeneration
             return false;
         }
 
-        var catalog = SanguoshaCardCatalog.TryGetCards();
-        if (catalog is null || catalog.Count == 0)
+        var rewardCards = SanguoshaCardCatalog.TryGetRewardCards(owner);
+        if (rewardCards is null || rewardCards.Count == 0)
         {
             return false;
         }
 
         var options = type is null
-            ? catalog
-            : catalog.Where(card => card.Type == type.Value);
+            ? rewardCards
+            : rewardCards.Where(card => card.Type == type.Value);
 
         cards = CardFactory
             .GetDistinctForCombat(
-                potion.Owner,
+                owner,
                 options,
                 count,
                 owner.RunState.Rng.CombatCardGeneration)
@@ -53,19 +65,24 @@ internal static class SanguoshaPotionCardGeneration
 
     public static async Task ChooseOneFreeCard(PotionModel potion, PlayerChoiceContext choiceContext, CardType? type)
     {
+        if (potion.Owner is not { } owner)
+        {
+            return;
+        }
+
         if (!TryCreateCombatCards(potion, type, 3, out var cards))
         {
             return;
         }
 
-        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, potion.Owner, canSkip: true);
+        var selected = await CardSelectCmd.FromChooseACardScreen(choiceContext, cards, owner, canSkip: true);
         if (selected is null)
         {
             return;
         }
 
         selected.SetToFreeThisTurn();
-        await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, potion.Owner);
+        await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, owner);
     }
 }
 
@@ -74,6 +91,11 @@ internal static class AttackPotionSanguoshaCardGenerationPatch
 {
     private static bool Prefix(AttackPotion __instance, PlayerChoiceContext choiceContext, ref Task __result)
     {
+        if (!SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, CardType.Attack))
+        {
+            return true;
+        }
+
         __result = SanguoshaPotionCardGeneration.ChooseOneFreeCard(__instance, choiceContext, CardType.Attack);
         return false;
     }
@@ -84,6 +106,11 @@ internal static class SkillPotionSanguoshaCardGenerationPatch
 {
     private static bool Prefix(SkillPotion __instance, PlayerChoiceContext choiceContext, ref Task __result)
     {
+        if (!SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, CardType.Skill))
+        {
+            return true;
+        }
+
         __result = SanguoshaPotionCardGeneration.ChooseOneFreeCard(__instance, choiceContext, CardType.Skill);
         return false;
     }
@@ -94,6 +121,11 @@ internal static class PowerPotionSanguoshaCardGenerationPatch
 {
     private static bool Prefix(PowerPotion __instance, PlayerChoiceContext choiceContext, ref Task __result)
     {
+        if (!SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, CardType.Power))
+        {
+            return true;
+        }
+
         __result = SanguoshaPotionCardGeneration.ChooseOneFreeCard(__instance, choiceContext, CardType.Power);
         return false;
     }
@@ -104,6 +136,11 @@ internal static class ColorlessPotionSanguoshaCardGenerationPatch
 {
     private static bool Prefix(ColorlessPotion __instance, PlayerChoiceContext choiceContext, ref Task __result)
     {
+        if (!SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, type: null))
+        {
+            return true;
+        }
+
         __result = SanguoshaPotionCardGeneration.ChooseOneFreeCard(__instance, choiceContext, type: null);
         return false;
     }
@@ -114,12 +151,22 @@ internal static class CosmicConcoctionSanguoshaCardGenerationPatch
 {
     private static bool Prefix(CosmicConcoction __instance, ref Task __result)
     {
+        if (!SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, type: null))
+        {
+            return true;
+        }
+
         __result = AddUpgradedCards(__instance);
         return false;
     }
 
     private static async Task AddUpgradedCards(CosmicConcoction potion)
     {
+        if (potion.Owner is not { } owner)
+        {
+            return;
+        }
+
         if (!SanguoshaPotionCardGeneration.TryCreateCombatCards(
                 potion,
                 type: null,
@@ -132,7 +179,7 @@ internal static class CosmicConcoctionSanguoshaCardGenerationPatch
         foreach (var card in cards)
         {
             CardCmd.Upgrade(card);
-            await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, potion.Owner);
+            await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, owner);
         }
     }
 }
@@ -142,12 +189,23 @@ internal static class OrobicAcidSanguoshaCardGenerationPatch
 {
     private static bool Prefix(OrobicAcid __instance, ref Task __result)
     {
+        if (new[] { CardType.Attack, CardType.Skill, CardType.Power }
+            .Any(type => !SanguoshaPotionCardGeneration.CanCreateCombatCards(__instance, type)))
+        {
+            return true;
+        }
+
         __result = AddOneOfEachType(__instance);
         return false;
     }
 
     private static async Task AddOneOfEachType(OrobicAcid potion)
     {
+        if (potion.Owner is not { } owner)
+        {
+            return;
+        }
+
         var cards = new List<CardModel>();
         foreach (var type in new[] { CardType.Attack, CardType.Skill, CardType.Power })
         {
@@ -164,6 +222,6 @@ internal static class OrobicAcidSanguoshaCardGenerationPatch
             card.SetToFreeThisTurn();
         }
 
-        await CardPileCmd.AddGeneratedCardsToCombat(cards, PileType.Hand, potion.Owner);
+        await CardPileCmd.AddGeneratedCardsToCombat(cards, PileType.Hand, owner);
     }
 }
